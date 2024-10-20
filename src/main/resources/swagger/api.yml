@@ -1,0 +1,510 @@
+openapi: '3.0.1'
+info:
+  title: 'The parking garage'
+  version: 0.0.1
+servers:
+  - url: http://localhost:8080/api
+    description: Development server
+  - url: https://localhost:8080/api
+    description: Development server with TLS Profile
+paths:
+  /api/register:
+    post:
+      summary: "POST api/register"
+      operationId: "registerAccount"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ManagedUserVM"
+        required: true
+      responses:
+        "201":
+          description: "Created"
+  /api/activate:
+    get:
+      summary: "GET api/activate"
+      operationId: "activateAccount"
+      parameters:
+        - name: "key"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+  /api/account:
+    get:
+      summary: "GET api/account"
+      operationId: "getAccount"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AdminUserDTO"
+    post:
+      summary: "POST api/account"
+      operationId: "saveAccount"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminUserDTO"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+  /api/account/change-password:
+    post:
+      summary: "POST api/account/change-password"
+      operationId: "changePassword"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PasswordChangeDTO"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+  /api/account/reset-password/init:
+    post:
+      summary: "POST api/account/reset-password/init"
+      operationId: "requestPasswordReset"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "string"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+  /api/account/reset-password/finish:
+    post:
+      summary: "POST api/account/reset-password/finish"
+      operationId: "finishPasswordReset"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/KeyAndPasswordVM"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+
+  /:
+    get:
+      summary: 'GET '
+      operationId: 'home'
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            '*/*':
+              schema:
+                type: 'string'
+  /api/admin/users:
+    post:
+      summary: "POST api/admin/users"
+      description: "Create new user"
+      operationId: "createUser"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminUserDTO"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/User"
+    put:
+      summary: "PUT api/admin/users"
+      operationId: "updateUser"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminUserDTO"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AdminUserDTO"
+    get:
+      summary: "GET api/admin/users"
+      operationId: "getAllUsers"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/AdminUserDTO"
+  /api/admin/users/{login}:
+    put:
+      summary: "PUT api/admin/users/{login}"
+      operationId: "updateUser"
+      parameters:
+        - name: "login"
+          in: "path"
+          required: false
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminUserDTO"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AdminUserDTO"
+    get:
+      summary: "GET api/admin/users/{login}"
+      operationId: "getUser"
+      parameters:
+        - name: "login"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AdminUserDTO"
+    delete:
+      summary: "DELETE api/admin/users/{login}"
+      operationId: "deleteUser"
+      parameters:
+        - name: "login"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+  /api/authenticate:
+    post:
+      summary: "POST api/authenticate"
+      description: "Returns JWT token. Requires login and password. Use for login process"
+      operationId: "authorize"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginVM"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/JWTToken"
+    get:
+      summary: "GET api/authenticate"
+      operationId: "isAuthenticated"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+  /api/users:
+    get:
+      summary: "GET api/users"
+      operationId: "getAllPublicUsers"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/UserDTO"
+  /api/authorities:
+    post:
+      summary: "POST api/authorities"
+      operationId: "createAuthority"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Authority"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Authority"
+    get:
+      summary: "GET api/authorities"
+      operationId: "getAllAuthorities"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Authority"
+
+  /api/authorities/{id}:
+    get:
+      summary: "GET api/authorities/{id}"
+      operationId: "getAuthority"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Authority"
+    delete:
+      summary: "DELETE api/authorities/{id}"
+      operationId: "deleteAuthority"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+components:
+  responses:
+    Problem:
+      description: error occurred - see status code and problem object for more information.
+      content:
+        application/problem+json:
+          schema:
+            type: object
+            properties:
+              type:
+                type: string
+                format: uri
+                description: |
+                  An absolute URI that identifies the problem type.  When dereferenced,
+                  it SHOULD provide human-readable documentation for the problem type
+                  (e.g., using HTML).
+                default: 'about:blank'
+              title:
+                type: string
+                description: |
+                  A short, summary of the problem type. Written in english and readable
+                  for engineers (usually not suited for non technical stakeholders and
+                  not localized); example: Service Unavailable
+              status:
+                type: integer
+                format: int32
+                description: |
+                  The HTTP status code generated by the origin server for this occurrence
+                  of the problem.
+                minimum: 100
+                maximum: 600
+                exclusiveMaximum: true
+                example: 503
+              detail:
+                type: string
+                description: |
+                  A human readable explanation specific to this occurrence of the
+                  problem.
+                example: Connection to database timed out
+              instance:
+                type: string
+                format: uri
+                description: |
+                  An absolute URI that identifies the specific occurrence of the problem.
+                  It may or may not yield further information if dereferenced.
+
+  schemas:
+    Instant:
+      type: "object"
+      properties: { }
+    ManagedUserVM:
+      type: "object"
+      properties:
+        password:
+          type: "string"
+        id:
+          type: "integer"
+          format: "int64"
+        login:
+          type: "string"
+        firstName:
+          type: "string"
+        lastName:
+          type: "string"
+        email:
+          type: "string"
+        imageUrl:
+          type: "string"
+        activated:
+          type: "boolean"
+        createdBy:
+          type: "string"
+        createdDate:
+          $ref: "#/components/schemas/Instant"
+        lastModifiedBy:
+          type: "string"
+        lastModifiedDate:
+          $ref: "#/components/schemas/Instant"
+        authorities:
+          type: "array"
+          items:
+            type: "string"
+    AdminUserDTO:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        login:
+          type: "string"
+        firstName:
+          type: "string"
+        lastName:
+          type: "string"
+        email:
+          type: "string"
+        imageUrl:
+          type: "string"
+        activated:
+          type: "boolean"
+        createdBy:
+          type: "string"
+        createdDate:
+          $ref: "#/components/schemas/Instant"
+        lastModifiedBy:
+          type: "string"
+        lastModifiedDate:
+          $ref: "#/components/schemas/Instant"
+        authorities:
+          type: "array"
+          items:
+            type: "string"
+    PasswordChangeDTO:
+      type: "object"
+      properties:
+        currentPassword:
+          type: "string"
+        newPassword:
+          type: "string"
+    KeyAndPasswordVM:
+      type: "object"
+      properties:
+        key:
+          type: "string"
+        newPassword:
+          type: "string"
+    User:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        login:
+          type: "string"
+        firstName:
+          type: "string"
+        lastName:
+          type: "string"
+        email:
+          type: "string"
+        activated:
+          type: "boolean"
+        imageUrl:
+          type: "string"
+        resetDate:
+          $ref: "#/components/schemas/Instant"
+    Authority:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+    UserDTO:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        login:
+          type: "string"
+    LoginVM:
+      type: "object"
+      properties:
+        username:
+          type: "string"
+          example: "user"
+        password:
+          type: "string"
+          example: "1234"
+        rememberMe:
+          type: "boolean"
+          example: false
+    JWTToken:
+      type: "object"
+      properties:
+        idToken:
+          type: "string"
+          example: "UxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcyOTE5ODk3NywiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzI5MTEyNTc3fQ.MGu"
+    Void:
+      type: "object"
+      properties: { }
+
+
+  securitySchemes:
+    jwt:
+      type: http
+      description: JWT Authentication
+      scheme: bearer
+      bearerFormat: JWT
+    basic:
+      type: http
+      description: Basic Authentication
+      scheme: basic
+security:
+  - jwt: []
+  - basic: []
