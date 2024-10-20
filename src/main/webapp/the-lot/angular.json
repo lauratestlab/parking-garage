@@ -99,10 +99,6 @@
     }
   },
   "cli": {
-<<<<<<< HEAD
     "analytics": false
-=======
-    "analytics": "ca331803-0030-4c0a-a27a-5c6dba5be316"
->>>>>>> Lora's
   }
 }
