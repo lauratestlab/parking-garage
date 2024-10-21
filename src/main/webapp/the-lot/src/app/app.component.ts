@@ -10,12 +10,7 @@ import { FirstComponent } from './first/first.component';
   styleUrls: ['./app.component.css']
 
 })
-//   @Component({
-//   selector: 'app-login',
-//   templateUrl: './app.component.html',
-//   styleUrl: './app.component.css'
 
-// })
   
 export class AppComponent {
   title = 'the-lot';
