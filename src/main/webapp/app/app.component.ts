@@ -4,6 +4,7 @@ import { RouterLink, RouterOutlet, RouterLinkActive } from '@angular/router';
 import { AdminSidebarComponent } from "./admin-sidebar/admin-sidebar.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { ReservationsComponent } from './reservations/reservations.component';
+import {FormsModule} from "@angular/forms";
 import LoginComponent from "./login/login.component";
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 
@@ -15,6 +16,7 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
     RouterLink,
     RouterLinkActive,
     CommonModule,
+    FormsModule,
     AdminSidebarComponent,
     ReservationsComponent,
     DashboardComponent,
