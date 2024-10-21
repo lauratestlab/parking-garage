@@ -13,7 +13,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/api/activate?key=C0ssJHPWFBDBzt1Upn8d
+GET http://localhost:8080/api/activate?key=CXADFrBdgFPrCvzvXGe6
 
 ###
 POST http://localhost:8080/api/authenticate
@@ -21,8 +21,9 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "username": "admin",
-  "password": "1234"
+  "username": "test",
+  "password": "1234",
+  "rememberMe": true
 }
 
 ###
