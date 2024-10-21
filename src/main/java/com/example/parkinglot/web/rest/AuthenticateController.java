@@ -33,6 +33,7 @@ import static com.example.parkinglot.security.SecurityUtils.JWT_ALGORITHM;
  * Controller to authenticate users.
  */
 @RestController
+@CrossOrigin("http://localhost:4200")
 @RequestMapping("/api")
 public class AuthenticateController {
 

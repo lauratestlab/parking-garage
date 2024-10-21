@@ -4,7 +4,7 @@ import { ReservationsComponent } from './reservations/reservations.component';
 import { PricingComponent } from './pricing/pricing.component';
 import { MembersComponent } from './members/members.component';
 import {SignupComponent} from "./signup/signup.component";
-import {LoginComponent} from "./login/login.component";
+import LoginComponent from "./login/login.component";
 import {ActivatePageComponent} from "./activate-page/activate-page.component";
 
 export const routes: Routes = [
