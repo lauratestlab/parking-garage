@@ -4,15 +4,17 @@ import { RouterLink, RouterOutlet, RouterLinkActive } from '@angular/router';
 import { AdminSidebarComponent } from "./admin-sidebar/admin-sidebar.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { ReservationsComponent } from './reservations/reservations.component';
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
-    RouterOutlet,
+    RoutFerOutlet,
     RouterLink,
     RouterLinkActive,
     CommonModule,
+    FormsModule,
     AdminSidebarComponent,
     ReservationsComponent,
     DashboardComponent
