@@ -3,18 +3,18 @@
     <form [formGroup]="signupForm" (ngSubmit)="register()" method="post">
         <!-- First Name Field -->
         <div class="mb-3">
-            <label for="first_name" class="form-label">First Name</label>
-            <input formControlName="first_name" type="text" class="form-control" id="first_name" placeholder="First Name">
-            <div *ngIf="signupForm.get('first_name')?.invalid && signupForm.get('first_name')?.touched" class="text-danger">
+            <label for="firstName" class="form-label">First Name</label>
+            <input formControlName="firstName" type="text" class="form-control" id="firstName" placeholder="First Name">
+            <div *ngIf="signupForm.get('firstName')?.invalid && signupForm.get('firstName')?.touched" class="text-danger">
                 First name is required
             </div>
         </div>
 
         <!-- Last Name Field -->
         <div class="mb-3">
-            <label for="last_name" class="form-label">Last Name</label>
-            <input formControlName="last_name" type="text" class="form-control" id="last_name" placeholder="Last Name">
-            <div *ngIf="signupForm.get('last_name')?.invalid && signupForm.get('last_name')?.touched" class="text-danger">
+            <label for="lastName" class="form-label">Last Name</label>
+            <input formControlName="lastName" type="text" class="form-control" id="lastName" placeholder="Last Name">
+            <div *ngIf="signupForm.get('lastName')?.invalid && signupForm.get('lastName')?.touched" class="text-danger">
                 Last name is required
             </div>
         </div>
@@ -30,9 +30,9 @@
 
         <!-- Username Field -->
         <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
-            <input formControlName="username" type="text" class="form-control" id="username" placeholder="Username">
-            <div *ngIf="signupForm.get('username')?.invalid && signupForm.get('username')?.touched" class="text-danger">
+            <label for="login" class="form-label">Username</label>
+            <input formControlName="login" type="text" class="form-control" id="login" placeholder="Username">
+            <div *ngIf="signupForm.get('login')?.invalid && signupForm.get('login')?.touched" class="text-danger">
                 Username is required
             </div>
         </div>

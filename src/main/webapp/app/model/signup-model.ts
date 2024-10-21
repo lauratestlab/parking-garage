@@ -1,7 +1,7 @@
 export interface SignupModel {
-    first_name: string;
-    last_name: string;
-    username: string;
+    firstName: string;
+    lastName: string;
+    login: string;
     email: string;
     password: string;
 }

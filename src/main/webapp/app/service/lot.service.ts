@@ -5,18 +5,17 @@ import {SignupModel} from "../model/signup-model";
 import {request} from "node:http";
 import {SignupResponse} from "../model/signup-response";
 
-const BASE_URL = "http://localhost:8080/api";
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class LotService {
-  private baseUrl = 'http://localhost:8080/api/register';
+  private baseUrl = 'http://localhost:8080/api'; // Move into configuration file
 
   constructor(private http: HttpClient) {}
 
   register(request: SignupModel): Observable<SignupResponse> {
-    return this.http.post<SignupResponse>(`${this.baseUrl}`, request);
+    return this.http.post<SignupResponse>(`${this.baseUrl}/register`, request);
   }
 }

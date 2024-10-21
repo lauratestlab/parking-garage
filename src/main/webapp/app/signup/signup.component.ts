@@ -6,12 +6,14 @@ import {response} from "express";
 import {Router} from "@angular/router";
 import {LotService} from "../service/lot.service";
 import {LocalStorageService} from "../service/local-storage.service";
+import {CommonModule} from "@angular/common";
 
 @Component({
   selector: 'app-signup',
   standalone: true,
   imports: [
-      ReactiveFormsModule
+      ReactiveFormsModule,
+      CommonModule
   ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
@@ -24,12 +26,11 @@ export class SignupComponent {
 
   constructor(
       private router: Router,
-      private lotService: LotService,
-      private storage: LocalStorageService
+      private lotService: LotService
   ){
-    this.signupForm = this.fb.nonNullable.group({
-      first_name: ['', Validators.required],
-      last_name: ['', Validators.required],
+    this.signupForm = this.fb.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
       email: ['', Validators.required],
       login: ['', Validators.required],
       password: ['', Validators.required]
@@ -37,23 +38,16 @@ export class SignupComponent {
   }
 
   register(): void {
-    // Clear any existing auth key from local storage
-    this.storage.remove('auth-key');
-
     // Extract form values into a SignupModel object
     const request: SignupModel = this.signupForm.value;
+    console.log(request);
 
     if (this.signupForm.valid) {
       console.log("Form is valid");
 
-      // Submit form data via Lot Service
-      // Check this out tomorrow
       this.lotService.register(request).subscribe({
-        next: (res) => {
-          debugger;
-          console.log("line 54")
-          console.log(res.response);
-          this.msg = res.response;
+        next: () => {
+          this.router.navigate(['activate']);
         },
         error: (err) => {
           console.error("Error Received: ", err);

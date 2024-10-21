@@ -25,6 +25,7 @@ import java.util.Optional;
  * REST controller for managing the current user's account.
  */
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api")
 public class AccountResource {
 

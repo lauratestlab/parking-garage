@@ -10,7 +10,7 @@ import {FormsModule} from "@angular/forms";
   selector: 'app-root',
   standalone: true,
   imports: [
-    RoutFerOutlet,
+    RouterOutlet,
     RouterLink,
     RouterLinkActive,
     CommonModule,
