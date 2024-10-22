@@ -7,15 +7,15 @@
       "projectType": "application",
       "schematics": {},
       "root": "",
-      "sourceRoot": "src",
+      "sourceRoot": "src/main/webapp",
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/the-lot",
+            "outputPath": "build/resources/main/static/",
             "index": "src/main/webapp/index.html",
-            "browser": "src/main/webapp/main.ts",
+            "main": "src/main/webapp/main.ts",
             "polyfills": [
               "zone.js"
             ],
@@ -29,12 +29,7 @@
             "styles": [
               "src/main/webapp/styles.css"
             ],
-            "scripts": [],
-            "server": "src/main/webapp/main.server.ts",
-            "prerender": true,
-            "ssr": {
-              "entry": "server.ts"
-            }
+            "scripts": []
           },
           "configurations": {
             "production": {

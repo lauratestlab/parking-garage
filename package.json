@@ -8,7 +8,11 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:the-lot": "node dist/the-lot/server/server.mjs",
-    "stubdata": "json-server data.js -p 3500"
+    "stubdata": "json-server data.js -p 3500",
+    "clean-www": "rimraf build/resources/main/static/",
+    "webapp:build": "npm run clean-www && npm run webapp:build:dev",
+    "webapp:build:dev": "ng build --configuration development",
+    "webapp:build:prod": "ng build --configuration production"
   },
   "private": true,
   "dependencies": {
