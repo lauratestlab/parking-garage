@@ -243,58 +243,8 @@ databaseChangeLog:
             separator: ;
             tableName: cars
             usePreparedStatements: true
-  - changeSet:
-      id: 1729099703466-15
-      author: user
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - createTable:
-            tableName: reservations
-            columns:
-              - column:
-                  name: reservation_id
-                  type: BIGINT
-                  autoIncrement: true
-                  constraints:
-                    nullable: false
-                    primaryKey: true
-                    primaryKeyName: pk_reservation
-              - column:
-                  name: start_time
-                  type: TIMESTAMP
-                  constraints:
-                    nullable: false
-              - column:
-                  name: end_time
-                  type: TIMESTAMP
-                  constraints:
-                    nullable: false
-              - column:
-                  name: spot_id
-                  type: BIGINT
-                  constraints:
-                    nullable: false
-                    foreignKeyName: fk_spot_reservation
-                    references: spot(spot_id)
-              - column:
-                  name: payment_method_id
-                  type: BIGINT
-                  constraints:
-                    nullable: false
-                    foreignKeyName: fk_payment_reservation
-                    references: payment_method(payment_id)
-              - column:
-                  name: user_id
-                  type: BIGINT
-                  constraints:
-                    nullable: false
-                    foreignKeyName: fk_user_reservation
-                    references: user(user_id)
-              - column:
-                    name: price
-                    type: DECIMAL(10, 2)
-                    constraints:
-                      nullable: false
+
+
 
   - changeSet:
         id: 1729099703466-16
@@ -302,7 +252,7 @@ databaseChangeLog:
         objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
         changes:
           - createTable:
-              tableName: payment_method
+              tableName: payment_methods
               columns:
               - column:
                     name: payment_method_id
@@ -352,16 +302,174 @@ databaseChangeLog:
                     type: VARCHAR(20)
                     constraints:
                       nullable: false
+
   - changeSet:
-        id: 1729099703466-17
-        author: user
-        changes:
-          - addForeignKeyConstraint:
-              baseColumnNames: payment_method_id
-              baseTableName: reservations
-              constraintName: fk_payment_method_reservation
-              referencedColumnNames: payment_method_id
-              referencedTableName: payment_method
+      id: 1729099703466-100
+      author: user
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_floor
+                  name: floor_id
+                  type: BIGINT
+                  autoIncrement: true
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: INT
+            tableName: floors
+  - changeSet:
+      id: 1729099703466-101
+      author: user
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_price
+                  name: duration
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: price
+                  type: decimal(10, 2)
+            tableName: prices
+  - changeSet:
+      id: 1729099703466-102
+      author: user
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_spot
+                  name: spot_id
+                  type: BIGINT
+              - column:
+                  name: name
+                  type: VARCHAR(10)
+              - column:
+                  name: floor_id
+                  type: BIGINT
+            tableName: spots
+  - changeSet:
+      id: 1729099703466-1003
+      author: user
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: floor_id
+            baseTableName: spots
+            constraintName: FK_SPOT_ON_FLOORID
+            referencedColumnNames: floor_id
+            referencedTableName: floors
+
+  - changeSet:
+      id: 1729099703466-150
+      author: user
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            tableName: reservations
+            columns:
+              - column:
+                  name: reservation_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_reservation
+              - column:
+                  name: start_time
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_time
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: spot_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_spot_reservation
+                    references: spots(spot_id)
+              - column:
+                  name: payment_method_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_payment_reservation
+                    references: payment_methods(payment_method_id)
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_reservation
+                    references: users(id)
+              - column:
+                  name: price
+                  type: DECIMAL(10, 2)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 1729099703466-170
+      author: user
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: payment_method_id
+            baseTableName: reservations
+            constraintName: fk_payment_method_reservation
+            referencedColumnNames: payment_method_id
+            referencedTableName: payment_methods
+
+  - changeSet:
+      id: 1729099703466-180
+      author: user
+      changes:
+        - loadData:
+            file: db/changelog/data/floors.csv
+            separator: ;
+            tableName: floors
+            usePreparedStatements: true
+
+  - changeSet:
+      id: 1729099703466-190
+      author: user
+      changes:
+        - loadData:
+            file: db/changelog/data/spots.csv
+            separator: ;
+            tableName: spots
+            usePreparedStatements: true
+  - changeSet:
+      id: 1729099703466-200
+      author: user
+      changes:
+        - loadData:
+            file: db/changelog/data/prices.csv
+            separator: ;
+            tableName: prices
+            usePreparedStatements: true
+
+
+
 
 
 
