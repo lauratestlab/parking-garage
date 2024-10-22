@@ -1,9 +1,7 @@
-
-export class Login{
+export class Login {
   constructor(
-public username: string,
-public password: string,
-public remeberMe: boolean,
+      public username: string,
+      public password: string,
+      public rememberMe: boolean,
   ) {}
 }
-

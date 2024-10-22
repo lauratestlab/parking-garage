@@ -1,2 +1,0 @@
-payment_method_id;expiration_date;ccv;card_number;full_name;delivery_street;delivery_city;delivery_state;delivery_zip
-1;01/24;123;123456;Marcin Szoska;123 Main St;Warsaw;Mazowieckie;00-001

@@ -1,17 +1,17 @@
 package com.example.parkinglot.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.math.BigInteger;
 
 @Entity
 @Data
+@Table(name= "prices")
 public class Price {
 
     @Id
     private int duration;
 
-    private double price;
+    private BigInteger price;
 }
