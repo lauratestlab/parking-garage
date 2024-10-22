@@ -1,0 +1,2 @@
+reservation_id,start_time,end_time,spot_id,payment_method_id,price,user_id
+1,2024-10-15 10:00:00,2024-10-15 12:00:00,1,101,25.0,1001
