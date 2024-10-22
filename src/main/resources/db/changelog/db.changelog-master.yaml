@@ -268,14 +268,14 @@ databaseChangeLog:
                   name: end_time
                   type: TIMESTAMP
                   constraints:
-                  nullable: false
+                    nullable: false
               - column:
                   name: spot_id
                   type: BIGINT
                   constraints:
-                  nullable: false
-                  foreignKeyName: fk_spot_reservation
-                  references: spot(spot_id)
+                    nullable: false
+                    foreignKeyName: fk_spot_reservation
+                    references: spot(spot_id)
               - column:
                   name: payment_method_id
                   type: BIGINT
@@ -294,7 +294,7 @@ databaseChangeLog:
                     name: price
                     type: DECIMAL(10, 2)
                     constraints:
-                    nullable: false
+                      nullable: false
 
   - changeSet:
         id: 1729099703466-16
