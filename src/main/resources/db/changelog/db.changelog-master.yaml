@@ -356,6 +356,7 @@ databaseChangeLog:
                     primaryKeyName: pk_spot
                   name: spot_id
                   type: BIGINT
+                  autoIncrement: true
               - column:
                   name: name
                   type: VARCHAR(10)
@@ -469,24 +470,26 @@ databaseChangeLog:
             usePreparedStatements: true
 
   - changeSet:
-      id: 1729099703466-180
+      id: 1729099703466-210
       author: user
       changes:
         - loadData:
-            file: db/changelog/data/reservation.csv
+            file: db/changelog/data/payment_methods.csv
             separator: ;
-            tableName: cars
+            tableName: payment_methods
             usePreparedStatements: true
 
+
   - changeSet:
-      id: 1729099703466-190
+      id: 1729099703466-220
       author: user
       changes:
         - loadData:
-            file: db/changelog/data/payment_method.csv
+            file: db/changelog/data/reservations.csv
             separator: ;
-            tableName: cars
+            tableName: reservations
             usePreparedStatements: true
+
 
 
 
