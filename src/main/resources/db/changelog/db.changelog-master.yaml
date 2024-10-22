@@ -362,6 +362,25 @@ databaseChangeLog:
               constraintName: fk_payment_method_reservation
               referencedColumnNames: payment_method_id
               referencedTableName: payment_method
+  - changeSet:
+      id: 1729099703466-18
+      author: user
+      changes:
+        - loadData:
+            file: db/changelog/data/reservation.csv
+            separator: ;
+            tableName: cars
+            usePreparedStatements: true
+
+  - changeSet:
+      id: 1729099703466-19
+      author: user
+      changes:
+        - loadData:
+            file: db/changelog/data/payment_method.csv
+            separator: ;
+            tableName: cars
+            usePreparedStatements: true
 
 
 
