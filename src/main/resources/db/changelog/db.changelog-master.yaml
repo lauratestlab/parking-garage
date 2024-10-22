@@ -468,6 +468,26 @@ databaseChangeLog:
             tableName: prices
             usePreparedStatements: true
 
+  - changeSet:
+      id: 1729099703466-180
+      author: user
+      changes:
+        - loadData:
+            file: db/changelog/data/reservation.csv
+            separator: ;
+            tableName: cars
+            usePreparedStatements: true
+
+  - changeSet:
+      id: 1729099703466-190
+      author: user
+      changes:
+        - loadData:
+            file: db/changelog/data/payment_method.csv
+            separator: ;
+            tableName: cars
+            usePreparedStatements: true
+
 
 
 
