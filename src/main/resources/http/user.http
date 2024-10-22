@@ -1,0 +1,83 @@
+###
+POST http://localhost:8080/api/register
+Accept: application/json
+Content-Type: application/json
+
+{
+  "login": "test",
+  "password": "1234",
+  "firstName": "Ivan",
+  "lastName": "Petrov",
+  "email": "powerm4f12@gmail.com"
+
+}
+
+###
+GET http://localhost:8080/api/activate?key=CXADFrBdgFPrCvzvXGe6
+
+###
+POST http://localhost:8080/api/authenticate
+
+Accept: application/json
+Content-Type: application/json
+Host: localhost:4200
+Origin: http://localhost:4200
+Referer: http://localhost:4200/login
+
+{
+  "username": "user",
+  "password": "user",
+  "rememberMe": true
+}
+
+###
+POST http://localhost:8080/api/account/reset-password/init
+Content-Type: text/plain
+Accept: application/json
+
+powerm4f12@gmail.com
+
+###
+GET http://localhost:8080/api/account/reset/finish?key=ucTj848jt00C8O5Ju99I
+
+###
+POST http://localhost:8080/api/account/reset-password/finish
+Content-Type: application/json
+Accept: application/json
+
+{
+  "key": "ucTj848jt00C8O5Ju99I",
+  "newPassword": "1234"
+}
+
+###
+GET http://localhost:8080/api/users
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcyOTE5ODk3NywiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzI5MTEyNTc3fQ.MGuJqSAzkgELEtne1n8Fsa_zmGWTBEN5xfs0c2wfL5JQWc_-nNCVylq1aygUh9Ksp_sd9FZUMohzxtNcXbAxnA
+
+###
+GET http://localhost:8080/api/users?login=test
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcyOTE5ODk3NywiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzI5MTEyNTc3fQ.MGuJqSAzkgELEtne1n8Fsa_zmGWTBEN5xfs0c2wfL5JQWc_-nNCVylq1aygUh9Ksp_sd9FZUMohzxtNcXbAxnA
+
+###
+POST http://localhost:8080/api/account
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcyOTE5ODk3NywiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzI5MTEyNTc3fQ.MGuJqSAzkgELEtne1n8Fsa_zmGWTBEN5xfs0c2wfL5JQWc_-nNCVylq1aygUh9Ksp_sd9FZUMohzxtNcXbAxnA
+
+{
+  "id": 1,
+  "login": "test",
+  "firstName": "Ivan",
+  "lastName": "Petrov",
+  "email": "powerm4f12@gmail.com",
+  "password": "12345"
+}
+
+###
+###
+DELETE http://localhost:8080/api/admin/users/test
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnaG9zdCIsImV4cCI6MTcyNzI3NjI0MywiYXV0aCI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MjcxODk4NDN9.uuonEhzg7c6Xnc5VoiH_XjFHU53NuzWeP5uvBYwUlC858YcZXpPsokdga47WR0vEpUhR3fe0hlzmIn5a-JDKpA
+
+
+###
+GET https://google.com
