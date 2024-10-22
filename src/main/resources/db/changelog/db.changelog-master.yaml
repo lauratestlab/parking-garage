@@ -182,3 +182,197 @@ databaseChangeLog:
             usePreparedStatements: true
 
 
+  - changeSet:
+      id: 1729099703466-12
+      author: user
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            tableName: cars
+            columns:
+              - column:
+                  name: car_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_cars
+              - column:
+                  name: model
+                  type: varchar(25)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: make
+                  type: varchar(25)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: color
+                  type: varchar(25)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: registration
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: true
+  - changeSet:
+      id: 1729099703466-13
+      author: user
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: cars
+            constraintName: fk_users_on_cars
+            referencedColumnNames: id
+            referencedTableName: users
+  - changeSet:
+      id: 1729099703466-14
+      author: user
+      changes:
+        - loadData:
+            file: db/changelog/data/car.csv
+            separator: ;
+            tableName: cars
+            usePreparedStatements: true
+  - changeSet:
+      id: 1729099703466-15
+      author: user
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            tableName: reservations
+            columns:
+              - column:
+                  name: reservation_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_reservation
+              - column:
+                  name: start_time
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_time
+                  type: TIMESTAMP
+                  constraints:
+                  nullable: false
+              - column:
+                  name: spot_id
+                  type: BIGINT
+                  constraints:
+                  nullable: false
+                  foreignKeyName: fk_spot_reservation
+                  references: spot(spot_id)
+              - column:
+                  name: payment_method_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_payment_reservation
+                    references: payment_method(payment_id)
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_reservation
+                    references: user(user_id)
+              - column:
+                    name: price
+                    type: DECIMAL(10, 2)
+                    constraints:
+                    nullable: false
+
+  - changeSet:
+        id: 1729099703466-16
+        author: user
+        objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+        changes:
+          - createTable:
+              tableName: payment_method
+              columns:
+              - column:
+                    name: payment_method_id
+                    type: BIGINT
+                    autoIncrement: true
+                    constraints:
+                      nullable: false
+                      primaryKey: true
+                      primaryKeyName: pk_payment_method
+              - column:
+                    name: expiration_date
+                    type: VARCHAR(5)
+                    constraints:
+                      nullable: false
+              - column:
+                    name: ccv
+                    type: INT
+                    constraints:
+                      nullable: false
+              - column:
+                    name: card_number
+                    type: BIGINT
+                    constraints:
+                      nullable: false
+              - column:
+                    name: full_name
+                    type: VARCHAR(255)
+                    constraints:
+                      nullable: false
+              - column:
+                    name: delivery_street
+                    type: VARCHAR(255)
+                    constraints:
+                      nullable: false
+              - column:
+                    name: delivery_city
+                    type: VARCHAR(100)
+                    constraints:
+                      nullable: false
+              - column:
+                    name: delivery_state
+                    type: VARCHAR(50)
+                    constraints:
+                      nullable: false
+              - column:
+                    name: delivery_zip
+                    type: VARCHAR(20)
+                    constraints:
+                      nullable: false
+  - changeSet:
+        id: 1729099703466-17
+        author: user
+        changes:
+          - addForeignKeyConstraint:
+              baseColumnNames: payment_method_id
+              baseTableName: reservations
+              constraintName: fk_payment_method_reservation
+              referencedColumnNames: payment_method_id
+              referencedTableName: payment_method
+
+
+
+
+
+
+
+
+
+
+
+
+
+
