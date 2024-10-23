@@ -10,7 +10,7 @@ import lombok.Data;
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long carID;
+    private Long carId;
     //private Long userId;
     private String model;
     private String make;
@@ -18,7 +18,7 @@ public class Car {
     private String registration;
 
     // Many Cars can belong to one User
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id") // Foreign key column in Car table
     private User user;
 

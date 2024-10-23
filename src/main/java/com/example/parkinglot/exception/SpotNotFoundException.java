@@ -1,4 +1,7 @@
-package com.example.parkinglot.service;
+package com.example.parkinglot.exception;
 
-public class SpotNotFoundException {
+public class SpotNotFoundException extends RuntimeException {
+    public SpotNotFoundException(String msg) {
+        super(msg);
+    }
 }

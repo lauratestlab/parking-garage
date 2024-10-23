@@ -13,6 +13,7 @@ import java.util.List;
 
 @Entity
 @Data
+@Table(name = "payment_methods")
 public class PaymentMethod {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +27,7 @@ public class PaymentMethod {
     private int ccv;
 
 
-    //@CreditCardNumber(message="Not a valid credit card number")
+    @CreditCardNumber(message="Not a valid credit card number")
     private int card_number;
 
     private String fullName;
@@ -42,7 +43,4 @@ public class PaymentMethod {
 
     @NotBlank(message="Zip code is required")
     private String deliveryZip;
-
-     @OneToMany(mappedBy = "paymentMethod", cascade = CascadeType.ALL, orphanRemoval = true)
-     private List<Reservation> reservations;
 }
