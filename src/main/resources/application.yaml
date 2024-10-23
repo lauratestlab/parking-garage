@@ -1,6 +1,12 @@
 spring:
   application:
     name: parkinglot
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          authority-prefix: ''
+          authorities-claim-name: auth
   jpa:
     show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect

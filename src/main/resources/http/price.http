@@ -10,6 +10,6 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjIxMjY0MCwiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzI5NjIwNjQwfQ.A8djeccnKXFg-6JWQ1DmH0AtGpdTcfh4yxEsMw92-29vcUYemQ29vf4-gmOtsZuCOxMeyieXwuX2IdAUx1SRFQ
 
 {
-  "duration": 8800,
-  "price": 8888
+  "duration": 77777,
+  "price": 99999
 }
