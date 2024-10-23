@@ -1,18 +1,9 @@
+* {box-sizing: border-box}
+
 .container{
-  margin: auto;
-  max-width: 700px;
-  width: 100%;
-  height: 200px;
+    padding: 16px;
 }
-.login-box {
-    height: 600px;
-    margin-top: 60px;
-    padding: 10px;
-    background: #f7dee5;
-    opacity: 0.5;
-    text-align: center;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-    }
+
 
 .login-key {
     height: 100px;
@@ -23,33 +14,25 @@
     -webkit-text-fill-color: transparent;
 }
 input[type=text] {
-    background-color: #1A2226;
-    border: none;
-    border-bottom: 2px solid #0DB8DE;
-    border-top: 0px;
-    border-radius: 0px;
-    font-weight: bold;
-    outline: 0;
-    margin-bottom: 20px;
-    padding-left: 0px;
-    color: #ECF0F5;
+    width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
 }
 
 input[type=password] {
-    background-color: #1A2226;
-    border: none;
-    border-bottom: 2px solid #0DB8DE;
-    border-top: 0px;
-    border-radius: 0px;
-    font-weight: bold;
-    outline: 0;
-    padding-left: 0px;
-    margin-bottom: 20px;
-    color: #ECF0F5;
+    width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
 }
 
 .form-group {
-    margin-bottom: 40px;
+    margin-bottom: 10px;
     outline: 0px;
 }
 
@@ -57,9 +40,7 @@ input[type=password] {
     border-color: inherit;
     -webkit-box-shadow: none;
     box-shadow: none;
-    border-bottom: 2px solid #0DB8DE;
     outline: 0;
-    background-color: #1A2226;
     color: #ECF0F5;
 }
 
@@ -77,16 +58,26 @@ label {
     color: #000;
     font-weight: bold;
     letter-spacing: 1px;
-
+    margin-bottom: -10px;
 
 }
+.form-check-label{
+position: absolute;
+/* border: 1px solid red; */
+padding-top: 3\0px ;
+}
+.sing-up{
+padding: 3px;
+}
+/* .from-paragraph1-label{
 
+} */
 .from-paragraph{
     margin-top: -50px;
 }
 
 .btn-outline-primary {
-    border-color: #0DB8DE;
+    border-color: white;
     color: #0DB8DE;
     border-radius: 0px;
     font-weight: bold;
@@ -106,11 +97,14 @@ label {
 }
 
 .login-button {
-    display: block;
-    margin: 0;
-    padding-right: 0px;
-    text-align: center;
-    margin-bottom: 25px;
+  background-color: #04AA6D;
+  color: white;
+  padding: 16px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
 }
 
 .login-text {
@@ -122,3 +116,4 @@ label {
 .loginbttm {
     padding: 0px;
 }
+
