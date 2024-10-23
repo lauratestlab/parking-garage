@@ -1,80 +1,109 @@
-<div class="container">
-    <div class="row">
-        <div class="col-lg-3 col-md-2"></div>
-        <div class="col-lg-6 col-md-8 login-box">
-            <div class="col-lg-12 login-title">
-                <h2> The Lot Logicians </h2>
+<div class="container mt-5">
+    <h2>Log in</h2>
+    <form [formGroup]="loginForm" (ngSubmit)="login()" method="post">
+        <!-- Username Field -->
+        <div class="mb-3">
+            <label for="login" class="form-label">Username</label>
+            <input formControlName="login" type="text" class="form-control" id="login" placeholder="Username">
+            <div *ngIf="loginForm.get('login')?.invalid && loginForm.get('login')?.touched" class="text-danger">
+                Username is required
             </div>
-            <br>
-                <div class="col-lg-12 login-form">
-                    <div class="col-lg-12 login-form">
-                        <form class="form" (ngSubmit)="login()" [formGroup]="loginForm" method="post">
-                            <div class="form-group">
-                                <br>
-                                <label class="form-control-label">USERNAME</label>
-                                <br>
-                                <input
-                                        type="text"
-                                        class="form-control"
-                                        name="username"
-                                        id="username"
-                                        placeholder="Your username"
-                                        formControlName="username"
-                                        #username
-                                        data-cy="username"
-                                        required
-                                />
-                                <br>
-                            </div>
-                            <div class="form-group">
-                                <br>
-                                <label class="form-control-label">PASSWORD</label>
-                                
-                                <br>
-                                <input
-                                        type="password"
-                                        class="form-control"
-                                        name="password"
-                                        id="password"
-                                        placeholder="Your password"
-                                        formControlName="password"
-                                        data-cy="password"
-                                />
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label" for="rememberMe">
-                                    <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe" formControlName="rememberMe" />
-                                    <span>Remember me</span>
-                                </label>
-                            </div>
-                             <div class="sing-up">
-                                    <button type="button" class="btn btn-primary"  [disabled]="loginForm.invalid">Login</button>
-                                    <button  (click)="register()" type="button" class="btn btn-link">Register</button>
-            
-                            </div>
-                            <div class="from-paragraph1">
-                                <label class="from-paragraph1-label">forget password</label>
-                            </div>
-                            <br>
-                            <div class="col-lg-12 loginbttm">
-                                <div class="col-lg-6 login-btm login-text">
-                                    <!-- Error Message -->
-                                </div>
-                                <!-- <div class="col-lg-6 login-btm login-button">
-                                    <button type="submit" class="btn btn-outline-primary">LOGIN
-                                    </button>
-                                </div> -->
-
-                            </div>
-                           
-
-                        </form>
-                    </div>
-                    <div class="col-lg-12 login-key"></div>
-                    <i class="fa fa-key" aria-hidden="true"></i>
-                </div>
         </div>
-        <div class="col-lg-3 col-md-2"></div>
-    </div>
+
+        <!-- Password Field -->
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input formControlName="password" type="password" class="form-control" id="password" placeholder="Password">
+            <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-danger">
+                Password is required
+            </div>
+        </div>
+
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">Login</button>
+<!--        <button (click)="login()" type="button" class="btn btn-link">Register</button>-->
+    </form>
+
 </div>
+
+<!--<div class="container">-->
+<!--    <div class="row">-->
+<!--        <div class="col-lg-3 col-md-2"></div>-->
+<!--        <div class="col-lg-6 col-md-8 login-box">-->
+<!--            <div class="col-lg-12 login-title">-->
+<!--                <h2> The Lot Logicians </h2>-->
+<!--            </div>-->
+<!--            <br>-->
+<!--                <div class="col-lg-12 login-form">-->
+<!--                    <div class="col-lg-12 login-form">-->
+<!--                        <form class="form" (ngSubmit)="login()" [formGroup]="loginForm" method="post">-->
+<!--                            <div class="form-group">-->
+<!--                                <br>-->
+<!--                                <label class="form-control-label">USERNAME</label>-->
+<!--                                <br>-->
+<!--                                <input-->
+<!--                                        type="text"-->
+<!--                                        class="form-control"-->
+<!--                                        name="username"-->
+<!--                                        id="username"-->
+<!--                                        placeholder="Your username"-->
+<!--                                        formControlName="username"-->
+<!--                                        #username-->
+<!--                                        data-cy="username"-->
+<!--                                        required-->
+<!--                                />-->
+<!--                                <br>-->
+<!--                            </div>-->
+<!--                            <div class="form-group">-->
+<!--                                <br>-->
+<!--                                <label class="form-control-label">PASSWORD</label>-->
+<!--                                -->
+<!--                                <br>-->
+<!--                                <input-->
+<!--                                        type="password"-->
+<!--                                        class="form-control"-->
+<!--                                        name="password"-->
+<!--                                        id="password"-->
+<!--                                        placeholder="Your password"-->
+<!--                                        formControlName="password"-->
+<!--                                        data-cy="password"-->
+<!--                                />-->
+<!--                            </div>-->
+<!--                            <div class="form-check">-->
+<!--                                <label class="form-check-label" for="rememberMe">-->
+<!--                                    <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe" formControlName="rememberMe" />-->
+<!--                                    <span>Remember me</span>-->
+<!--                                </label>-->
+<!--                            </div>-->
+<!--                             <div class="sing-up">-->
+<!--                                    <button type="button" class="btn btn-primary"  [disabled]="loginForm.invalid">Login</button>-->
+<!--                                    <button  (click)="register()" type="button" class="btn btn-link">Register</button>-->
+<!--            -->
+<!--                            </div>-->
+<!--                            <div class="from-paragraph1">-->
+<!--                                <label class="from-paragraph1-label">forget password</label>-->
+<!--                            </div>-->
+<!--                            <br>-->
+<!--                            <div class="col-lg-12 loginbttm">-->
+<!--                                <div class="col-lg-6 login-btm login-text">-->
+<!--                                    &lt;!&ndash; Error Message &ndash;&gt;-->
+<!--                                </div>-->
+<!--                                &lt;!&ndash; <div class="col-lg-6 login-btm login-button">-->
+<!--                                    <button type="submit" class="btn btn-outline-primary">LOGIN-->
+<!--                                    </button>-->
+<!--                                </div> &ndash;&gt;-->
+
+<!--                            </div>-->
+<!--                           -->
+
+<!--                        </form>-->
+<!--                    </div>-->
+<!--                    <div class="col-lg-12 login-key"></div>-->
+<!--                    <i class="fa fa-key" aria-hidden="true"></i>-->
+<!--                </div>-->
+<!--        </div>-->
+<!--        <div class="col-lg-3 col-md-2"></div>-->
+<!--    </div>-->
+<!--</div>-->
 

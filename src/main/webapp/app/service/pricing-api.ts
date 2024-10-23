@@ -10,19 +10,15 @@ import { Pricing } from "../model/pricing-model";
 
 export class PricingService {
     // Endpoint for pricing data
-    private baseUrl = 'http://localhost:8080'
+    private baseUrl = 'http://localhost:8080/api'
 
     constructor(private http: HttpClient) { }
 
     getPricingList(): Observable<Pricing[]> {
-        return this.http.get<GetResponse>(this.baseUrl).pipe(
-            map(response => response._embedded.prices)
-          );
+        return this.http.get<Pricing[]>(`${this.baseUrl}/price`);
+    }
+    
+    updatePricing(priceDetail: any): Observable<Pricing> {
+        return this.http.post<Pricing>(`${this.baseUrl}/price/update`, priceDetail);
     }
 }
-
-interface GetResponse {
-    _embedded: {
-      prices: Pricing[];
-    }
-  }

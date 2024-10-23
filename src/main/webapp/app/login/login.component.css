@@ -1,119 +1,55 @@
 * {box-sizing: border-box}
 
-.container{
+/* Add padding to containers */
+.container {
     padding: 16px;
 }
 
 
-.login-key {
-    height: 100px;
-    font-size: 80px;
-    line-height: 90px;
-    background: -webkit-linear-gradient(#27EF9F, #0DB8DE);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-input[type=text] {
+/* Full-width input fields */
+input[type=text], input[type=password] {
     width: 100%;
-  padding: 15px;
-  margin: 5px 0 22px 0;
-  display: inline-block;
-  border: none;
-  background: #f1f1f1;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
 }
 
-input[type=password] {
-    width: 100%;
-  padding: 15px;
-  margin: 5px 0 22px 0;
-  display: inline-block;
-  border: none;
-  background: #f1f1f1;
-}
-
-.form-group {
-    margin-bottom: 10px;
-    outline: 0px;
-}
-
-.form-control:focus {
-    border-color: inherit;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    outline: 0;
-    color: #ECF0F5;
-}
-
-input:focus {
+input[type=text]:focus, input[type=password]:focus {
+    background-color: #ddd;
     outline: none;
-    box-shadow: 0 0 0;
 }
 
-label {
-    margin-bottom: 0px;
+/* Overwrite default styles of hr */
+hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
 }
 
-.form-control-label {
-    font-size: 10px;
-    color: #000;
-    font-weight: bold;
-    letter-spacing: 1px;
-    margin-bottom: -10px;
-
-}
-.form-check-label{
-position: absolute;
-/* border: 1px solid red; */
-padding-top: 3\0px ;
-}
-.sing-up{
-padding: 3px;
-}
-/* .from-paragraph1-label{
-
-} */
-.from-paragraph{
-    margin-top: -50px;
-}
-
-.btn-outline-primary {
-    border-color: white;
-    color: #0DB8DE;
-    border-radius: 0px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-}
-
-.btn-outline-primary:hover {
+/* Set a style for the submit/register button */
+.registerbtn {
+    background-color: #04AA6D;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
     cursor: pointer;
-    background-color: white;
-    color: black;
-    right: 0px;
+    width: 100%;
+    opacity: 0.9;
 }
 
-.login-btm {
-    float: center;
+.registerbtn:hover {
+    opacity:1;
 }
 
-.login-button {
-  background-color: #04AA6D;
-  color: white;
-  padding: 16px 20px;
-  margin: 8px 0;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  opacity: 0.9;
+/* Add a blue text color to links */
+a {
+    color: dodgerblue;
 }
 
-.login-text {
-    text-align: left;
-    padding-left: 0px;
-    color: #A2A4A4;
+/* Set a grey background color and center the text of the "sign in" section */
+.signin {
+    background-color: #f1f1f1;
+    text-align: center;
 }
-
-.loginbttm {
-    padding: 0px;
-}
-
