@@ -1,9 +1,13 @@
 import { Component } from '@angular/core';
+import {CurrencyPipe, NgForOf} from "@angular/common";
 
 @Component({
   selector: 'app-members',
   standalone: true,
-  imports: [],
+    imports: [
+        CurrencyPipe,
+        NgForOf
+    ],
   templateUrl: './members.component.html',
   styleUrl: './members.component.css'
 })

@@ -23,3 +23,41 @@
     flex-direction: row;
     gap: 6px;
 }
+
+table{
+    width: 100%;
+    table-layout: fixed;
+}
+.tbl-header{
+    background-color: rgba(255,255,255,0.3);
+}
+.tbl-content{
+    height:100%;
+    overflow-x: hidden;
+    margin-top: 0px;
+    /*border: 1px solid rgba(255,255,255,0.3);*/
+}
+th{
+    padding: 20px 20px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 1rem;
+    color: #fff;
+    text-transform: uppercase;
+}
+td{
+    padding: 20px;
+    text-align: left;
+    vertical-align:middle;
+    font-weight: 300;
+    font-size: 1.2rem;
+    color: #fff;
+    border-bottom: solid 2px #2e3033;
+}
+tr:nth-child(even){
+    background-color: #2e3033;
+}
+
+.hover-effect:hover {
+    background-color: rgba(173, 255, 47, 0.22);
+}
