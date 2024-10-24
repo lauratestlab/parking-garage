@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
+@Table(name = "reservations")
 public class Reservation {
 
 
@@ -17,7 +18,7 @@ public class Reservation {
     private  LocalDateTime startTime;
     private LocalDateTime endTime;
     private Long spotId;
-    private Long paymentMethodId;
+    //private Long paymentMethodId;
     private double price;
 
     @ManyToOne
@@ -25,7 +26,7 @@ public class Reservation {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "payment_Id")
+    @JoinColumn(name = "payment_method_id")
     private PaymentMethod paymentMethod;
 
     @ManyToOne
