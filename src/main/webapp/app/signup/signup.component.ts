@@ -59,35 +59,6 @@ export class SignupComponent {
 
   }
 
-
-  // register(): void {
-  //   this.storage.remove('auth-key');
-  //
-  //   const formValue = this.form.value;
-  //   // @ts-ignore
-  //   this.request.first_name = formValue.first_name;
-  //   // if (this.form.valid) {
-  //   //   alert("You've been registered!");
-  //   //
-  //   //   this.http.post<SignupModel>('http://localhost:8080/api/register', {
-  //   //     user: this.form.getRawValue()
-  //   //   }).subscribe({
-  //   //     next: (response) => {
-  //   //       console.log('response', response);  // Log the response here
-  //   //       this.router.navigate(['activate']);  // Navigate to the 'activate' page
-  //   //     },
-  //   //     error: (err) => {
-  //   //       console.error('Error during registration:', err);  // Log the error if any
-  //   //     },
-  //   //     complete: () => {
-  //   //       console.log('Registration request completed.');  // Optionally handle completion
-  //   //     }
-  //   //   });
-  //   //
-  //   // } else {
-  //   //   alert("Please fill out all fields correctly.");
-  //   // }
-
   login(): void {
     this.router.navigate(['login']);
   }

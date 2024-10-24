@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/price")
+@CrossOrigin(origins = "http://localhost:4200")
 public class PriceController {
 
     private final PriceRepository priceRepository;
@@ -29,7 +30,7 @@ public class PriceController {
         return priceRepository.findAll();
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @PostMapping("/update")
     public ResponseEntity<Price> createPrice(@RequestBody Price price) {
         Price savedPrice = priceRepository.save(price);

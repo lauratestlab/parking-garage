@@ -2,43 +2,65 @@
     <div class="header">
         <h2>Pricing</h2>
         <div class="buttons">
+            <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Add price</button>
             <button type="button" class="btn btn-outline-light">Update pricing</button>
+            <button type="button" class="btn btn-outline-danger">Delete</button>
         </div>
     </div>
+    <p>Price may vary depending on the member.</p>
 
     <div class="card-container">
-        <div class="row">
-            <div *ngFor="let price of prices" class="col-lg-4 col-md-12 mb-4">
-                <div class="h-100 flip-card">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-
-                            <span class="price">{{ price.price | currency : 'USD' : 'symbol' : '1.0-0' }}</span><br>/ {{ price.duration }} hr(s)
-                            <br>
-                            <h2 class="card-title">Basic</h2>
-                            <small>Individual</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <table>
+            <thead>
+            <tr>
+                <th></th>
+                <th>Price</th>
+                <th>Duration (in hours)</th>
+            </tr>
+            </thead>
+        </table>
+        <div class="tbl-content">
+            <table>
+                <tbody>
+                <tr class="hover-effect" *ngFor="let price of prices">
+                    <td *ngIf="price.duration === 1">Quick Stop</td>
+                    <td *ngIf="price.duration === 2">Double Time</td>
+                    <td *ngIf="price.duration === 5">Half Day Hustle</td>
+                    <td *ngIf="price.duration === 24">Full Day Flex</td>
+                    <td>{{ price.price | currency: 'USD' }}</td>
+                    <td>{{ price.duration }}</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-
-
-        <!-- Temp table to display prices -->
-<!--         <table class="table table-striped">-->
-<!--            <thead>-->
-<!--                <tr>-->
-<!--                    <th scope="col">Duration (hours)</th>-->
-<!--                    <th scope="col">Price</th>-->
-<!--                </tr>-->
-<!--            </thead>-->
-<!--            <tbody>-->
-<!--                <tr *ngFor="let price of prices">-->
-<!--                    <td>{{ price.duration }}</td>-->
-<!--                    <td>{{ price.price | currency }}</td>-->
-<!--                </tr>-->
-<!--            </tbody>-->
-<!--         </table>-->
-
     </div>
+
+
+<!--    <div id="mySidepanel" class="sidepanel" *ngIf="isAddPriceFormVisible">-->
+<!--        <h3>Form</h3>-->
+<!--        <form>-->
+<!--            <label for="name">Name</label>-->
+<!--            <input type="text" id="name" name="name"/>-->
+<!--        </form>-->
+<!--&lt;!&ndash;        <form [formGroup]="addPriceForm" (ngSubmit)="addPrice()" method="post">&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="mb-3">&ndash;&gt;-->
+<!--&lt;!&ndash;                <label for="price" class="form-label">Price</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                <input formControlName="price" type="number" class="form-control" id="price" placeholder="Price">&ndash;&gt;-->
+<!--&lt;!&ndash;                <div *ngIf="addPriceForm?.invalid && addPriceForm.get('price')?.touched" class="text-danger">&ndash;&gt;-->
+<!--&lt;!&ndash;                    Price is required&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;            <div class="mb-3">&ndash;&gt;-->
+<!--&lt;!&ndash;                <label for="duration" class="form-label">Duration</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                <input formControlName="duration" type="number" class="form-control" id="duration" placeholder="Duration">&ndash;&gt;-->
+<!--&lt;!&ndash;                <div *ngIf="addPriceForm.get('price')?.invalid && addPriceForm.get('duration')?.touched" class="text-danger">&ndash;&gt;-->
+<!--&lt;!&ndash;                    Price is required&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;            <button type="submit" class="btn btn-primary" [disabled]="addPriceForm.invalid">Add price</button>&ndash;&gt;-->
+<!--&lt;!&ndash;        </form>&ndash;&gt;-->
+<!--    </div>-->
+
 </div>
+
