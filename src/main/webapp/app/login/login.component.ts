@@ -38,7 +38,7 @@ export default class LoginComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.username().nativeElement.focus();
   }
-
+    
   login(): void {
     this.loginService.login(this.loginForm.getRawValue()).subscribe({
       next: () => {
@@ -50,6 +50,12 @@ export default class LoginComponent implements OnInit, AfterViewInit {
       },
       error: () => this.authenticationError.set(true),
     });
+
   }
+    register(): void {
+      this.router.navigate(['register']);
+     
+    }
+
 }
 

@@ -1,8 +1,15 @@
-* {box-sizing: border-box}
 
-/* Add padding to containers */
-.container {
-  padding: 16px;
+.login-box {
+    
+    height: 800px;
+    margin-top: 50px;
+    margin: auto;
+    width: 75%;
+    padding: 10px;
+    background: white;
+    opacity: 0.5;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    
 }
 
 /* Full-width input fields */
