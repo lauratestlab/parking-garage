@@ -1,10 +1,10 @@
 import {Component, inject, OnInit} from '@angular/core';
-import { PricingService } from '../service/pricing-api';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Pricing } from '../model/pricing-model';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {SignupModel} from "../model/signup-model";
+import {PricingService} from "../service/pricing-api";
 
 @Component({
   selector: 'app-pricing',
@@ -30,20 +30,15 @@ export class PricingComponent implements OnInit {
     });
   }
 
-
   ngOnInit(): void {
       this.loadPricingModel();
   }
 
-  toggleAddPriceBar() {
-    console.log("Add has clicked!");
-    this.isAddPriceFormVisible = !this.isAddPriceFormVisible;
-  }
-
   loadPricingModel(): void {
-    this.api.getPricingList().subscribe(data =>{
-      this.prices = data;
-    });
+    this.api.getPricingList().subscribe(
+        data => { this.prices = data; },
+        error => { console.error('Error fetching pricing list', error); }
+    );
   }
 
   addPrice() {
@@ -57,22 +52,17 @@ export class PricingComponent implements OnInit {
         next: () => {
           console.log('Pricing data submitted. Check db');
         },
-        error: (err) => {
-          console.error("'Error submitting pricing data: ", err);
+        error: () => {
+          console.error("'Error submitting pricing data");
         }
       });
     } else {
       console.log("Form submission failed");
+
     }
-    // this.api.addPrice(this.prices).subscribe(
-    //     (response) => {
-    //       console.log('Pricing data submitted:', response);
-    //     },
-    //     (error) => {
-    //       console.error('Error submitting pricing data:',error);
-    //     }
-    // );
   }
+
+
   updatePricing() {
 
   }

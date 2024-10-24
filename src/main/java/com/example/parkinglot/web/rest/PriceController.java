@@ -45,7 +45,7 @@ public class PriceController {
     }
 
     // Method to update the price by duration (id) and the new price
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @PutMapping("/update/{duration}")
     public ResponseEntity<Price> updatePriceByDuration(
             @PathVariable("duration") int duration,

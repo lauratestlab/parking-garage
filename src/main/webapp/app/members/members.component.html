@@ -23,14 +23,13 @@
         <div class="tbl-content">
             <table>
                 <tbody>
-                <tr class="hover-effect">
-                    <!--                    <td *ngIf="price.duration === 1">Quick Stop</td>-->
-                    <!--                    <td *ngIf="price.duration === 2">Double Time</td>-->
-                    <!--                    <td *ngIf="price.duration === 5">Half Day Hustle</td>-->
-                    <!--                    <td *ngIf="price.duration === 24">Full Day Flex</td>-->
-                    <!--                    <td *ng>No Name</td>-->
-                    <td></td>
-                    <td></td>
+                <tr class="hover-effect" *ngFor="let member of members">
+                    <td>{{ member.member_id }}</td>
+                    <td>{{ member.first_name }}</td>
+                    <td>{{ member.last_name }}</td>
+                    <td>{{ member.email }}</td>
+                    <td>{{ member.status }}</td>
+                    <td>{{ member.date_created }}</td>
                 </tr>
                 </tbody>
             </table>

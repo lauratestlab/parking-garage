@@ -1,11 +1,8 @@
 import {Component, inject} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {HttpClient} from "@angular/common/http";
 import {SignupModel} from "../model/signup-model";
-import {response} from "express";
 import {Router} from "@angular/router";
 import {LotService} from "../service/lot.service";
-import {LocalStorageService} from "../service/local-storage.service";
 import {CommonModule} from "@angular/common";
 
 @Component({
