@@ -13,6 +13,7 @@ import java.util.List;
 
 @Entity
 @Data
+@Table(name = "paymentMethods")
 public class PaymentMethod {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

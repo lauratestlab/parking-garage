@@ -16,7 +16,7 @@ public class Spot {
 
     private String name;
 
-    @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Reservation> reservations;
 
     @ManyToOne
