@@ -24,4 +24,8 @@ public class CarService {
         return carRepository.save(car);
     }
 
+    public long getRedCarCount() {
+        return carRepository.countRedCars();
+    }
+
 }

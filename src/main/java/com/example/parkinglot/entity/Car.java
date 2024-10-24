@@ -10,6 +10,7 @@ import lombok.Data;
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "car_id")
     private Long carId;
     //private Long userId;
     private String model;
