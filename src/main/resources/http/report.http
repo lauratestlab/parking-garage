@@ -1,0 +1,4 @@
+GET http://localhost:8080/api/report/availableSpots
+###
+GET http://localhost:8080/api/report/revenue?start=2024-10-24&end=2024-10-24
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjM5MjM5MiwiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzI5ODAwMzkyfQ.TfU-bQWKq1ybMuhjg8CA6s8dsk-6xXi5Hx5hbP5eFu3_ISQfV_B3kE8PRctxYInaxKvLOVebQDZqsgjKzJjCIQ

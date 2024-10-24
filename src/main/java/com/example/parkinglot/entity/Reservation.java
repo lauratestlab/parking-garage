@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jdk.jfr.Timestamp;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -41,11 +42,13 @@ public class Reservation extends AbstractAuditingEntity<Long> {
     private Spot spot;
 
     @Enumerated(EnumType.STRING)
-    private Status status = Status.CREATED;
+    private Status status = Status.ACTIVE;
 
     @ManyToOne
     @JoinColumn(name = "car_id")
     private Car car;
+
+    private String confirmationCode;
 
     @Override
     public Long getId() {

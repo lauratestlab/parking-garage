@@ -413,7 +413,6 @@ databaseChangeLog:
                   name: payment_method_id
                   type: BIGINT
                   constraints:
-                    nullable: false
                     foreignKeyName: fk_payment_reservation
                     references: payment_methods(payment_method_id)
               - column:
@@ -522,11 +521,58 @@ databaseChangeLog:
                   name: last_modified_date
                   type: timestamp
 
+  - changeSet:
+      id: 1729099703466-240
+      author: user
+      changes:
+        - addColumn:
+            tableName: reservations
+            columns:
+              - column:
+                  name: confirmation_code
+                  type: VARCHAR(20)
 
 
+  - changeSet:
+      id: 1729099703466-250
+      author: user
+      changes:
+        - addColumn:
+            tableName: payment_methods
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+  - changeSet:
+      id: 1729099703466-260
+      author: user
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: payment_methods
+            constraintName: fk_suer_id_payment_methods
+            referencedColumnNames: id
+            referencedTableName: users
 
+  - changeSet:
+      id: 1729099703466-270
+      author: user
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: payment_methods
+            constraintName: fk_user_id_payment_methods
+            referencedColumnNames: id
+            referencedTableName: users
 
-
+  - changeSet:
+      id: 1729099703466-280
+      author: user
+      changes:
+        - modifyDataType:
+            columnName: card_number
+            newDataType: varchar(19)
+            tableName: payment_methods
 
 
 

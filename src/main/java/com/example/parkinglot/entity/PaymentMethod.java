@@ -19,6 +19,10 @@ public class PaymentMethod {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paymentMethodId;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @Pattern(regexp="^(0[1-9]|1[0-2])([\\/])([1-9][0-9])$",
             message="Must be formatted MM/YY")
     private String expirationDate;
@@ -26,9 +30,8 @@ public class PaymentMethod {
     @Digits(integer=3, fraction=0, message="Invalid CVV")
     private int ccv;
 
-
     @CreditCardNumber(message="Not a valid credit card number")
-    private int card_number;
+    private String card_number;
 
     private String fullName;
 

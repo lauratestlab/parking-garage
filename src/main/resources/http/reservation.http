@@ -12,4 +12,5 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjIyO
   "paymentMethodId": 1
 }
 
-###-
+###
+GET http://localhost:8080/api/reservation/qr/sdfg

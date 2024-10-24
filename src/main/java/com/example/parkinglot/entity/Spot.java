@@ -3,6 +3,7 @@ package com.example.parkinglot.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,4 +20,8 @@ public class Spot {
     @ManyToOne
     @JoinColumn(name = "floor_id")
     private Floor floor;
+
+    @OneToMany(mappedBy = "spot", fetch = FetchType.LAZY)
+    private List<Reservation> reservations = new ArrayList<>();
+
 }
