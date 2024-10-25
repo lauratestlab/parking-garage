@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.example.parkinglot.service.PriceService;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
@@ -49,7 +50,7 @@ public class PriceController {
     @PutMapping("/update/{duration}")
     public ResponseEntity<Price> updatePriceByDuration(
             @PathVariable("duration") int duration,
-            @RequestParam("price") BigInteger newPrice) {
+            @RequestParam("price") BigDecimal newPrice) {
         Price updatedPrice = priceService.updatePriceByDurationAndValue(duration, newPrice);
         if (updatedPrice != null) {
             return ResponseEntity.ok(updatedPrice);

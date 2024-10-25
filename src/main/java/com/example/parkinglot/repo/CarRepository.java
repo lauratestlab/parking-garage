@@ -8,23 +8,18 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CarRepository extends JpaRepository<Car, Long> {
 
     List<Car> findByUserFirstName(String firstName);
 
+    Optional<Car> getOneByCarId(Long aLong);
 
     @Query("SELECT COUNT(c) FROM Car c WHERE c.color = 'Red'")
     long countRedCars();
-
 }
-
-
-
-
-
-
 
 
 

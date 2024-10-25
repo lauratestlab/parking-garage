@@ -3,6 +3,7 @@ package com.example.parkinglot.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,10 +17,11 @@ public class Spot {
 
     private String name;
 
-    @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Reservation> reservations;
-
     @ManyToOne
     @JoinColumn(name = "floor_id")
     private Floor floor;
+
+    @OneToMany(mappedBy = "spot", fetch = FetchType.LAZY)
+    private List<Reservation> reservations = new ArrayList<>();
+
 }

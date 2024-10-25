@@ -1,5 +1,6 @@
 package com.example.parkinglot.web.rest;
 
+import com.example.parkinglot.security.AuthoritiesConstants;
 import com.example.parkinglot.service.UserService;
 import com.example.parkinglot.dto.UserDTO;
 import org.slf4j.Logger;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,7 +47,7 @@ public class PublicUserResource {
     @GetMapping("/users")
     public ResponseEntity<List<UserDTO>> getAllPublicUsers(Pageable pageable) {
         LOG.debug("REST request to get all public User names");
-        if (!onlyContainsAllowedProperties(pageable)) {
+         if (!onlyContainsAllowedProperties(pageable)) {
             return ResponseEntity.badRequest().build();
         }
 

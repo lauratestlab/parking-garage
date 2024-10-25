@@ -1,0 +1,16 @@
+###
+POST http://localhost:8080/api/reservation
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjIyOTAwNiwiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzI5NjM3MDA2fQ.XkmMwxbygJPUE1XBiHxaTYW0SmH83isSK7vfAsSuA3IXh7pEHfNmFoeAWwG64Aqdkd7L3AzohlyGxoB35orYdA
+
+{
+  "userId": 1,
+  "startTime": "2025-04-23T18:25:43.511Z",
+  "endTime": "2025-04-28T18:25:43.511Z",
+  "spotId": 1,
+  "carId": 1,
+  "paymentMethodId": 1
+}
+
+###
+GET http://localhost:8080/api/reservation/qr/sdfg
