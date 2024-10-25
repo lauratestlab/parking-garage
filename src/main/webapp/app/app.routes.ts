@@ -3,12 +3,11 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ReservationsComponent } from './reservations/reservations.component';
 import { PricingComponent } from './pricing/pricing.component';
 import { MembersComponent } from './members/members.component';
-import {SignupComponent} from "./signup/signup.component";
 import LoginComponent from "./login/login.component";
 import {ActivatePageComponent} from "./activate-page/activate-page.component";
 
-export const routes: Routes = [
-    { path: 'register', component: SignupComponent },
+const routes: Routes = [
+    { path: 'register', loadComponent: () => import('./signup/signup.component') },
     { path: 'login', component: LoginComponent },
     { path: 'activate', component: ActivatePageComponent },
     // { path: 'dashboard', component: DashboardComponent },
@@ -17,3 +16,5 @@ export const routes: Routes = [
     // { path: 'members', component: MembersComponent },
     { path: '',   redirectTo: '/register', pathMatch: 'full' }
 ];
+
+export default routes;

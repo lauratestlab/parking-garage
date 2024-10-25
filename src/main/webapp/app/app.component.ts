@@ -25,7 +25,7 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
+export default class AppComponent {
   currentPage: string = 'dashboard';
 
   private applicationConfigService = inject(ApplicationConfigService);

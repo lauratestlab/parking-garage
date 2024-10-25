@@ -52,11 +52,6 @@ server:
   port: 10344
   address: localhost
 
-# ===================================================================
-# JHipster specific properties
-#
-# Full reference is available at: https://www.jhipster.tech/common-application-properties/
-# ===================================================================
 application:
   mail:
     from: test@localhost.com

@@ -37,13 +37,21 @@
               }
             ],
             "styles": [
-              "src/main/webapp/styles.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
             "scripts": []
           },
           "configurations": {
             "production": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "serviceWorker": true,
+              "ngswConfigPath": "ngsw-config.json",
               "budgets": [
                 {
                   "type": "initial",
@@ -55,13 +63,15 @@
                   "maximumWarning": "2kB",
                   "maximumError": "4kB"
                 }
-              ],
-              "outputHashing": "all"
+              ]
             },
             "development": {
+              "buildOptimizer": false,
               "optimization": false,
+              "vendorChunk": true,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "namedChunks": true
             }
           },
           "defaultConfiguration": "production"
@@ -100,7 +110,6 @@
               }
             ],
             "styles": [
-              "src/main/webapp/styles.css",
               "src/main/webapp/app/signup/signup.component.css"
             ],
             "scripts": []
@@ -110,6 +119,12 @@
     }
   },
   "cli": {
+    "cache": {
+      "enabled": true,
+      "path": "./build/angular/",
+      "environment": "all"
+    },
+    "packageManager": "npm",
     "analytics": false
   }
 }

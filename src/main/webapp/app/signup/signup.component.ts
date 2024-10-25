@@ -18,7 +18,7 @@ import {CommonModule} from "@angular/common";
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
 })
-export class SignupComponent {
+export default class SignupComponent {
   signupForm: FormGroup;
   msg: string | undefined;
   fb = inject(FormBuilder);
