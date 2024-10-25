@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: The logicians
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
@@ -7,12 +9,15 @@ spring:
       maximum-pool-size: 1
   jpa:
     open-in-view: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
     properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
       hibernate.id.new_generator_mappings: true
       hibernate.connection.provider_disables_autocommit: true
       hibernate.cache.use_second_level_cache: false

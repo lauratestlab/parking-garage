@@ -49,6 +49,10 @@ dependencies {
 	testImplementation "org.testcontainers:junit-jupiter"
 	testImplementation "org.testcontainers:testcontainers"
 	testImplementation "org.testcontainers:postgresql"
+	implementation 'com.google.zxing:core:3.5.3'
+	implementation 'com.google.zxing:javase:3.5.3'
+	implementation 'commons-io:commons-io:2.17.0'
+	implementation 'com.github.spotbugs:spotbugs-annotations:4.8.6'
 }
 
 ext {

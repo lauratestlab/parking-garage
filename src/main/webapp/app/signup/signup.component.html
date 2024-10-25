@@ -1,7 +1,11 @@
 <div class="container mt-5">
+     <div class="mb-3 login-box">
     <h2>Sign Up</h2>
+    <br>
+    <br>
     <form [formGroup]="signupForm" (ngSubmit)="register()" method="post">
         <!-- First Name Field -->
+        
         <div class="mb-3">
             <label for="firstName" class="form-label">First Name</label>
             <input formControlName="firstName" type="text" class="form-control" id="firstName" placeholder="First Name">
@@ -49,5 +53,7 @@
         <!-- Submit Button -->
         <button type="submit" class="btn btn-primary" [disabled]="signupForm.invalid">Register</button>
         <button (click)="login()" type="button" class="btn btn-link">Login</button>
-    </form>
+   </form> 
 </div>
+</div>
+
