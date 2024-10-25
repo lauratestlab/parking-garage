@@ -50,7 +50,7 @@ export class PricingComponent implements OnInit {
 
       this.api.addPrice(request).subscribe({
         next: () => {
-          console.log('Pricing data submitted. Check db');
+          console.log('Pricing data submitted.');
         },
         error: () => {
           console.error("'Error submitting pricing data");
