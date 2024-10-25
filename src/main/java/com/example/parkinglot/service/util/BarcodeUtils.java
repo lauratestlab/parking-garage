@@ -23,4 +23,14 @@ public class BarcodeUtils {
 
         return Base64.getEncoder().encodeToString(outputStream.toByteArray());
     }
+
+    public static byte[] generateQRCode(String barcodeText) throws WriterException, IOException {
+        QRCodeWriter barcodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = barcodeWriter.encode(barcodeText, BarcodeFormat.QR_CODE, 200, 200);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        MatrixToImageWriter.writeToStream(bitMatrix, IMAGE_FORMAT, outputStream);
+
+        return outputStream.toByteArray();
+    }
 }

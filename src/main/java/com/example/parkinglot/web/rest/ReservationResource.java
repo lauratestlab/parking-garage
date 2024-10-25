@@ -39,16 +39,16 @@ public class ReservationResource {
         return reservationService.createReservation(reservationDTO);
     }
 
-//    @GetMapping(value = "/qr/{confirmationCode}", produces = MediaType.IMAGE_JPEG_VALUE)
-//    @PermitAll
-//    public byte[] getReservationQR(@PathVariable String confirmationCode) {
-//        LOG.debug("REST request to generate qr code");
-//        try {
-//            return BarcodeUtils.generateQRCodeImage(confirmationCode);
-//        } catch (WriterException | IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+    @GetMapping(value = "/qr/{confirmationCode}", produces = MediaType.IMAGE_JPEG_VALUE)
+    @PermitAll
+    public byte[] getReservationQR(@PathVariable String confirmationCode) {
+        LOG.debug("REST request to generate qr code");
+        try {
+            return BarcodeUtils.generateQRCode(confirmationCode);
+        } catch (WriterException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private boolean isDateAcceptable(LocalDateTime start, LocalDateTime end) {
         return start.isAfter(LocalDateTime.now()) && end.isAfter(start);

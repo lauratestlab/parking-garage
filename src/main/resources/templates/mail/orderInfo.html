@@ -9,8 +9,8 @@
     <p th:text="#{email.order.greeting(${user.login})}">Dear</p>
     <p th:text="#{email.order.text1}">Order confirmation code:</p>
     <p th:text="${qr.confirmationNumber}">Confirmation number</p>
-<!--    <img th:src="@{|${baseUrl}/api/reservation/qr/${confirmationNumber}|}" alt="">-->
-        <img th:src="@{'data:image/jpeg;base64,'+${qr.qrCodeImage}}" alt="">
+    <img th:src="@{|https://api.qrserver.com/v1/create-qr-code/?size=150&data=${confirmationNumber}|}" alt="">
+<!--        <img th:src="@{'data:image/jpeg;base64,'+${qr.qrCodeImage}}" alt="">-->
     <p>
       <span th:text="#{email.activation.text2}">Regards, </span>
       <br />

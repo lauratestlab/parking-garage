@@ -32,18 +32,18 @@ public class ReservationService {
     private final CarService carService;
     private final CarRepository carRepository;
     private final PaymentMethodRepository paymentMethodRepository;
-    @Autowired
-    private  PaymentMethodMapper paymentMethodMapper;
+    private final PaymentMethodMapper paymentMethodMapper;
     private final ReportRepository reportRepository;
     private final MailService mailService;
 
-    public ReservationService(UserRepository userRepository, PaymentService paymentService, ReservationRepository reservationRepository, CarService carService, CarRepository carRepository, PaymentMethodRepository paymentMethodRepository, ReportRepository reportRepository, MailService mailService) {
+    public ReservationService(UserRepository userRepository, PaymentService paymentService, ReservationRepository reservationRepository, CarService carService, CarRepository carRepository, PaymentMethodRepository paymentMethodRepository, PaymentMethodMapper paymentMethodMapper, ReportRepository reportRepository, MailService mailService) {
         this.userRepository = userRepository;
         this.paymentService = paymentService;
         this.reservationRepository = reservationRepository;
         this.carService = carService;
         this.carRepository = carRepository;
         this.paymentMethodRepository = paymentMethodRepository;
+        this.paymentMethodMapper = paymentMethodMapper;
         this.reportRepository = reportRepository;
         this.mailService = mailService;
     }

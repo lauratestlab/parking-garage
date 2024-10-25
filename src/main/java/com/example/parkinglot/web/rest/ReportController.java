@@ -39,4 +39,9 @@ public class ReportController {
     public BigDecimal getRevenue(@RequestParam LocalDate start, @RequestParam LocalDate end) {
         return reportService.getRevenue(start, end);
     }
+
+//    @GetMapping("/vehicle")
+//    public BigDecimal getRevenue(@RequestParam String registration, @RequestParam String end) {
+//        return reportService.getRevenue(start, end);
+//    }
 }
