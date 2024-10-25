@@ -22,7 +22,7 @@ export class PricingService {
         return this.http.post<Pricing>(`${this.baseUrl}/price/update`, priceDetail);
     }
     
-    updatePrice(id: number, priceDetail: any): Observable<Pricing> {
-        return this.http.post<Pricing>(`${this.baseUrl}/${id}/price/update`, priceDetail);
-    }
+    // updatePrice(id: number, priceDetail: any): Observable<Pricing> {
+    //     return this.http.post<Pricing>(`${this.baseUrl}/${id}/price/update`, priceDetail);
+    // }
 }

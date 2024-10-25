@@ -16,8 +16,6 @@ import {PricingService} from "../service/pricing-api";
 export class PricingComponent implements OnInit {
   currentPage: string = 'pricing';
 
-  isAddPriceFormVisible = false;
-
   addPriceForm: FormGroup;
   fb = inject(FormBuilder);
 

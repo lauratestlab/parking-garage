@@ -7,4 +7,75 @@
         </div>
     </div>
 
+    <!-- booking-form.component.html -->
+    <form [formGroup]="reservationForm" (ngSubmit)="submitForm()">
+        <h2>Booking Form</h2>
+        <!-- Date and Time Inputs -->
+        <label for="startDate">Start Date:</label>
+        <input type="date" formControlName="startDate" />
+
+        <label for="startTime">Start Time:</label>
+        <input type="time" formControlName="startTime" />
+
+        <label for="endDate">End Date:</label>
+        <input type="date" formControlName="endDate" />
+
+        <label for="endTime">End Time:</label>
+        <input type="time" formControlName="endTime" />
+
+        <!-- Car Info Group -->
+        <fieldset formGroupName="carInfo">
+            <legend>Car Information</legend>
+
+            <label for="color">Color:</label>
+            <input type="text" formControlName="color" />
+
+            <label for="make">Make:</label>
+            <input type="text" formControlName="make" />
+
+            <label for="model">Model:</label>
+            <input type="text" formControlName="model" />
+
+            <label for="registrationNumber">Registration Number:</label>
+            <input type="text" formControlName="registrationNumber" />
+        </fieldset>
+
+        <!-- Payment Info Group -->
+        <fieldset formGroupName="paymentInfo">
+            <legend>Payment Information</legend>
+
+            <label for="cardNumber">Card Number:</label>
+            <input type="text" formControlName="cardNumber" maxlength="16" />
+
+            <label for="ccv">CCV:</label>
+            <input type="text" formControlName="ccv" maxlength="3" />
+
+            <label for="expirationDate">Expiration Date:</label>
+            <input type="month" formControlName="expirationDate" />
+
+            <label for="fullName">Full Name:</label>
+            <input type="text" formControlName="fullName" />
+
+            <!-- Address Group -->
+            <fieldset formGroupName="address">
+                <legend>Billing Address</legend>
+
+                <label for="street">Street:</label>
+                <input type="text" formControlName="street" />
+
+                <label for="city">City:</label>
+                <input type="text" formControlName="city" />
+
+                <label for="state">State:</label>
+                <input type="text" formControlName="state" />
+
+                <label for="zipCode">Zip Code:</label>
+                <input type="text" formControlName="zipCode" maxlength="5" />
+            </fieldset>
+        </fieldset>
+
+        <!-- Submit Button -->
+        <button type="submit" [disabled]="!reservationForm.valid">Submit</button>
+    </form>
+
 </div>

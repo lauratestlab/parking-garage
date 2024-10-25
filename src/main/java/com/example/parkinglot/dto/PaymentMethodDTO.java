@@ -16,7 +16,7 @@ public record PaymentMethodDTO(
         int ccv,
 
         @CreditCardNumber(message = "Not a valid credit card number")
-        int card_number,
+        String card_number,
 
         String fullName,
 
