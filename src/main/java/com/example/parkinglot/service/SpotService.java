@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class     SpotService {
+public class  SpotService {
 
     @Autowired
     private SpotRepository spotRepository;
