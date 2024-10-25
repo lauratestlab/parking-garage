@@ -69,7 +69,7 @@ public class SecurityConfiguration {
                     .requestMatchers(mvc.pattern("/api/account/reset-password/init")).permitAll()
                     .requestMatchers(mvc.pattern("/api/account/reset-password/finish")).permitAll()
                     .requestMatchers(mvc.pattern("/api/report/availableSpots")).permitAll()
-                    .requestMatchers(mvc.pattern("/api/report/revenue")).hasAuthority(AuthoritiesConstants.ADMIN)
+//                    .requestMatchers(mvc.pattern("/api/report/revenue")).hasAuthority(AuthoritiesConstants.ADMIN)
                     .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
                     .requestMatchers(mvc.pattern("/api/**")).permitAll()
             )

@@ -14,4 +14,8 @@ export class DashboardApiService {
   getAvailableSpots(): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/report/availableSpots`);
   }
+
+  getRevenue(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/report/revenue`);
+  }
 }
