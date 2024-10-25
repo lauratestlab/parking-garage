@@ -3,8 +3,8 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "src/main/webapp",
-    "outDir": "./dist/out-tsc",
+    "baseUrl": "src/main/webapp/",
+    "outDir": "./build/out-tsc/root",
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
@@ -25,6 +25,11 @@
       "dom"
     ]
   },
+  "references": [
+    {
+      "path": "tsconfig.spec.json"
+    }
+  ],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,

@@ -1,9 +1,10 @@
 {
   "name": "the-lot",
   "version": "0.0.0",
+  "type": "commonjs",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --hmr",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
@@ -15,6 +16,11 @@
     "webapp:build:prod": "ng build --configuration production"
   },
   "private": true,
+  "config": {
+    "backend_port": 8080,
+    "default_environment": "prod",
+    "packaging": "jar"
+  },
   "dependencies": {
     "@angular/animations": "^18.2.0",
     "@angular/common": "^18.2.0",
@@ -26,13 +32,14 @@
     "@angular/platform-server": "^18.2.0",
     "@angular/router": "^18.2.0",
     "@angular/ssr": "^18.2.4",
-    "express": "^4.18.2",
+    "bootstrap": "5.3.3",
     "json-server": "^1.0.0-beta.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"
   },
   "devDependencies": {
+    "@angular-builders/custom-webpack": "18.0.0",
     "@angular-devkit/build-angular": "^18.2.4",
     "@angular/cli": "^18.2.4",
     "@angular/compiler-cli": "^18.2.0",
@@ -45,6 +52,25 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.5.2"
+    "typescript": "~5.5.2",
+    "browser-sync": "3.0.2",
+    "browser-sync-webpack-plugin": "2.3.0",
+    "webpack-bundle-analyzer": "4.10.2",
+    "webpack-merge": "6.0.1",
+    "webpack-notifier": "1.15.0",
+    "rimraf": "5.0.8",
+    "swagger-ui-dist": "5.17.14",
+    "globals": "15.9.0",
+    "wait-on": "8.0.1"
+  },
+  "engines": {
+    "node": ">=20.17.0"
+  },
+  "cacheDirectories": [
+    "node_modules"
+  ],
+  "overrides": {
+    "browser-sync": "3.0.2",
+    "webpack": "5.94.0"
   }
 }

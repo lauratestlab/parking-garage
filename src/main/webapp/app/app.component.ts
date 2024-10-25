@@ -31,6 +31,6 @@ export class AppComponent {
   private applicationConfigService = inject(ApplicationConfigService);
 
   constructor() {
-    // this.applicationConfigService.setEndpointPrefix('http://localhost:8080');
+    this.applicationConfigService.setEndpointPrefix(SERVER_API_URL);
   }
 }

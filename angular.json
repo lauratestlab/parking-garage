@@ -5,14 +5,24 @@
   "projects": {
     "the-lot": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "css"
+        },
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
       "root": "",
       "sourceRoot": "src/main/webapp",
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
+            "customWebpackConfig": {
+              "path": "./webpack/webpack.custom.js"
+            },
             "outputPath": "build/resources/main/static/",
             "index": "src/main/webapp/index.html",
             "main": "src/main/webapp/main.ts",
@@ -27,7 +37,8 @@
               }
             ],
             "styles": [
-              "src/main/webapp/styles.css"
+              "src/main/webapp/styles.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
             "scripts": []
           },
@@ -57,6 +68,10 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "buildTarget": "the-lot:build:development",
+            "port": 4200
+          },
           "configurations": {
             "production": {
               "buildTarget": "the-lot:build:production"
@@ -85,7 +100,8 @@
               }
             ],
             "styles": [
-              "src/main/webapp/styles.css"
+              "src/main/webapp/styles.css",
+              "src/main/webapp/app/signup/signup.component.css"
             ],
             "scripts": []
           }
