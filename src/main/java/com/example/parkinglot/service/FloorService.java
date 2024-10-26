@@ -58,7 +58,13 @@ public class FloorService {
         return new SpotDTO(spot.getSpotId(), spot.getName(), spot.getFloor().getFloorId());
     }
 
+    public Floor addFloor(Floor floor) {
+        return floorRepository.save(floor);
+    }
 
+    public void deleteFloor(Long floorId) {
+        floorRepository.deleteById(floorId);
+    }
 
 
 

@@ -42,6 +42,23 @@ public class FloorController {
         return floorDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+
+    @PostMapping("/add")
+    public ResponseEntity<Floor> addFloor(@RequestParam("name") int name) {
+        Floor floor = new Floor();
+        floor.setName(name);  // Set the floor name from the request parameter
+        Floor createdFloor = floorService.addFloor(floor);
+        return new ResponseEntity<>(createdFloor, HttpStatus.CREATED);
+    }
+
+
+
+    @DeleteMapping("/{floorId}")
+    public ResponseEntity<Void> deleteFloor(@PathVariable("floorId") Long floorId) {
+        floorService.deleteFloor(floorId);
+        return ResponseEntity.noContent().build();
+    }
+
 //    @GetMapping("/{floorId}")
 //    public ResponseEntity<Floor> getFloorById(@PathVariable("floorId") Long floorId) {
 //        Optional<Floor> floor = floorService.getFloorById(floorId);
