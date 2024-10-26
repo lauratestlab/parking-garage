@@ -4,7 +4,6 @@
   "compilerOptions": {
     "composite": true,
     "outDir": "build/out-tsc/spec",
-    "types": ["jasmine", "node"]
+    "types": ["jest", "node"]
   }
 }
-

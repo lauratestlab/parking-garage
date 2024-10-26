@@ -18,7 +18,11 @@ const routes: Routes = [
     // { path: 'members', component: MembersComponent },
     { path: 'spot', component: SpotComponent },
     { path: 'floor', component: FloorComponent },
-    { path: '', redirectTo: '/register', pathMatch: 'full' }
+    { path: '', redirectTo: '/register', pathMatch: 'full' },
+    {
+        path: 'account',
+        loadChildren: () => import('./account/account.route'),
+    },
     
 ];
 
