@@ -7,6 +7,7 @@ import com.example.parkinglot.service.FloorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -25,6 +26,7 @@ public class FloorController {
         this.floorRepository = floorRepository;
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @PutMapping("/update/{floorId}")
     public ResponseEntity<Floor> updateFloorName(
             @PathVariable("floorId") Long floorId,
@@ -36,13 +38,14 @@ public class FloorController {
         return ResponseEntity.notFound().build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @GetMapping("/{floorId}")
     public ResponseEntity<FloorDTO> getFloorById(@PathVariable("floorId") Long floorId) {
         Optional<FloorDTO> floorDTO = floorService.getFloorDTOById(floorId);
         return floorDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<Floor> addFloor(@RequestParam("name") int name) {
         Floor floor = new Floor();
@@ -52,7 +55,7 @@ public class FloorController {
     }
 
 
-
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{floorId}")
     public ResponseEntity<Void> deleteFloor(@PathVariable("floorId") Long floorId) {
         floorService.deleteFloor(floorId);
