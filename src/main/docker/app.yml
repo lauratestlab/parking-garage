@@ -1,0 +1,17 @@
+name: parking
+services:
+  app:
+    image: parkinggarage
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/parkinglot
+    ports:
+      - 127.0.0.1:8080:8080
+    depends_on:
+      postgresql:
+        condition: service_healthy
+  postgresql:
+    extends:
+      file: ./postgresql.yml
+      service: postgresql
