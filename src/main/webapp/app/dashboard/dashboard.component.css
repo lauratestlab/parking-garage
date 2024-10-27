@@ -28,7 +28,7 @@
     height: 350px;
     border-radius: 10px;
     background-color: #2e3033;
-    border: 1px solid greenyellow;
+    /*border: 1px solid greenyellow;*/
 }
 
 
@@ -76,7 +76,7 @@ div.mid{
 }
 
 .blue {
-    border: 1px solid blue;
+    /*border: 1px solid blue;*/
 }
 
 /* Revenue card */

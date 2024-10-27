@@ -1,7 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {DashboardApiService} from "./dashboard-api.service";
 import {Observable} from "rxjs";
-import {FormsModule} from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, Validators} from "@angular/forms";
+import {Revenue} from "../model/revenue.model";
+import {error} from "@angular/compiler-cli/src/transformers/util";
 
 @Component({
   selector: 'app-dashboard',
@@ -16,34 +18,49 @@ export class DashboardComponent implements OnInit{
   currentPage: string = 'dashboard';
 
   availSpots: number | undefined;
-  revenueData: any;
+  revenueForm: FormGroup;
+  revenueData?: Revenue;
 
 
 
-  constructor(private api: DashboardApiService) {}
+  constructor(
+      private api: DashboardApiService,
+      private fb: FormBuilder,
+  ) {
+    this.revenueForm = this.fb.group({
+      start: ['', Validators.required],
+      end: ['', Validators.required]
+    });
+  }
 
   ngOnInit(): void {
     this.getAvailSpots();
-    this.fetchRevenue();
   }
 
   getAvailSpots(): void {
-    this.api.getAvailableSpots().subscribe(
-        data => { this.availSpots = data; },
-        error => { console.error('Error fetching all available spots: ', error); }
-    );
-  }
-
-
-  fetchRevenue(): void {
-    this.api.getRevenue().subscribe({
+    this.api.getAvailableSpots().subscribe({
       next: (data) => {
-        this.revenueData = data;
-        },
+        this.availSpots = data;
+      },
       error: (err) => {
-        console.error('Error fetching revenue data', err);
+        console.error('Error fetching all available spots: ', error);
       }
     });
   }
 
+  fetchRevenue(): void {
+    if (this.revenueForm.valid) {
+      const { start, end } = this.revenueForm.value;
+
+      this.api.getRevenue(start, end).subscribe({
+        next: (data) => {
+          this.revenueData = data;
+        },
+        error: (err) => {
+          this.revenueData = undefined;
+          console.error('Failed to retrieve revenue data', err);
+        }
+      });
+    }
+  }
 }

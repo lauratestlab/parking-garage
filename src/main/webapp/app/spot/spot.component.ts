@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SpotService } from '../service/spot-api';
+import { SpotService } from '../revenue_api/spot-api';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Spot } from '../model/spot-model';

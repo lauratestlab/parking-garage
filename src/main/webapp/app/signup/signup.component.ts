@@ -2,7 +2,7 @@ import {Component, inject} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {SignupModel} from "../model/signup-model";
 import {Router} from "@angular/router";
-import {LotService} from "../service/lot.service";
+import {LotService} from "../revenue_api/lot.service";
 import {CommonModule} from "@angular/common";
 
 @Component({

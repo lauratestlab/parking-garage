@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { map, Observable } from "rxjs";
 import { Pricing } from "../model/pricing-model";
@@ -21,8 +21,15 @@ export class PricingService {
     addPrice(priceDetail: any): Observable<Pricing> {
         return this.http.post<Pricing>(`${this.baseUrl}/price/update`, priceDetail);
     }
-    
-    // updatePrice(id: number, priceDetail: any): Observable<Pricing> {
-    //     return this.http.post<Pricing>(`${this.baseUrl}/${id}/price/update`, priceDetail);
-    // }
+
+    updatePrice(id: number, price: number): Observable<Pricing> {
+        // Define URL with parameters
+        const url = `${this.baseUrl}/price/update/${id}`;
+
+        // Set up query parameters
+        const params = new HttpParams().set('price', price.toString());
+
+        // Make HTTP PUT request
+        return this.http.put<Pricing>(url, {}, { params });
+    }
 }

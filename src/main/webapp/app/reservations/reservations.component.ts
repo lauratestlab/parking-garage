@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {ReservationApi} from "../service/reservation-api";
+import {ReservationApi} from "../revenue_api/reservation-api";
 
 
 @Component({

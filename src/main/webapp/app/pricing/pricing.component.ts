@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Pricing } from '../model/pricing-model';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {SignupModel} from "../model/signup-model";
-import {PricingService} from "../service/pricing-api";
+import {PricingService} from "../revenue_api/pricing-api";
 
 @Component({
   selector: 'app-pricing',
@@ -16,13 +16,13 @@ import {PricingService} from "../service/pricing-api";
 export class PricingComponent implements OnInit {
   currentPage: string = 'pricing';
 
-  addPriceForm: FormGroup;
+  priceForm: FormGroup;
   fb = inject(FormBuilder);
 
   prices: Pricing[] = [];
 
   constructor(private api: PricingService){
-    this.addPriceForm = this.fb.group({
+    this.priceForm = this.fb.group({
       price: ['', Validators.required],
       duration: ['', Validators.required]
     });
@@ -40,10 +40,10 @@ export class PricingComponent implements OnInit {
   }
 
   addPrice() {
-    const request: Pricing = this.addPriceForm.value;
+    const request: Pricing = this.priceForm.value;
     console.log(request);
 
-    if (this.addPriceForm.valid) {
+    if (this.priceForm.valid) {
       console.log("Form is valid");
 
       this.api.addPrice(request).subscribe({
@@ -61,8 +61,24 @@ export class PricingComponent implements OnInit {
   }
 
 
-  updatePricing() {
+  // Function to submit form data
+  updatePrice() {
+    if (this.priceForm.valid) {
+      const { price, duration } = this.priceForm.value;
 
+      this.api.updatePrice(duration, price).subscribe({
+        next: () => {
+          console.log('Price updated successfully!');
+          // this.successMessage = 'Price updated successfully!';
+          // this.errorMessage = '';
+        },
+        error: (err) => {
+          // this.errorMessage = 'Failed to update price';
+          // this.successMessage = '';
+          console.error('Failed to update price. ', err);
+        }
+      });
+    }
   }
 
 }
