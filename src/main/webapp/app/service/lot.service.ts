@@ -5,6 +5,7 @@ import {SignupModel} from "../model/signup-model";
 import {request} from "node:http";
 import {SignupResponse} from "../model/signup-response";
 
+const BASE_URL = "http://localhost:8080/api";
 
 @Injectable({
   providedIn: 'root'
