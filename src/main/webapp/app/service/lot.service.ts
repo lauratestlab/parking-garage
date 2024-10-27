@@ -1,7 +1,7 @@
 import {Injectable, inject} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {SignupModel} from "../model/signup-model";
+import {SignupModel} from "../account/signup/signup-model";
 import {SignupResponse} from "../model/signup-response";
 import {ApplicationConfigService} from "../core/config/application-config.service";
 

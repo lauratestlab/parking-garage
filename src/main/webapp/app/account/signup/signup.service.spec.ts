@@ -3,11 +3,11 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { provideHttpClient } from '@angular/common/http';
 
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
-import { RegisterService } from './register.service';
-import { Registration } from './register.model';
+import { SignupService } from './signup.service';
+import {SignupModel} from "./signup-model";
 
 describe('RegisterService Service', () => {
-  let service: RegisterService;
+  let service: SignupService;
   let httpMock: HttpTestingController;
   let applicationConfigService: ApplicationConfigService;
 
@@ -16,7 +16,7 @@ describe('RegisterService Service', () => {
       providers: [provideHttpClient(), provideHttpClientTesting()],
     });
 
-    service = TestBed.inject(RegisterService);
+    service = TestBed.inject(SignupService);
     applicationConfigService = TestBed.inject(ApplicationConfigService);
     httpMock = TestBed.inject(HttpTestingController);
   });
@@ -31,8 +31,9 @@ describe('RegisterService Service', () => {
       const login = 'abc';
       const email = 'test@test.com';
       const password = 'pass';
-      const langKey = 'FR';
-      const registration = new Registration(login, email, password, langKey);
+      const firstName = 'Ivan';
+      const lastName = 'Petrov';
+      const registration = new SignupModel(firstName, lastName, login, email, password);
 
       // WHEN
       service.save(registration).subscribe();
@@ -43,7 +44,7 @@ describe('RegisterService Service', () => {
       });
 
       // THEN
-      expect(testRequest.request.body).toEqual({ email, langKey, login, password });
+      expect(testRequest.request.body).toEqual({ email, firstName, lastName, login, password });
     });
   });
 });

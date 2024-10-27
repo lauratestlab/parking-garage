@@ -6,19 +6,18 @@ import { SpotComponent } from './spot/spot.component';
 import { FloorComponent } from './floor/floor.component';
 import { MembersComponent } from './members/members.component';
 import LoginComponent from "./login/login.component";
-import {ActivatePageComponent} from "./activate-page/activate-page.component";
+import {DashboardComponent} from "./dashboard/dashboard.component";
 
 const routes: Routes = [
-    { path: 'register', loadComponent: () => import('./signup/signup.component') },
+    { path: 'register', loadComponent: () => import('./account/signup/signup.component') },
     { path: 'login', component: LoginComponent },
-    { path: 'activate', component: ActivatePageComponent },
-    // { path: 'dashboard', component: DashboardComponent },
-    // { path: 'reservations', component: ReservationsComponent },
+    { path: 'dashboard', component: DashboardComponent },
+    { path: 'reservations', component: ReservationsComponent },
     { path: 'pricing', component: PricingComponent },
-    // { path: 'members', component: MembersComponent },
+    { path: 'members', component: MembersComponent },
     { path: 'spot', component: SpotComponent },
     { path: 'floor', component: FloorComponent },
-    { path: '', redirectTo: '/register', pathMatch: 'full' },
+    { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
     {
         path: 'account',
         loadChildren: () => import('./account/account.route'),

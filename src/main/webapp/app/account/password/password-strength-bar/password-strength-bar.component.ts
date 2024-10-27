@@ -7,10 +7,11 @@ import SharedModule from 'app/shared/shared.module';
   selector: 'app-password-strength-bar',
   imports: [SharedModule],
   templateUrl: './password-strength-bar.component.html',
-  styleUrl: './password-strength-bar.component.scss',
+  styleUrl: './password-strength-bar.component.css',
 })
 export default class PasswordStrengthBarComponent {
   colors = ['#F00', '#F90', '#FF0', '#9F0', '#0F0'];
+  strengthLevel: string = '';
 
   private renderer = inject(Renderer2);
   private elementRef = inject(ElementRef);
@@ -56,10 +57,31 @@ export default class PasswordStrengthBarComponent {
     return { idx: idx + 1, color: this.colors[idx] };
   }
 
+  setStrengthLevel(s: number): void {
+    this.strengthLevel = 'Poor';
+    if (s > 10) {
+      if (s <= 20) {
+        this.strengthLevel = 'Not Good';
+      } else if (s <= 30) {
+        this.strengthLevel = 'Average';
+      } else if (s <= 40) {
+        this.strengthLevel = 'Good';
+      } else {
+        this.strengthLevel = 'Very good';
+      }
+    }
+  }
+
+  getStrengthLevel(): string {
+    return this.strengthLevel;
+  }
+
   @Input()
   set passwordToCheck(password: string) {
     if (password) {
-      const c = this.getColor(this.measureStrength(password));
+      const strength = this.measureStrength(password);
+      this.setStrengthLevel(strength);
+      const c = this.getColor(strength);
       const element = this.elementRef.nativeElement;
       if (element.className) {
         this.renderer.removeClass(element, element.className);
