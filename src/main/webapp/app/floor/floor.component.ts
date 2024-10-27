@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FloorService } from '../service/floor-api';
+import { FloorService } from '../revenue_api/floor-api';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Floor } from '../model/floor-model';

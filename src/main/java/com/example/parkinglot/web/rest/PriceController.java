@@ -37,8 +37,8 @@ public class PriceController {
         return priceRepository.findAll();
     }
 
+//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     //Method to create new duration, new price
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @PostMapping("/update")
     public ResponseEntity<Price> createPrice(@RequestBody Price price) {
         Price savedPrice = priceRepository.save(price);
@@ -46,7 +46,7 @@ public class PriceController {
     }
 
     // Method to update the price by duration (id) and the new price
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @PutMapping("/update/{duration}")
     public ResponseEntity<Price> updatePriceByDuration(
             @PathVariable("duration") int duration,
@@ -59,7 +59,7 @@ public class PriceController {
     }
 
     //Delete based on id
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePrice(@PathVariable("id") int id) {
         if (!priceRepository.existsById(id)) {
