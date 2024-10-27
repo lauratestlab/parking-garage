@@ -1,21 +1,23 @@
 package com.example.parkinglot.dto;
 
+import java.util.List;
+
 public class FloorDTO {
   private Long floorId;
   private int name;
-  private Long spotId;
+  private List<SpotDTO> spots;
 
-  public FloorDTO(Long floorId, int name, Long spotId) {
+  public FloorDTO(Long floorId, int name, List<SpotDTO> spots) {
     this.floorId = floorId;
     this.name = name;
-    this.spotId = spotId;
+    this.spots = spots;
   }
 
   public Long getFloorId() {
     return floorId;
   }
 
-  public void setFloorId() {
+  public void setFloorId(Long floorId) {
     this.floorId = floorId;
   }
 
@@ -23,15 +25,15 @@ public class FloorDTO {
     return name;
   }
 
-  public void setName() {
+  public void setName(int name) {
     this.name = name;
   }
 
-  public Long getSpotId() {
-    return spotId;
+  public List<SpotDTO> getSpots() {
+    return spots;
   }
 
-  public void setSpotId() {
-    this.floorId = spotId;
+  public void setSpots(List<SpotDTO> spots) {
+    this.spots = spots;
   }
 }
