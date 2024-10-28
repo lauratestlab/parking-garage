@@ -44,39 +44,45 @@
 
         <fieldset formGroupName="paymentMethod">
             <legend>Payment Details</legend>
-            <div class="col-sm">
-                <label for="card_number" class="form-label">Account Number: </label>
-                <input formControlName="card_number" type="text" class="form-control" placeholder="Ford">
-            </div>
-            <div class="col-sm">
-                <label for="ccv" class="form-label">CCV: </label>
-                <input formControlName="ccv" type="number" class="form-control" placeholder="123">
-            </div>
-            <div class="col-md-5">
-                <label for="expirationDate" class="form-label">Expiration Date: </label>
-                <input formControlName="expirationDate" type="text" class="form-control" placeholder="MM/YY" >
-            </div>
-            <div class="col-sm">
-                <label for="fullName" class="form-label">Full Name:  </label>
-                <input formControlName="fullName" type="text" class="form-control" placeholder="John Doe">
+            <div class="row g-3">
+                <div class="col-sm">
+                    <label for="card_number" class="form-label">Account Number: </label>
+                    <input formControlName="card_number" type="text" class="form-control" placeholder="Ford">
+                </div>
+                <div class="col-sm">
+                    <label for="ccv" class="form-label">CCV: </label>
+                    <input formControlName="ccv" type="number" class="form-control" placeholder="123">
+                </div>
+                <div class="col-md-5">
+                    <label for="expirationDate" class="form-label">Expiration Date: </label>
+                    <input formControlName="expirationDate" type="text" class="form-control" placeholder="MM/YY" >
+                </div>
+                <div class="col-sm">
+                    <label for="fullName" class="form-label">Full Name:  </label>
+                    <input formControlName="fullName" type="text" class="form-control" placeholder="John Doe">
+                </div>
             </div>
 
+
             <fieldset formGroupName="address">
-                <div class="col-12">
-                    <label for="deliveryStreet" class="form-label">Address</label>
-                    <input formControlName="deliveryStreet" type="text" class="form-control" id="deliveryStreet" placeholder="1234 Main St">
-                </div>
-                <div class="col-md-6">
-                    <label for="deliveryCity" class="form-label">City</label>
-                    <input formControlName="deliveryCity" type="text" class="form-control" id="deliveryCity">
-                </div>
-                <div class="col-md-4">
-                    <label for="deliveryState" class="form-label">State</label>
-                    <input formControlName="deliveryState" type="text" class="form-control" id="deliveryState">
-                </div>
-                <div class="col-md-2">
-                    <label for="deliveryZip" class="form-label">Zip</label>
-                    <input formControlName="deliveryZip" type="text" class="form-control" id="deliveryZip">
+                <legend>Billing Address</legend>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label for="deliveryStreet" class="form-label">Address</label>
+                        <input formControlName="deliveryStreet" type="text" class="form-control" id="deliveryStreet" placeholder="1234 Main St">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="deliveryCity" class="form-label">City</label>
+                        <input formControlName="deliveryCity" type="text" class="form-control" id="deliveryCity">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="deliveryState" class="form-label">State</label>
+                        <input formControlName="deliveryState" type="text" class="form-control" id="deliveryState">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="deliveryZip" class="form-label">Zip</label>
+                        <input formControlName="deliveryZip" type="text" class="form-control" id="deliveryZip">
+                    </div>
                 </div>
             </fieldset>
         </fieldset>
