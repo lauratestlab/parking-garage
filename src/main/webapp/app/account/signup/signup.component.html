@@ -1,31 +1,32 @@
-<div class="container mt-5">
-    <div class="mb-3 login-box">
-        <h2>Sign Up</h2>
-        <br>
+<div class="main-content">
+    <div class="container mt-5">
+        <div class="mb-3 login-box">
+            <h2>Sign Up</h2>
+            <br>
 
-                @if (success()) {
-                    <h1>Thank you for registering your Lot Account!</h1>
-                    <p>Please follow the instructions we just emailed to you.</p>
-                }
+            @if (success()) {
+                <h1>Thank you for registering your Lot Account!</h1>
+                <p>Please follow the instructions we just emailed to you.</p>
+            }
 
-                @if (error()) {
-                    <div class="alert alert-danger"><strong>Registration failed!</strong> Please try again later.</div>
-                }
+            @if (error()) {
+                <div class="alert alert-danger"><strong>Registration failed!</strong> Please try again later.</div>
+            }
 
-                @if (errorUserExists()) {
-                    <div class="alert alert-danger"><strong>Login name already registered!</strong> Please choose
-                        another one.
-                    </div>
-                }
+            @if (errorUserExists()) {
+                <div class="alert alert-danger"><strong>Login name already registered!</strong> Please choose
+                    another one.
+                </div>
+            }
 
-                @if (errorEmailExists()) {
-                    <div class="alert alert-danger"><strong>Email is already in use!</strong> Please choose another one.
-                    </div>
-                }
+            @if (errorEmailExists()) {
+                <div class="alert alert-danger"><strong>Email is already in use!</strong> Please choose another one.
+                </div>
+            }
 
-                @if (doNotMatch()) {
-                    <div class="alert alert-danger">The password and its confirmation do not match!</div>
-                }
+            @if (doNotMatch()) {
+                <div class="alert alert-danger">The password and its confirmation do not match!</div>
+            }
             <br>
             @if (!success()) {
                 <form [formGroup]="signupForm" (ngSubmit)="register()" method="post">
@@ -150,7 +151,8 @@
 
                     <div class="mb-3">
                         <label for="confirmPassword" class="form-label">Password confirmation</label>
-                        <input formControlName="confirmPassword" type="password" class="form-control" id="confirmPassword"
+                        <input formControlName="confirmPassword" type="password" class="form-control"
+                               id="confirmPassword"
                                placeholder="Password">
 
                         @let confirmPasswordRef = signupForm.get('confirmPassword')! ;
@@ -174,10 +176,10 @@
                     </div>
 
                     <!-- Submit Button -->
-                    <button type="submit" class="btn btn-primary" >Register</button>
+                    <button type="submit" class="btn btn-primary">Register</button>
                     <button (click)="login()" type="button" class="btn btn-link">Login</button>
                 </form>
             }
         </div>
     </div>
-
+</div>

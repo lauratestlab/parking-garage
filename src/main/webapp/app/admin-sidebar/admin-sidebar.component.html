@@ -1,8 +1,68 @@
 <div class="side">
     <div class="sidebar">
-        <a href="dashboard" (click)="currentPage = 'dashboard'" [ngClass]="{active: currentPage === 'dashboard'}">Dashboard</a>
-        <a href="members" (click)="currentPage = 'members'" [ngClass]="{active: currentPage === 'members'}">Members</a>
-        <a href="pricing" (click)="currentPage = 'pricing'" [ngClass]="{active: currentPage === 'pricing'}">Pricing</a>
-        <a href="reservations" (click)="currentPage = 'reservations'" [ngClass]="{active: currentPage === 'reservations'}">Reservations</a>
+        <a routerLink="/dashboard" (click)="currentPage = 'dashboard'" [ngClass]="{active: currentPage === 'dashboard'}" *appHasAnyAuthority="'ROLE_ADMIN'">Dashboard</a>
+        <a routerLink="/members" (click)="currentPage = 'members'" [ngClass]="{active: currentPage === 'members'}" *appHasAnyAuthority="'ROLE_ADMIN'">Members</a>
+        <a routerLink="/pricing" (click)="currentPage = 'pricing'" [ngClass]="{active: currentPage === 'pricing'}">Pricing</a>
+        <a routerLink="/reservations" (click)="currentPage = 'reservations'" [ngClass]="{active: currentPage === 'reservations'}">Reservations</a>
+        <a routerLink="/admin/user-management" (click)="currentPage = 'user-management'" [ngClass]="{active: currentPage === 'user-management'}" routerLinkActive="active" *appHasAnyAuthority="'ROLE_ADMIN'">Users</a>
+        <a routerLink="/admin/floors" (click)="currentPage = 'floors'" [ngClass]="{active: currentPage === 'floors'}" routerLinkActive="active" *appHasAnyAuthority="'ROLE_ADMIN'">Users</a>
+
+        <li ngbDropdown
+                class="nav-item dropdown pointer"
+                display="dynamic"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }">
+            @let accountRef = account() ;
+            <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu"
+               data-cy="accountMenu">
+                    <span>
+                <span>Account</span>
+              </span>
+
+            </a>
+            <ul class="dropdown-menu bg-black text-white" ngbDropdownMenu aria-labelledby="account-menu">
+                @if (accountRef !== null) {
+                    <li>
+                        <a
+                                class="dropdown-item"
+                                routerLink="/account/settings"
+                                routerLinkActive="active"
+                        >
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                                class="dropdown-item"
+                                routerLink="/account/password"
+                                routerLinkActive="active"
+                        >
+                            <span>Password</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" (click)="logout()" id="logout" data-cy="logout">
+                            <span>Sign out</span>
+                        </a>
+                    </li>
+                } @else {
+                    <li>
+                        <a class="dropdown-item" (click)="login()" id="login" data-cy="login">
+                            <span>Sign in</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                                class="dropdown-item"
+                                routerLink="/account/register"
+                                routerLinkActive="active"
+                                data-cy="register"
+                        >
+                            <span>Register</span>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </li>
     </div>
 </div>

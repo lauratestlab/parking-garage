@@ -1,0 +1,88 @@
+<div class="main-content">
+  <h2>
+    <span id="floor-page-heading" data-cy="userManagementPageHeading">Users</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading()">
+        <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined"></fa-icon>
+        <span>Refresh list</span>
+      </button>
+      <button class="btn btn-primary" [routerLink]="['./new']">
+        <fa-icon icon="plus"></fa-icon> <span>Create a new user</span>
+      </button>
+    </div>
+  </h2>
+
+  <app-alert-error></app-alert-error>
+
+  <app-alert></app-alert>
+
+  @if (floors()) {
+    <div class="table-responsive">
+      <table class="table table-striped" aria-describedby="floor-page-heading">
+        <thead>
+          <tr appSort [sortState]="sortState" (sortChange)="transition($event)">
+            <th scope="col" appSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+            <th scope="col" appSortBy="name"><span>Login</span> <fa-icon icon="sort"></fa-icon></th>
+            <th scope="col" appSortBy="email"><span>Email</span> <fa-icon icon="sort"></fa-icon></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (floor of floors(); track trackIdentity(floor)) {
+            <tr>
+              <td>
+                <a [routerLink]="['./', floor.floorId, 'view']">{{ floor.floorId }}</a>
+              </td>
+              <td>{{ floor.name }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <button type="submit" [routerLink]="['./', floor.floorId, 'view']" class="btn btn-info btn-sm">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline">View</span>
+                  </button>
+
+                  <button
+                    type="submit"
+                    [routerLink]="['./', floor.floorId, 'edit']"
+                    queryParamsHandling="merge"
+                    class="btn btn-primary btn-sm"
+                  >
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline">Edit</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    (click)="deleteFloor(floor)"
+                    class="btn btn-danger btn-sm"
+                  >
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <div class="d-flex justify-content-center">
+        <app-item-count [params]="{ page: page, totalItems: totalItems(), itemsPerPage: itemsPerPage }"></app-item-count>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems()"
+          [(page)]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="transition()"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

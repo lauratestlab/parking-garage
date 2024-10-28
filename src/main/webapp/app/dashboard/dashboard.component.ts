@@ -43,7 +43,7 @@ export class DashboardComponent implements OnInit{
         this.availSpots = data;
       },
       error: (err) => {
-        console.error('Error fetching all available spots: ', error);
+        console.error('Error fetching all available spots: ', err);
       }
     });
   }

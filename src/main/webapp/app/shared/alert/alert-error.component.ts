@@ -10,7 +10,7 @@ import { AlertError } from './alert-error.model';
 
 @Component({
   standalone: true,
-  selector: 'jhi-alert-error',
+  selector: 'app-alert-error',
   templateUrl: './alert-error.component.html',
   imports: [CommonModule, NgbModule],
 })
@@ -24,7 +24,7 @@ export class AlertErrorComponent implements OnDestroy {
 
   constructor() {
     this.errorListener = this.eventManager.subscribe(
-      'jhipsterSampleApplicationApp.error',
+      'parkinglotApplication.error',
       (response: EventWithContent<unknown> | string) => {
         const errorResponse = (response as EventWithContent<AlertError>).content;
         this.addErrorAlert(errorResponse.message);
@@ -32,7 +32,7 @@ export class AlertErrorComponent implements OnDestroy {
     );
 
     this.httpErrorListener = this.eventManager.subscribe(
-      'jhipsterSampleApplicationApp.httpError',
+      'parkinglotApplication.httpError',
       (response: EventWithContent<unknown> | string) => {
         this.handleHttpError(response);
       },
@@ -40,7 +40,7 @@ export class AlertErrorComponent implements OnDestroy {
   }
 
   setClasses(alert: Alert): Record<string, boolean> {
-    const classes = { 'jhi-toast': Boolean(alert.toast) };
+    const classes = { 'app-toast': Boolean(alert.toast) };
     if (alert.position) {
       return { ...classes, [alert.position]: true };
     }

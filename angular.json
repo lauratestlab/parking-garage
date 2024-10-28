@@ -36,7 +36,8 @@
               "src/main/webapp/robots.txt"
             ],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/main/webapp/styles.css"
             ],
             "scripts": []
           },
@@ -95,7 +96,10 @@
           "builder": "@angular-builders/jest:run",
           "options": {
             "configPath": "jest.conf.js",
-            "tsConfig": "tsconfig.spec.json"
+            "tsConfig": "tsconfig.spec.json",
+            "styles": [
+              "src/main/webapp/styles.css"
+            ]
           }
         }
       }

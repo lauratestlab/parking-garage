@@ -1,26 +1,29 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Pricing} from "../model/pricing-model";
 import {Observable} from "rxjs";
 import {Revenue} from "../model/revenue.model";
+import {ApplicationConfigService} from "../core/config/application-config.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DashboardApiService {
-  private baseUrl = 'http://localhost:8080/api';
+  private http = inject(HttpClient);
+  private applicationConfigService = inject(ApplicationConfigService);
 
-  constructor(private http: HttpClient) { }
+  private resourceUrl = this.applicationConfigService.getEndpointFor('api/report');
+
 
   getAvailableSpots(): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/report/availableSpots`);
+    return this.http.get<any>(`${this.resourceUrl}/availableSpots`);
   }
 
   getRevenue(start: string, end: string): Observable<Revenue> {
     const params = new HttpParams()
         .set('start', start)
         .set('end', end);
-    return this.http.get<Revenue>(`${this.baseUrl}/report/revenue`, { params });
+    return this.http.get<Revenue>(`${this.resourceUrl}/revenue`, { params });
   }
 
 //   private apiUrl = 'http://localhost:8080/api/report/revenue';

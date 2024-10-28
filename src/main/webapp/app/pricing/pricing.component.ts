@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Pricing } from '../model/pricing-model';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {SignupModel} from "../model/signup-model";
 import {PricingService} from "../revenue_api/pricing-api";
 
 @Component({

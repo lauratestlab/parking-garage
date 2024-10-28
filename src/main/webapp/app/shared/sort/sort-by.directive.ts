@@ -6,10 +6,10 @@ import { SortDirective } from './sort.directive';
 
 @Directive({
   standalone: true,
-  selector: '[jhiSortBy]',
+  selector: '[appSortBy]',
 })
 export class SortByDirective {
-  @Input() jhiSortBy!: string;
+  @Input() appSortBy!: string;
 
   iconComponent = contentChild(FaIconComponent);
 
@@ -24,7 +24,7 @@ export class SortByDirective {
       if (this.iconComponent()) {
         let icon: IconDefinition = this.sortIcon;
         const { predicate, order } = this.sort.sortState();
-        if (predicate === this.jhiSortBy && order !== undefined) {
+        if (predicate === this.appSortBy && order !== undefined) {
           icon = order === 'asc' ? this.sortAscIcon : this.sortDescIcon;
         }
         this.iconComponent()!.icon = icon.iconName;
@@ -36,7 +36,7 @@ export class SortByDirective {
   @HostListener('click')
   onClick(): void {
     if (this.iconComponent()) {
-      this.sort.sort(this.jhiSortBy);
+      this.sort.sort(this.appSortBy);
     }
   }
 }

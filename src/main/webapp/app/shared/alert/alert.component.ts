@@ -6,7 +6,7 @@ import { Alert, AlertService } from 'app/core/util/alert.service';
 
 @Component({
   standalone: true,
-  selector: 'jhi-alert',
+  selector: 'app-alert',
   templateUrl: './alert.component.html',
   imports: [CommonModule, NgbModule],
 })
@@ -20,7 +20,7 @@ export class AlertComponent implements OnInit, OnDestroy {
   }
 
   setClasses(alert: Alert): Record<string, boolean> {
-    const classes = { 'jhi-toast': Boolean(alert.toast) };
+    const classes = { 'app-toast': Boolean(alert.toast) };
     if (alert.position) {
       return { ...classes, [alert.position]: true };
     }

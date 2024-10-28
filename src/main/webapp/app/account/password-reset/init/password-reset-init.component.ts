@@ -6,7 +6,7 @@ import { PasswordResetInitService } from './password-reset-init.service';
 
 @Component({
   standalone: true,
-  selector: 'jhi-password-reset-init',
+  selector: 'app-password-reset-init',
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
   templateUrl: './password-reset-init.component.html',
 })

@@ -8,17 +8,17 @@ import { AccountService } from 'app/core/auth/account.service';
  *
  * @howToUse
  * ```
- *     <some-element *jhiHasAnyAuthority="'ROLE_ADMIN'">...</some-element>
+ *     <some-element *appHasAnyAuthority="'ROLE_ADMIN'">...</some-element>
  *
- *     <some-element *jhiHasAnyAuthority="['ROLE_ADMIN', 'ROLE_USER']">...</some-element>
+ *     <some-element *appHasAnyAuthority="['ROLE_ADMIN', 'ROLE_USER']">...</some-element>
  * ```
  */
 @Directive({
   standalone: true,
-  selector: '[jhiHasAnyAuthority]',
+  selector: '[appHasAnyAuthority]',
 })
 export default class HasAnyAuthorityDirective {
-  public authorities = input<string | string[]>([], { alias: 'jhiHasAnyAuthority' });
+  public authorities = input<string | string[]>([], { alias: 'appHasAnyAuthority' });
 
   private templateRef = inject(TemplateRef<any>);
   private viewContainerRef = inject(ViewContainerRef);

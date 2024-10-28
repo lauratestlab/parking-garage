@@ -8,7 +8,7 @@ import { PasswordResetFinishService } from './password-reset-finish.service';
 
 @Component({
   standalone: true,
-  selector: 'jhi-password-reset-finish',
+  selector: 'app-password-reset-finish',
   imports: [SharedModule, RouterModule, FormsModule, ReactiveFormsModule, PasswordStrengthBarComponent],
   templateUrl: './password-reset-finish.component.html',
 })

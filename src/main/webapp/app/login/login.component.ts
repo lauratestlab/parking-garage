@@ -53,10 +53,6 @@ export default class LoginComponent implements OnInit, AfterViewInit {
     });
 
   }
-    register(): void {
-      this.router.navigate(['register']);
-     
-    }
 
 }
 

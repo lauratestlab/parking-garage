@@ -13,9 +13,15 @@ import {
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
+import { NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
+
 import { DEBUG_INFO_ENABLED } from 'app/app.constants';
+import './config/dayjs';
 import { httpInterceptorProviders } from './core/interceptor';
 import routes from './app.routes';
+
+import { NgbDateDayjsAdapter } from './config/datepicker-adapter';
+import { AppPageTitleStrategy } from './app-page-title-strategy';
 
 const routerFeatures: RouterFeatures[] = [
   withComponentInputBinding(),
@@ -45,6 +51,8 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptorsFromDi()),
     Title,
     { provide: LOCALE_ID, useValue: 'en' },
+    { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
     httpInterceptorProviders,
+    { provide: TitleStrategy, useClass: AppPageTitleStrategy },
   ],
 };

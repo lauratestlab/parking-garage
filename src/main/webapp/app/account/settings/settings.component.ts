@@ -9,7 +9,7 @@ const initialAccount: Account = {} as Account;
 
 @Component({
   standalone: true,
-  selector: 'jhi-settings',
+  selector: 'app-settings',
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
   templateUrl: './settings.component.html',
 })
