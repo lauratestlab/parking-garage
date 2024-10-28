@@ -2,83 +2,90 @@
 
     <div class="header">
         <h2>Reservations</h2>
-        <div class="buttons">
-            <button type="button" class="btn btn-outline-light">Reserve a spot</button>
-        </div>
+<!--        <div class="buttons">-->
+<!--            <button type="button" class="btn btn-outline-light">Reserve a spot</button>-->
+<!--        </div>-->
     </div>
     <hr>
-    <form class="row g-3">
+    <form class="row g-3" [formGroup]="reservationForm" (ngSubmit)="addReservation()">
         <div class="row g-3">
             <legend>Reservation Dates</legend>
             <div class="col">
-                <label for="start-date" class="form-label">Start Date:</label>
-                <input type="datetime-local" class="form-control" aria-label="Start Date/Time" required>
+                <label for="startTime" class="form-label">Start Date:</label>
+                <input formControlName="startTime" type="datetime-local" class="form-control" aria-label="Start Date/Time" required>
             </div>
             <div class="col">
-                <label for="end-date" class="form-label">End Date:</label>
-                <input type="datetime-local" class="form-control"  aria-label="End Date/Time" required>
+                <label for="endTime" class="form-label">End Date:</label>
+                <input formControlName="endTime" type="datetime-local" class="form-control"  aria-label="End Date/Time" required>
             </div>
         </div>
 
-        <div class="row g-3">
-            <legend>Car Details</legend>
+        <fieldset formGroupName="car">
+            <div class="row g-3">
+                <legend>Car Details</legend>
+                <div class="col-sm">
+                    <label for="make" class="form-label">Make: </label>
+                    <input formControlName="make" type="text" class="form-control" placeholder="Ford">
+                </div>
+                <div class="col-sm">
+                    <label for="model" class="form-label">Model: </label>
+                    <input formControlName="model" type="text" class="form-control" placeholder="Fusion">
+                </div>
+                <div class="col-sm">
+                    <label for="color" class="form-label">Color: </label>
+                    <input formControlName="color" type="text" class="form-control" placeholder="Red" aria-label="color">
+                </div>
+                <div class="col-md-5">
+                    <label for="registrationNumber" class="form-label">Registration Number: </label>
+                    <input formControlName="registrationNumber" type="text" class="form-control" placeholder="1234567" aria-label="registration-number">
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset formGroupName="paymentMethod">
+            <legend>Payment Details</legend>
             <div class="col-sm">
-                <label for="car-make" class="form-label">Make: </label>
-                <input type="text" class="form-control" placeholder="Ford" aria-label="car-make">
+                <label for="card_number" class="form-label">Account Number: </label>
+                <input formControlName="card_number" type="text" class="form-control" placeholder="Ford">
             </div>
             <div class="col-sm">
-                <label for="car-model" class="form-label">Model: </label>
-                <input type="text" class="form-control" placeholder="Fusion" aria-label="car-model">
-            </div>
-            <div class="col-sm">
-                <label for="color" class="form-label">Color: </label>
-                <input type="text" class="form-control" placeholder="Red" aria-label="color">
+                <label for="ccv" class="form-label">CCV: </label>
+                <input formControlName="ccv" type="number" class="form-control" placeholder="123">
             </div>
             <div class="col-md-5">
-                <label for="registration-number" class="form-label">Registration Number: </label>
-                <input type="text" class="form-control" placeholder="1234567" aria-label="registration-number">
+                <label for="expirationDate" class="form-label">Expiration Date: </label>
+                <input formControlName="expirationDate" type="text" class="form-control" placeholder="MM/YY" >
             </div>
+            <div class="col-sm">
+                <label for="fullName" class="form-label">Full Name:  </label>
+                <input formControlName="fullName" type="text" class="form-control" placeholder="John Doe">
+            </div>
+
+            <fieldset formGroupName="address">
+                <div class="col-12">
+                    <label for="deliveryStreet" class="form-label">Address</label>
+                    <input formControlName="deliveryStreet" type="text" class="form-control" id="deliveryStreet" placeholder="1234 Main St">
+                </div>
+                <div class="col-md-6">
+                    <label for="deliveryCity" class="form-label">City</label>
+                    <input formControlName="deliveryCity" type="text" class="form-control" id="deliveryCity">
+                </div>
+                <div class="col-md-4">
+                    <label for="deliveryState" class="form-label">State</label>
+                    <input formControlName="deliveryState" type="text" class="form-control" id="deliveryState">
+                </div>
+                <div class="col-md-2">
+                    <label for="deliveryZip" class="form-label">Zip</label>
+                    <input formControlName="deliveryZip" type="text" class="form-control" id="deliveryZip">
+                </div>
+            </fieldset>
+        </fieldset>
+
+
+
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Reserve a spot</button>
         </div>
-
-        <form class="row g-3">
-            <legend>Payment details</legend>
-            <div class="col-sm">
-                <label for="full-name" class="form-label">Full Name: </label>
-                <input type="text" class="form-control" placeholder="John Doe" aria-label="full-name">
-            </div>
-            <div class="col-sm">
-                <label for="card-number" class="form-label">Card Number: </label>
-                <input type="text" class="form-control" placeholder="XXXXXXXXXXXX" aria-label="card-number">
-            </div>
-            <div class="col-sm">
-                <label for="expired" class="form-label">Expiration Date:  </label>
-                <input type="text" class="form-control" placeholder="MM/YY" aria-label="expired">
-            </div>
-            <div class="col-md-2">
-                <label for="ccv" class="form-label">CCV:  </label>
-                <input type="text" class="form-control" placeholder="123" aria-label="ccv">
-            </div>
-            <div class="col-12">
-                <label for="inputAddress" class="form-label">Address</label>
-                <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-            </div>
-            <div class="col-md-6">
-                <label for="inputCity" class="form-label">City</label>
-                <input type="text" class="form-control" id="inputCity">
-            </div>
-            <div class="col-md-4">
-                <label for="inputState" class="form-label">State</label>
-                <input type="text" class="form-control" id="inputState">
-            </div>
-            <div class="col-md-2">
-                <label for="inputZip" class="form-label">Zip</label>
-                <input type="text" class="form-control" id="inputZip">
-            </div>
-
-            <div class="col-12">
-                <button type="submit" class="btn btn-primary">Reserve a spot</button>
-            </div>
-        </form>
     </form>
 
 <!--    &lt;!&ndash; booking-form.component.html &ndash;&gt;-->

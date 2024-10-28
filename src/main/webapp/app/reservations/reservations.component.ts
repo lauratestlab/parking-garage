@@ -22,47 +22,42 @@ export class ReservationsComponent{
 
   constructor(private api: ReservationApi) {
     this.reservationForm = this.fb.group({
-      startDate: ['', Validators.required],
       startTime: ['', Validators.required],
-      endDate: ['', Validators.required],
       endTime: ['', Validators.required],
-      carInfo: this.fb.group({
+      car: this.fb.group({
         color: ['', Validators.required],
         make: ['', Validators.required],
         model: ['', Validators.required],
         registrationNumber: ['', Validators.required]
       }),
-      paymentInfo: this.fb.group({
-        cardNumber: ['', [Validators.required]],
+      paymentMethod: this.fb.group({
+        card_number: ['', [Validators.required]],
         ccv: ['', [Validators.required]],
         expirationDate: ['', Validators.required],
         fullName: ['', Validators.required],
         address: this.fb.group({
-          street: ['', Validators.required],
-          city: ['', Validators.required],
-          state: ['', Validators.required],
-          zipCode: ['', [Validators.required]]
+          deliveryStreet: ['', Validators.required],
+          deliveryCity: ['', Validators.required],
+          deliveryState: ['', Validators.required],
+          deliveryZip: ['', [Validators.required]]
         })
       })
     });
   }
 
-  submitForm() {
+  addReservation() {
     const request: any = this.reservationForm.value;
     console.log('Form submitted: ', request);
 
     if(this.reservationForm.valid) {
       this.api.addReservation(request).subscribe({
           next: () => {
-            console.log('Check db');
+            window.alert('Booking was successful!');
           },
           error: () => {
-            console.error("'Error submitting reservation data");
+            window.alert('Booking was unsuccessful!');
           }
       });
-
-    } else {
-
     }
   }
 
