@@ -24,4 +24,6 @@ public class Spot {
     @OneToMany(mappedBy = "spot", fetch = FetchType.LAZY)
     private List<Reservation> reservations = new ArrayList<>();
 
+    public Long getId() {
+    return spotId;}
 }

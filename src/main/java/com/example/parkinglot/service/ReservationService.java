@@ -5,24 +5,22 @@ import com.example.parkinglot.dto.ReservationDTO;
 import com.example.parkinglot.dto.ReservationInfoDTO;
 import com.example.parkinglot.entity.*;
 import com.example.parkinglot.enums.Status;
-import com.example.parkinglot.exception.CarNotFoundException;
-import com.example.parkinglot.exception.NoSpotsAvailableException;
-import com.example.parkinglot.exception.NotAllowedTimeException;
-import com.example.parkinglot.exception.PaymentMethodNotFoundException;
+import com.example.parkinglot.exception.*;
 import com.example.parkinglot.mapper.PaymentMethodMapper;
 import com.example.parkinglot.repo.*;
 import com.example.parkinglot.security.RandomUtil;
 import com.example.parkinglot.security.SecurityUtils;
 import jakarta.persistence.NoResultException;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ReservationService {
@@ -103,4 +101,27 @@ public class ReservationService {
                     .orElseThrow(() -> new CarNotFoundException("Car with id " + reservationDTO.carId() + " was not found in the database"));
         }
     }
+
+    public List<ReservationDTO> findAllReservations() {
+        List<Reservation> reservations = reservationRepository.findAll();
+        return reservations.stream()
+                .map(ReservationDTO::new) // Assuming ReservationDTO2 has a constructor that takes Reservation
+                .collect(Collectors.toList());
+    }
+
+
+    public List<ReservationDTO> findReservationsForCurrentUser() {
+        Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
+        if (currentUserLogin.isPresent()) {
+            User user = userRepository.findByLogin(currentUserLogin.get())
+                    .orElseThrow(() -> new UserNotFoundException("User not found"));
+            List<Reservation> reservations = reservationRepository.findByUser(user);
+            return reservations.stream()
+                    .map(reservation -> new ReservationDTO(reservation)) // convert to DTO
+                    .collect(Collectors.toList());
+        }
+        return Collections.emptyList();
+    }
+
+
 }

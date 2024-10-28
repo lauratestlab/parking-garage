@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/reservation")
@@ -53,4 +54,19 @@ public class ReservationResource {
     private boolean isDateAcceptable(LocalDateTime start, LocalDateTime end) {
         return start.isAfter(LocalDateTime.now()) && end.isAfter(start);
     }
+
+    @GetMapping
+    @PermitAll // Or @PreAuthorize("hasRole('ADMIN')")
+    public List<ReservationDTO> getAllReservations() {
+        LOG.debug("REST request to get all reservations");
+        return reservationService.findAllReservations();
+    }
+
+    @GetMapping("/my")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ReservationDTO> getMyReservations() {
+        LOG.debug("REST request to get reservations for current user");
+        return reservationService.findReservationsForCurrentUser();
+    }
+
 }

@@ -23,4 +23,7 @@ public class Car {
     @JoinColumn(name = "user_id") // Foreign key column in Car table
     private User user;
 
+    public Long getId() {
+        return carId;
+    }
 }

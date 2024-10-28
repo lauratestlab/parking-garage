@@ -1,0 +1,13 @@
+###
+GET http://localhost:8080/api/reservation
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyIiwiZXhwIjoxNzMyMjExOTA5LCJhdXRoIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzI5NjE5OTA5fQ.SiIQrIUHy-kA0AzbHo0o6Gc9WrjRZzIO_Z8316AUVSiYf8IduJXleL9aKyA_s-fwqFy7fZscbRXqDTGeoqAsXw
+
+
+
+
+###
+GET http://localhost:8080/api/reservation/my
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyIiwiZXhwIjoxNzMyMjExOTA5LCJhdXRoIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzI5NjE5OTA5fQ.SiIQrIUHy-kA0AzbHo0o6Gc9WrjRZzIO_Z8316AUVSiYf8IduJXleL9aKyA_s-fwqFy7fZscbRXqDTGeoqAsXw
+
