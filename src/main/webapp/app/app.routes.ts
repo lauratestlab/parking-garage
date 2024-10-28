@@ -3,8 +3,6 @@ import { Routes } from '@angular/router';
 import { ReservationsComponent } from './reservations/reservations.component';
 import { PricingComponent } from './pricing/pricing.component';
 import { SpotComponent } from './spot/spot.component';
-import { FloorComponent } from './floor/floor.component';
-import { MembersComponent } from './members/members.component';
 import SignupComponent from "./account/signup/signup.component";
 import LoginComponent from "./login/login.component";
 import {DashboardComponent} from "./dashboard/dashboard.component";
@@ -21,7 +19,6 @@ export const routes: Routes = [
     { path: 'dashboard', component: DashboardComponent, title: "dashboard" },
     { path: 'reservations', component: ReservationsComponent },
     { path: 'pricing', component: PricingComponent },
-    { path: 'members', component: MembersComponent },
     // { path: '',   redirectTo: '/dashboard', pathMatch: 'full' },
     // { path: 'register', component: SignupComponent },
     // { path: 'login', component: LoginComponent },
