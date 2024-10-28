@@ -1,0 +1,30 @@
+<div class="d-flex justify-content-center main-content">
+    <div class="col-8">
+        @if (spot(); as spotRef) {
+            <div>
+                <h2>
+                    <span>Spot</span> [<strong>{{ spotRef.id }}</strong
+                >]
+                </h2>
+
+                <dl class="row-md jh-entity-details">
+                    <dt><span>Id</span></dt>
+                    <dd>
+                        <span>{{ spotRef.id }}</span>
+                    </dd>
+
+                    <dt><span>Name</span></dt>
+                    <dd>{{ spotRef.name }}</dd>
+
+
+                    <dt><span>Floor</span></dt>
+                    <dd>{{ spotRef.floor }}</dd>
+
+                </dl>
+
+                <button type="submit" routerLink="../../" class="btn btn-info">
+                    <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span></button>
+            </div>
+        }
+    </div>
+</div>

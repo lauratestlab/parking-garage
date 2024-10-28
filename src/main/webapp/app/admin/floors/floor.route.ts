@@ -5,10 +5,10 @@ import { of } from 'rxjs';
 import { IFloor } from './floor.model';
 import { FloorService } from './service/floor.service';
 
-export const userManagementResolve: ResolveFn<IFloor | null> = (route: ActivatedRouteSnapshot) => {
-  const login = route.paramMap.get('login');
-  if (login) {
-    return inject(FloorService).find(login);
+export const floorManagementResolve: ResolveFn<IFloor | null> = (route: ActivatedRouteSnapshot) => {
+  const id = route.paramMap.get('id');
+  if (id) {
+    return inject(FloorService).find(id);
   }
   return of(null);
 };
@@ -25,21 +25,21 @@ const floorRoute: Routes = [
     path: ':id/view',
     loadComponent: () => import('./detail/floor-detail.component'),
     resolve: {
-      user: userManagementResolve,
+      floor: floorManagementResolve,
     },
   },
   {
     path: 'new',
     loadComponent: () => import('./update/floor-update.component'),
     resolve: {
-      user: userManagementResolve,
+      floor: floorManagementResolve,
     },
   },
   {
     path: ':id/edit',
     loadComponent: () => import('./update/floor-update.component'),
     resolve: {
-      user: userManagementResolve,
+      floor: floorManagementResolve,
     },
   },
 ];

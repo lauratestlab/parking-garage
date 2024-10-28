@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 
+import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { Pagination } from 'app/core/request/request.model';
@@ -33,5 +34,33 @@ export class FloorService {
 
   delete(login: number): Observable<{}> {
     return this.http.delete(`${this.resourceUrl}/${login}`);
+  }
+
+  getFloorIdentifier(floor: Pick<IFloor, 'id'>): number | null {
+    return floor.id;
+  }
+
+  compareFloor(o1: Pick<IFloor, 'id'> | null, o2: Pick<IFloor, 'id'> | null): boolean {
+    return o1 && o2 ? this.getFloorIdentifier(o1) === this.getFloorIdentifier(o2) : o1 === o2;
+  }
+
+  addFloorToCollectionIfMissing<Type extends Pick<IFloor, 'id'>>(
+      floorCollection: Type[],
+      ...floorsToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const floors: Type[] = floorsToCheck.filter(isPresent);
+    if (floors.length > 0) {
+      const floorCollectionIdentifiers = floorCollection.map(floorItem => this.getFloorIdentifier(floorItem));
+      const floorsToAdd = floors.filter(floorItem => {
+        const floorIdentifier = this.getFloorIdentifier(floorItem);
+        if (floorCollectionIdentifiers.includes(floorIdentifier)) {
+          return false;
+        }
+        floorCollectionIdentifiers.push(floorIdentifier);
+        return true;
+      });
+      return [...floorsToAdd, ...floorCollection];
+    }
+    return floorCollection;
   }
 }

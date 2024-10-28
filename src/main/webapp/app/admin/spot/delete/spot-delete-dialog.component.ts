@@ -3,19 +3,19 @@ import { FormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import SharedModule from 'app/shared/shared.module';
-import { Floor } from '../floor.model';
-import { FloorService } from '../service/floor.service';
+import { Spot } from '../spot.model';
+import { SpotService } from '../service/spot.service';
 
 @Component({
   standalone: true,
-  selector: 'app-floor-delete-dialog',
-  templateUrl: './floor-delete-dialog.component.html',
+  selector: 'app-spot-delete-dialog',
+  templateUrl: './spot-delete-dialog.component.html',
   imports: [SharedModule, FormsModule],
 })
-export default class FloorManagementDeleteDialogComponent {
-  floor?: Floor;
+export default class SpotManagementDeleteDialogComponent {
+  spot?: Spot;
 
-  private floorService = inject(FloorService);
+  private spotService = inject(SpotService);
   private activeModal = inject(NgbActiveModal);
 
   cancel(): void {
@@ -23,7 +23,7 @@ export default class FloorManagementDeleteDialogComponent {
   }
 
   confirmDelete(login: number): void {
-    this.floorService.delete(login).subscribe(() => {
+    this.spotService.delete(login).subscribe(() => {
       this.activeModal.close('deleted');
     });
   }

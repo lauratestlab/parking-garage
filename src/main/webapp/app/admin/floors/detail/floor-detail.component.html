@@ -1,20 +1,20 @@
 <div class="d-flex justify-content-center main-content">
   <div class="col-8">
-    @if (user(); as userRef) {
+    @if (floor(); as floorRef) {
       <div>
         <h2>
-          <span>User</span> [<strong>{{ userRef.id }}</strong
+          <span>Floor</span> [<strong>{{ floorRef.id }}</strong
           >]
         </h2>
 
         <dl class="row-md jh-entity-details">
-          <dt><span>Login</span></dt>
+          <dt><span>Id</span></dt>
           <dd>
-            <span>{{ userRef.id }}</span>
+            <span>{{ floorRef.id }}</span>
           </dd>
 
           <dt><span>Name</span></dt>
-          <dd>{{ userRef.name }}</dd>
+          <dd>{{ floorRef.name }}</dd>
 
         </dl>
 

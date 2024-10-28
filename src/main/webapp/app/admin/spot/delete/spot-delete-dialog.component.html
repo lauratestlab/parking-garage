@@ -1,5 +1,5 @@
-@if (floor) {
-  <form name="deleteForm" (ngSubmit)="confirmDelete(floor.id!)">
+@if (spot) {
+  <form name="deleteForm" (ngSubmit)="confirmDelete(spot.id!)">
     <div class="modal-header">
       <h4 class="modal-title">Confirm delete operation</h4>
     </div>
@@ -7,7 +7,7 @@
     <div class="modal-body">
       <app-alert-error></app-alert-error>
 
-      <p>Are you sure you want to delete floor {{ floor.id }}?</p>
+      <p>Are you sure you want to delete spot {{ spot.id }}?</p>
     </div>
 
     <div class="modal-footer">

@@ -5,23 +5,23 @@ import { of } from 'rxjs';
 
 import { Authority } from 'app/config/authority.constants';
 
-import FloorDetailComponent from './floor-detail.component';
+import SpotDetailComponent from './spot-detail.component';
 
-describe('Floor Management Detail Component', () => {
+describe('Spot Management Detail Component', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FloorDetailComponent],
+      imports: [SpotDetailComponent],
       providers: [
         provideRouter(
           [
             {
               path: '**',
-              loadComponent: () => import('./floor-detail.component'),
+              loadComponent: () => import('./spot-detail.component'),
               resolve: {
-                floor: () =>
+                spot: () =>
                   of({
                     id: 123,
-                    login: 'floor',
+                    login: 'spot',
                     firstName: 'first',
                     lastName: 'last',
                     email: 'first@last.com',
@@ -37,7 +37,7 @@ describe('Floor Management Detail Component', () => {
         ),
       ],
     })
-      .overrideTemplate(FloorDetailComponent, '')
+      .overrideTemplate(SpotDetailComponent, '')
       .compileComponents();
   });
 
@@ -45,13 +45,13 @@ describe('Floor Management Detail Component', () => {
     it('Should call load all on construct', async () => {
       // WHEN
       const harness = await RouterTestingHarness.create();
-      const instance = await harness.navigateByUrl('/', FloorDetailComponent);
+      const instance = await harness.navigateByUrl('/', SpotDetailComponent);
 
       // THEN
-      expect(instance.floor()).toEqual(
+      expect(instance.spot()).toEqual(
         expect.objectContaining({
           id: 123,
-          login: 'floor',
+          login: 'spot',
           firstName: 'first',
           lastName: 'last',
           email: 'first@last.com',

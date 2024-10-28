@@ -1,6 +1,5 @@
 package com.example.parkinglot.web.rest;
 
-import com.example.parkinglot.dto.AdminUserDTO;
 import com.example.parkinglot.dto.FloorDTO;
 import com.example.parkinglot.entity.Floor;
 import com.example.parkinglot.security.AuthoritiesConstants;
@@ -30,18 +29,15 @@ public class FloorController {
 
     private final FloorService floorService;
 
-
     @Autowired
     public FloorController(FloorService floorService) {
         this.floorService = floorService;
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
-    @PutMapping("/update/{floorId}")
-    public ResponseEntity<Floor> updateFloorName(
-            @PathVariable("floorId") Long floorId,
-            @RequestParam("name") String newName) {
-        Floor updatedFloor = floorService.updateFloorName(floorId, newName);
+    @PutMapping("/floors")
+    public ResponseEntity<Floor> updateFloorName(@Valid @RequestBody FloorDTO floorDTO) {
+        Floor updatedFloor = floorService.updateFloorName(floorDTO.getId(), floorDTO.getName());
         if (updatedFloor != null) {
             return ResponseEntity.ok(updatedFloor);
         }
@@ -60,7 +56,7 @@ public class FloorController {
 
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
-    @GetMapping("/{floorId}")
+    @GetMapping("/floors/{floorId}")
     public ResponseEntity<FloorDTO> getFloorById(@PathVariable("floorId") Long floorId) {
         Optional<FloorDTO> floorDTO = floorService.getFloorDTOById(floorId);
         return floorDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
@@ -75,7 +71,7 @@ public class FloorController {
 
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
-    @DeleteMapping("/{floorId}")
+    @DeleteMapping("/floors/{floorId}")
     public ResponseEntity<Void> deleteFloor(@PathVariable("floorId") Long floorId) {
         floorService.deleteFloor(floorId);
         return ResponseEntity.noContent().build();

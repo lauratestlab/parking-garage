@@ -13,11 +13,11 @@ const newFloor: IFloor = {
 
 @Component({
   standalone: true,
-  selector: 'app-user-mgmt-update',
+  selector: 'app-floor-update',
   templateUrl: './floor-update.component.html',
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })
-export default class UserManagementUpdateComponent implements OnInit {
+export default class FloorUpdateComponent implements OnInit {
   authorities = signal<string[]>([]);
   isSaving = signal(false);
 

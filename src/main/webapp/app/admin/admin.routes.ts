@@ -12,6 +12,11 @@ const routes: Routes = [
     title: 'Floors',
   },
   {
+    path: 'spots',
+    loadChildren: () => import('./spot/spot.route'),
+    title: 'Spots',
+  },
+  {
     path: 'docs',
     loadComponent: () => import('./docs/docs.component'),
     title: 'global.menu.admin.apidocs',

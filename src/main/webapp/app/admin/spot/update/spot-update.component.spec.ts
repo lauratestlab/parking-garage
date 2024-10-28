@@ -5,38 +5,38 @@ import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
 import { Authority } from 'app/config/authority.constants';
-import { FloorService } from '../service/floor.service';
-import { Floor } from '../floor.model';
+import { SpotService } from '../service/spot.service';
+import { Spot } from '../spot.model';
 
-import FloorUpdateComponent from './floor-update.component';
+import SpotUpdateComponent from './spot-update.component';
 
-describe('Floor Management Update Component', () => {
-  let comp: FloorUpdateComponent;
-  let fixture: ComponentFixture<FloorUpdateComponent>;
-  let service: FloorService;
+describe('Spot Management Update Component', () => {
+  let comp: SpotUpdateComponent;
+  let fixture: ComponentFixture<SpotUpdateComponent>;
+  let service: SpotService;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [FloorUpdateComponent],
+      imports: [SpotUpdateComponent],
       providers: [
         provideHttpClient(),
         FormBuilder,
         {
           provide: ActivatedRoute,
           useValue: {
-            data: of({ floor: new Floor(123, 'floor', 'first', 'last', 'first@last.com', true, 'en', [Authority.USER], 'admin') }),
+            data: of({ spot: new Spot(123, 'spot', 'first', 'last', 'first@last.com', true, 'en', [Authority.USER], 'admin') }),
           },
         },
       ],
     })
-      .overrideTemplate(FloorUpdateComponent, '')
+      .overrideTemplate(SpotUpdateComponent, '')
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FloorUpdateComponent);
+    fixture = TestBed.createComponent(SpotUpdateComponent);
     comp = fixture.componentInstance;
-    service = TestBed.inject(FloorService);
+    service = TestBed.inject(SpotService);
   });
 
   describe('OnInit', () => {
@@ -57,7 +57,7 @@ describe('Floor Management Update Component', () => {
   });
 
   describe('save', () => {
-    it('Should call update service on save for existing floor', inject(
+    it('Should call update service on save for existing spot', inject(
       [],
       fakeAsync(() => {
         // GIVEN
@@ -74,11 +74,11 @@ describe('Floor Management Update Component', () => {
       }),
     ));
 
-    it('Should call create service on save for new floor', inject(
+    it('Should call create service on save for new spot', inject(
       [],
       fakeAsync(() => {
         // GIVEN
-        const entity = { login: 'foo' } as Floor;
+        const entity = { login: 'foo' } as Spot;
         jest.spyOn(service, 'create').mockReturnValue(of(entity));
         comp.editForm.patchValue(entity);
         // WHEN

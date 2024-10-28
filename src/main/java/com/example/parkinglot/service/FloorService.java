@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Service
 public class FloorService {
 
-    private FloorRepository floorRepository;
+    private final FloorRepository floorRepository;
 
     @Autowired
     public FloorService(FloorRepository floorRepository) {
@@ -63,7 +63,7 @@ public class FloorService {
     }
 
     private SpotDTO convertSpotToDTO(Spot spot) {
-        return new SpotDTO(spot.getSpotId(), spot.getName(), spot.getFloor().getId());
+        return new SpotDTO(spot.getId(), spot.getName(), spot.getFloor().getName(), spot.getFloor().getId());
     }
 
     public Floor addFloor(@Valid FloorDTO floorDTO) {

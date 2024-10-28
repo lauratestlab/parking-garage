@@ -3,12 +3,12 @@ import { HttpErrorResponse, provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { Authority } from 'app/config/authority.constants';
-import { Floor } from '../floor.model';
+import { Spot } from '../spot.model';
 
-import { FloorService } from './floor.service';
+import { SpotService } from './spot.service';
 
-describe('Floor Service', () => {
-  let service: FloorService;
+describe('Spot Service', () => {
+  let service: SpotService;
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
@@ -16,7 +16,7 @@ describe('Floor Service', () => {
       providers: [provideHttpClient(), provideHttpClientTesting()],
     });
 
-    service = TestBed.inject(FloorService);
+    service = TestBed.inject(SpotService);
     httpMock = TestBed.inject(HttpTestingController);
   });
 
@@ -25,16 +25,16 @@ describe('Floor Service', () => {
   });
 
   describe('Service methods', () => {
-    it('should return Floor', () => {
+    it('should return Spot', () => {
       let expectedResult: string | undefined;
 
-      service.find('floor').subscribe(received => {
+      service.find('spot').subscribe(received => {
         expectedResult = received.login;
       });
 
       const req = httpMock.expectOne({ method: 'GET' });
-      req.flush(new Floor(123, 'floor'));
-      expect(expectedResult).toEqual('floor');
+      req.flush(new Spot(123, 'spot'));
+      expect(expectedResult).toEqual('spot');
     });
 
     it('should return Authorities', () => {
@@ -52,7 +52,7 @@ describe('Floor Service', () => {
     it('should propagate not found response', () => {
       let expectedResult = 0;
 
-      service.find('floor').subscribe({
+      service.find('spot').subscribe({
         error: (error: HttpErrorResponse) => (expectedResult = error.status),
       });
 

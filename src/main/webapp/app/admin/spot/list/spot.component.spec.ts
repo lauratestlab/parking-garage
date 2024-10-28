@@ -6,15 +6,15 @@ import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
 import { AccountService } from 'app/core/auth/account.service';
-import { FloorService } from '../service/floor.service';
-import { Floor } from '../floor.model';
+import { SpotService } from '../service/spot.service';
+import { Spot } from '../spot.model';
 
-import FloorManagementComponent from './floor.component';
+import SpotManagementComponent from './spot.component';
 
-describe('Floor Management Component', () => {
-  let comp: FloorManagementComponent;
-  let fixture: ComponentFixture<FloorManagementComponent>;
-  let service: FloorService;
+describe('Spot Management Component', () => {
+  let comp: SpotManagementComponent;
+  let fixture: ComponentFixture<SpotManagementComponent>;
+  let service: SpotService;
   let mockAccountService: AccountService;
   const data = of({
     defaultSort: 'id,asc',
@@ -29,17 +29,17 @@ describe('Floor Management Component', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [FloorManagementComponent],
+      imports: [SpotManagementComponent],
       providers: [provideHttpClient(), { provide: ActivatedRoute, useValue: { data, queryParamMap } }, AccountService],
     })
-      .overrideTemplate(FloorManagementComponent, '')
+      .overrideTemplate(SpotManagementComponent, '')
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FloorManagementComponent);
+    fixture = TestBed.createComponent(SpotManagementComponent);
     comp = fixture.componentInstance;
-    service = TestBed.inject(FloorService);
+    service = TestBed.inject(SpotService);
     mockAccountService = TestBed.inject(AccountService);
     mockAccountService.identity = jest.fn(() => of(null));
   });
@@ -53,7 +53,7 @@ describe('Floor Management Component', () => {
         jest.spyOn(service, 'query').mockReturnValue(
           of(
             new HttpResponse({
-              body: [new Floor(123, "test")],
+              body: [new Spot(123, "test")],
               headers,
             }),
           ),
@@ -65,36 +65,36 @@ describe('Floor Management Component', () => {
 
         // THEN
         expect(service.query).toHaveBeenCalled();
-        expect(comp.floors()?.[0]).toEqual(expect.objectContaining({ id: 123 }));
+        expect(comp.spots()?.[0]).toEqual(expect.objectContaining({ id: 123 }));
       }),
     ));
   });
 
   describe('setActive', () => {
-    it('Should update floor and call load all', inject(
+    it('Should update spot and call load all', inject(
       [],
       fakeAsync(() => {
         // GIVEN
         const headers = new HttpHeaders().append('link', 'link;link');
-        const floor = new Floor(123, "G");
+        const spot = new Spot(123);
         jest.spyOn(service, 'query').mockReturnValue(
           of(
             new HttpResponse({
-              body: [floor],
+              body: [spot],
               headers,
             }),
           ),
         );
-        jest.spyOn(service, 'update').mockReturnValue(of(floor));
+        jest.spyOn(service, 'update').mockReturnValue(of(spot));
 
         // WHEN
-        comp.setActive(floor, true);
+        comp.setActive(spot, true);
         tick(); // simulate async
 
         // THEN
-        expect(service.update).toHaveBeenCalledWith({ ...floor, activated: true });
+        expect(service.update).toHaveBeenCalledWith({ ...spot, activated: true });
         expect(service.query).toHaveBeenCalled();
-        expect(comp.floors()?.[0]).toEqual(expect.objectContaining({ id: 123 }));
+        expect(comp.spots()?.[0]).toEqual(expect.objectContaining({ id: 123 }));
       }),
     ));
   });

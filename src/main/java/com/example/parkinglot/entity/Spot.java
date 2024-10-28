@@ -13,7 +13,8 @@ public class Spot {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long spotId;
+    @Column(name = "spot_id")
+    private Long id;
 
     private String name;
 

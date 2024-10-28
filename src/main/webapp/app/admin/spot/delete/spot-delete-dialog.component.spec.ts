@@ -5,22 +5,22 @@ import { provideHttpClient } from '@angular/common/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { of } from 'rxjs';
 
-import { FloorService } from '../service/floor.service';
+import { SpotService } from '../service/spot.service';
 
-import FloorManagementDeleteDialogComponent from './floor-delete-dialog.component';
+import SpotManagementDeleteDialogComponent from './spot-delete-dialog.component';
 
-describe('Floor Management Delete Component', () => {
-  let comp: FloorManagementDeleteDialogComponent;
-  let fixture: ComponentFixture<FloorManagementDeleteDialogComponent>;
-  let service: FloorService;
+describe('Spot Management Delete Component', () => {
+  let comp: SpotManagementDeleteDialogComponent;
+  let fixture: ComponentFixture<SpotManagementDeleteDialogComponent>;
+  let service: SpotService;
   let mockActiveModal: NgbActiveModal;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [FloorManagementDeleteDialogComponent],
+      imports: [SpotManagementDeleteDialogComponent],
       providers: [provideHttpClient(), NgbActiveModal],
     })
-      .overrideTemplate(FloorManagementDeleteDialogComponent, '')
+      .overrideTemplate(SpotManagementDeleteDialogComponent, '')
       .compileComponents();
   }));
 
@@ -39,11 +39,11 @@ describe('Floor Management Delete Component', () => {
         jest.spyOn(service, 'delete').mockReturnValue(of({}));
 
         // WHEN
-        comp.confirmDelete('floor');
+        comp.confirmDelete('spot');
         tick();
 
         // THEN
-        expect(service.delete).toHaveBeenCalledWith('floor');
+        expect(service.delete).toHaveBeenCalledWith('spot');
         expect(mockActiveModal.close).toHaveBeenCalledWith('deleted');
       }),
     ));
