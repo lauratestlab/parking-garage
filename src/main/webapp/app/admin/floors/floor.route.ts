@@ -22,7 +22,7 @@ const floorRoute: Routes = [
     },
   },
   {
-    path: ':login/view',
+    path: ':id/view',
     loadComponent: () => import('./detail/floor-detail.component'),
     resolve: {
       user: userManagementResolve,

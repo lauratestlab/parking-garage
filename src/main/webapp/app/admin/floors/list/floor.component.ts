@@ -38,7 +38,7 @@ export default class FloorManagementComponent implements OnInit {
   }
 
   trackIdentity(item: Floor): number {
-    return item.floorId!;
+    return item.id!;
   }
 
   deleteFloor(floor: Floor): void {

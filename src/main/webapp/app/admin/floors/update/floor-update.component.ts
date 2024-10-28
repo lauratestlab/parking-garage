@@ -22,7 +22,7 @@ export default class UserManagementUpdateComponent implements OnInit {
   isSaving = signal(false);
 
   editForm = new FormGroup({
-    floorId: new FormControl(floorTemplate.floorId),
+    id: new FormControl(floorTemplate.id),
     name: new FormControl(floorTemplate.name)
   });
 
@@ -30,9 +30,9 @@ export default class UserManagementUpdateComponent implements OnInit {
   private route = inject(ActivatedRoute);
 
   ngOnInit(): void {
-    this.route.data.subscribe(({ user }) => {
-      if (user) {
-        this.editForm.reset(user);
+    this.route.data.subscribe(({ floor }) => {
+      if (floor) {
+        this.editForm.reset(floor);
       } else {
         this.editForm.reset(newFloor);
       }
@@ -46,7 +46,7 @@ export default class UserManagementUpdateComponent implements OnInit {
   save(): void {
     this.isSaving.set(true);
     const floor = this.editForm.getRawValue();
-    if (floor.floorId !== null) {
+    if (floor.id !== null) {
       this.floorService.update(floor).subscribe({
         next: () => this.onSaveSuccess(),
         error: () => this.onSaveError(),

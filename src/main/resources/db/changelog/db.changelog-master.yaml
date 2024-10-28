@@ -321,7 +321,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   name: name
-                  type: INT
+                  type: VARCHAR(20)
             tableName: floors
   - changeSet:
       id: 1729099703466-101

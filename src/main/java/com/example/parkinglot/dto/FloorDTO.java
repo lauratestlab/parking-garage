@@ -3,29 +3,29 @@ package com.example.parkinglot.dto;
 import java.util.List;
 
 public class FloorDTO {
-  private Long floorId;
-  private int name;
+  private Long id;
+  private String name;
   private List<SpotDTO> spots;
 
-  public FloorDTO(Long floorId, int name, List<SpotDTO> spots) {
-    this.floorId = floorId;
+  public FloorDTO(Long floorId, String name, List<SpotDTO> spots) {
+    this.id = floorId;
     this.name = name;
     this.spots = spots;
   }
 
-  public Long getFloorId() {
-    return floorId;
+  public Long getId() {
+    return id;
   }
 
-  public void setFloorId(Long floorId) {
-    this.floorId = floorId;
+  public void setId(Long id) {
+    this.id = id;
   }
 
-  public int getName() {
+  public String getName() {
     return name;
   }
 
-  public void setName(int name) {
+  public void setName(String name) {
     this.name = name;
   }
 

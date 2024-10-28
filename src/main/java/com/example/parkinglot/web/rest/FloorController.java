@@ -1,42 +1,63 @@
 package com.example.parkinglot.web.rest;
 
+import com.example.parkinglot.dto.AdminUserDTO;
 import com.example.parkinglot.dto.FloorDTO;
 import com.example.parkinglot.entity.Floor;
-import com.example.parkinglot.repo.FloorRepository;
+import com.example.parkinglot.security.AuthoritiesConstants;
 import com.example.parkinglot.service.FloorService;
+import com.example.parkinglot.web.util.PaginationUtil;
+import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/floors")
+@RequestMapping("/api/admin")
 public class FloorController {
 
+    private static final Logger LOG = LoggerFactory.getLogger(FloorController.class);
+
     private final FloorService floorService;
-    private final FloorRepository floorRepository;
 
 
     @Autowired
-    public FloorController(FloorService floorService, FloorRepository floorRepository) {
+    public FloorController(FloorService floorService) {
         this.floorService = floorService;
-        this.floorRepository = floorRepository;
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @PutMapping("/update/{floorId}")
     public ResponseEntity<Floor> updateFloorName(
             @PathVariable("floorId") Long floorId,
-            @RequestParam("name") int newName) {
+            @RequestParam("name") String newName) {
         Floor updatedFloor = floorService.updateFloorName(floorId, newName);
         if (updatedFloor != null) {
             return ResponseEntity.ok(updatedFloor);
         }
         return ResponseEntity.notFound().build();
     }
+
+    @GetMapping("/floors")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<List<FloorDTO>> getAllUsers(Pageable pageable) {
+        LOG.debug("REST request to get all Floors");
+
+        final Page<FloorDTO> page = floorService.getAllFloors(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @GetMapping("/{floorId}")
@@ -46,11 +67,9 @@ public class FloorController {
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
-    @PostMapping("/add")
-    public ResponseEntity<Floor> addFloor(@RequestParam("name") int name) {
-        Floor floor = new Floor();
-        floor.setName(name);  // Set the floor name from the request parameter
-        Floor createdFloor = floorService.addFloor(floor);
+    @PostMapping("/floors")
+    public ResponseEntity<Floor> addFloor(@Valid @RequestBody FloorDTO floorDTO) {
+        Floor createdFloor = floorService.addFloor(floorDTO);
         return new ResponseEntity<>(createdFloor, HttpStatus.CREATED);
     }
 

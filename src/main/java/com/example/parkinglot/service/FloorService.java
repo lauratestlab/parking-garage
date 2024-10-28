@@ -1,13 +1,16 @@
 package com.example.parkinglot.service;
 
-import com.example.parkinglot.dto.SpotDTO;
-import com.example.parkinglot.entity.Spot;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.example.parkinglot.dto.FloorDTO;
+import com.example.parkinglot.dto.SpotDTO;
 import com.example.parkinglot.entity.Floor;
+import com.example.parkinglot.entity.Spot;
 import com.example.parkinglot.repo.FloorRepository;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +27,7 @@ public class FloorService {
     }
 
     @Transactional
-    public Floor updateFloorName(Long floorId, int newName) {
+    public Floor updateFloorName(Long floorId, String newName) {
         Optional<Floor> optFloor = floorRepository.findById(floorId);
         if (optFloor.isPresent()) {
             Floor floor = optFloor.get();
@@ -32,6 +35,11 @@ public class FloorService {
             return floorRepository.save(floor);
         }
         return null;
+    }
+
+    @Transactional(readOnly = true)
+    public Page<FloorDTO> getAllFloors(Pageable pageable) {
+        return floorRepository.findAll(pageable).map(this::convertToDto);
     }
 
     public Optional<Floor> getFloorById(Long floorId) {
@@ -51,14 +59,15 @@ public class FloorService {
                 .map(this::convertSpotToDTO)
                 .collect(Collectors.toList());
 
-        return new FloorDTO(floor.getFloorId(), floor.getName(), spotDTOs);
+        return new FloorDTO(floor.getId(), floor.getName(), spotDTOs);
     }
 
     private SpotDTO convertSpotToDTO(Spot spot) {
-        return new SpotDTO(spot.getSpotId(), spot.getName(), spot.getFloor().getFloorId());
+        return new SpotDTO(spot.getSpotId(), spot.getName(), spot.getFloor().getId());
     }
 
-    public Floor addFloor(Floor floor) {
+    public Floor addFloor(@Valid FloorDTO floorDTO) {
+        Floor floor = convertToEntity(floorDTO);
         return floorRepository.save(floor);
     }
 
@@ -69,15 +78,15 @@ public class FloorService {
 
 
   //begining od L's code. Not used int the controller
-//  private FloorDTO convertToDto(Floor floor) {
+  private FloorDTO convertToDto(Floor floor) {
 //        Long spotId = floor.getSpots().isEmpty() ? null : floor.getSpots().get(0).getSpotId();
-//        return new FloorDTO(floor.getFloorId(), floor.getName(), spotId);
-//    }
+        return new FloorDTO(floor.getId(), floor.getName(), List.of());
+    }
 
   
     private Floor convertToEntity(FloorDTO floorDTO) {
         Floor floor = new Floor();
-        floor.setFloorId(floorDTO.getFloorId());
+        floor.setId(floorDTO.getId());
         floor.setName(floorDTO.getName());
         return floor;
     }

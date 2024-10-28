@@ -15,7 +15,7 @@ public interface SpotRepository extends JpaRepository<Spot, Long> {
 
     //        @Query("SELECT s.spotId, s.name, s.floor FROM Spot s")
 //        List<Object[]> findAllSpotsWithLimitedFields();
-    @Query("SELECT s.spotId, s.name, s.floor.floorId FROM Spot s")
+    @Query("SELECT s.spotId, s.name, s.floor.id FROM Spot s")
     List<Object[]> findAllSpotsWithLimitedFields();
 }
 

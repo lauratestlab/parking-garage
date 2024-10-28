@@ -1,6 +1,6 @@
 <div class="main-content">
   <h2>
-    <span id="floor-page-heading" data-cy="userManagementPageHeading">Users</span>
+    <span id="floor-page-heading" data-cy="floorManagementPageHeading">Floors</span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading()">
@@ -8,7 +8,7 @@
         <span>Refresh list</span>
       </button>
       <button class="btn btn-primary" [routerLink]="['./new']">
-        <fa-icon icon="plus"></fa-icon> <span>Create a new user</span>
+        <fa-icon icon="plus"></fa-icon> <span>Create a new floor</span>
       </button>
     </div>
   </h2>
@@ -23,27 +23,27 @@
         <thead>
           <tr appSort [sortState]="sortState" (sortChange)="transition($event)">
             <th scope="col" appSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-            <th scope="col" appSortBy="name"><span>Login</span> <fa-icon icon="sort"></fa-icon></th>
-            <th scope="col" appSortBy="email"><span>Email</span> <fa-icon icon="sort"></fa-icon></th>
+            <th scope="col" appSortBy="name"><span>Name</span> <fa-icon icon="sort"></fa-icon></th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
           @for (floor of floors(); track trackIdentity(floor)) {
             <tr>
               <td>
-                <a [routerLink]="['./', floor.floorId, 'view']">{{ floor.floorId }}</a>
+                <a [routerLink]="['./', floor.id, 'view']">{{ floor.id }}</a>
               </td>
               <td>{{ floor.name }}</td>
               <td class="text-end">
                 <div class="btn-group">
-                  <button type="submit" [routerLink]="['./', floor.floorId, 'view']" class="btn btn-info btn-sm">
+                  <button type="submit" [routerLink]="['./', floor.id, 'view']" class="btn btn-info btn-sm">
                     <fa-icon icon="eye"></fa-icon>
                     <span class="d-none d-md-inline">View</span>
                   </button>
 
                   <button
                     type="submit"
-                    [routerLink]="['./', floor.floorId, 'edit']"
+                    [routerLink]="['./', floor.id, 'edit']"
                     queryParamsHandling="merge"
                     class="btn btn-primary btn-sm"
                   >
