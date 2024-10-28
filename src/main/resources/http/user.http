@@ -17,7 +17,6 @@ GET http://localhost:8080/api/activate?key=CXADFrBdgFPrCvzvXGe6
 
 ###
 POST http://localhost:8080/api/authenticate
-
 Accept: application/json
 Content-Type: application/json
 Host: localhost:4200
@@ -25,8 +24,8 @@ Origin: http://localhost:4200
 Referer: http://localhost:4200/login
 
 {
-  "username": "user",
-  "password": "user",
+  "username": "admin",
+  "password": "admin",
   "rememberMe": true
 }
 
