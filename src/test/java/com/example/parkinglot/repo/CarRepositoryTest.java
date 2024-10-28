@@ -26,14 +26,14 @@ class CarRepositoryTest {
 
     @BeforeEach
     public void setUp() {
-        user = new User(
-                "John",
-                "Doe",
-                "johndoe123",
-                "Pa$$w0rd",
-                 "johndoe@example.com",
-                Role.USER
-        );
+        user = new User();
+        user.setFirstName("John");
+        user.setLastName("Doe");
+        user.setLogin("johndoe123");
+        user.setPassword("$2y$10$iaLUe2YNU6aKWR6vxVc7CO5VBdMBC2ZeC0aCYr88xEdyD4xlrkdwe");
+        user.setEmail("johndoe@example.com");
+        user.setCreatedBy("test");
+
         userRepository.save(user);
     }
 

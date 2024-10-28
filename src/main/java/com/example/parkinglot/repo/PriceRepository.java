@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface PriceRepository
-        extends CrudRepository<Price, Double>{
+        extends CrudRepository<Price, Integer>{
     List<Price> findAll();
 }

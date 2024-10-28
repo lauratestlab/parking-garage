@@ -3,7 +3,7 @@ package com.example.parkinglot.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 
 @Entity
 @Data
@@ -13,5 +13,5 @@ public class Price {
     @Id
     private int duration;
 
-    private BigInteger price;
+    private BigDecimal price;
 }
