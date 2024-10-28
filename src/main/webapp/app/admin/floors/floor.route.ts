@@ -36,7 +36,7 @@ const floorRoute: Routes = [
     },
   },
   {
-    path: ':login/edit',
+    path: ':id/edit',
     loadComponent: () => import('./update/floor-update.component'),
     resolve: {
       user: userManagementResolve,
