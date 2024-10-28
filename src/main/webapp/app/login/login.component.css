@@ -44,6 +44,10 @@ input[type=password] {
     color: #ECF0F5;
 }
 
+.form-control {
+    color: #ECF0F5;
+}
+
 input:focus {
     outline: none;
     box-shadow: 0 0 0;
