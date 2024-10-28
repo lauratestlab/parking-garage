@@ -38,28 +38,6 @@
 
     <hr>
 
-<!--    <div class="add-price-div">-->
-<!--        <h3>Add new price</h3>-->
-<!--        <form [formGroup]="priceForm" (ngSubmit)="addPrice()" method="post">-->
-<!--            <div class="mb-3">-->
-<!--                <label for="add-price" class="form-label">Price</label>-->
-<!--                <input formControlName="price" type="number" class="form-control" id="add-price" placeholder="Price">-->
-<!--                <div *ngIf="priceForm?.invalid && priceForm.get('price')?.touched" class="text-danger">-->
-<!--                    Price is required.-->
-<!--                </div>-->
-<!--            </div>-->
-
-<!--            <div class="mb-3">-->
-<!--                <label for="add-duration" class="form-label">Duration</label>-->
-<!--                <input formControlName="duration" type="number" class="form-control" id="add-duration" placeholder="Duration">-->
-<!--                <div *ngIf="priceForm.get('price')?.invalid && priceForm.get('duration')?.touched" class="text-danger">-->
-<!--                    Duration is required.-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <button type="submit" class="btn btn-primary" [disabled]="priceForm.invalid">Add price</button>-->
-<!--        </form>-->
-<!--    </div>-->
-
     <div class="update-price-div">
         <h3>Update an existing price</h3>
         <form [formGroup]="priceForm" (ngSubmit)="updatePrice()">

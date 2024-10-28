@@ -97,3 +97,9 @@ div.mid{
     width: auto;
     height: auto;
 }
+
+.flip-card-front {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}

@@ -4,7 +4,7 @@ import {Observable} from "rxjs";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Revenue} from "../model/revenue.model";
 import {error} from "@angular/compiler-cli/src/transformers/util";
-import {NgIf} from "@angular/common";
+import {CurrencyPipe, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-dashboard',
@@ -12,7 +12,8 @@ import {NgIf} from "@angular/common";
   imports: [
     FormsModule,
     NgIf,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CurrencyPipe
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
