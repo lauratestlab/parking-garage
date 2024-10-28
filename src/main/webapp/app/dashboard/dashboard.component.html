@@ -11,14 +11,14 @@
     <div class="card-container">
         <div class="box red available-spots">
             <div class="flip-card-front">
-                <form>
+                <form [formGroup]="revenueForm" (ngSubmit)="fetchRevenue()" >
                     <label for="start">Start Date:</label>
                     <input type="date" id="start" formControlName="start" required>
 
                     <label for="end">End Date:</label>
                     <input type="date" id="end" formControlName="end" required>
 
-<!--                    <button type="submit" [disabled]="revenueForm.invalid">View Revenue</button>-->
+                    <button type="submit" [disabled]="revenueForm.invalid">View Revenue</button>
                 </form>
 
                 <span class="price">{{ revenueData }}</span><br>/ as of today

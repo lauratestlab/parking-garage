@@ -1,15 +1,18 @@
 import {Component, OnInit} from '@angular/core';
 import {DashboardApiService} from "./dashboard-api.service";
 import {Observable} from "rxjs";
-import {FormBuilder, FormGroup, FormsModule, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Revenue} from "../model/revenue.model";
 import {error} from "@angular/compiler-cli/src/transformers/util";
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    FormsModule
+    FormsModule,
+    NgIf,
+    ReactiveFormsModule
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
