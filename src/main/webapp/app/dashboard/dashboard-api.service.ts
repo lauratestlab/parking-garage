@@ -22,17 +22,4 @@ export class DashboardApiService {
         .set('end', end);
     return this.http.get<Revenue>(`${this.baseUrl}/report/revenue`, { params });
   }
-
-//   private apiUrl = 'http://localhost:8080/api/report/revenue';
-//
-//   constructor(private http: HttpClient) {}
-//
-//   getRevenue(start: string, end: string): Observable<Revenue> {
-//     const params = new HttpParams()
-//         .set('start', start)
-//         .set('end', end);
-//
-//     return this.http.get<Revenue>(this.apiUrl, { params });
-//   }
-// }
 }
