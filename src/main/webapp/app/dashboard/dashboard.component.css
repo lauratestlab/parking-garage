@@ -86,7 +86,7 @@ div.mid{
 
 .price {
     color:white;
-    font-size: 150px;
+    font-size: 120px;
     font-weight: 800;
     padding-top:-80% !important;
 }
@@ -102,4 +102,11 @@ div.mid{
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+}
+
+.card-title {
+    text-transform: uppercase;
+    font-size: 20px;
+    font-weight: normal;
+    color: #a7a7a7;
 }
