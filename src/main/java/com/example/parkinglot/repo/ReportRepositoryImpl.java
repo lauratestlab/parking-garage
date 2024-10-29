@@ -28,7 +28,7 @@ public class ReportRepositoryImpl implements ReportRepository {
 
         Join<Spot, Reservation> joinedRoot = root.join("reservations", JoinType.LEFT);
 
-        joinedRoot.on(cb.lessThan(joinedRoot.get("startTime"), endTime), cb.greaterThan(joinedRoot.get("endTime"), startTime), cb.equal(joinedRoot.get("status"), Status.ACTIVE));
+        joinedRoot.on(cb.lessThan(joinedRoot.get("startTime"), endTime), cb.greaterThan(joinedRoot.get("endTime"), startTime), cb.equal(joinedRoot.get("status"), Status.STARTED));
 
         cq.where(cb.isNull(joinedRoot.get("id")));
 
@@ -46,7 +46,7 @@ public class ReportRepositoryImpl implements ReportRepository {
 
         Join<Spot, Reservation> joinedRoot = root.join("reservations", JoinType.LEFT);
 
-        joinedRoot.on(cb.lessThan(joinedRoot.get("startTime"), endTime), cb.greaterThan(joinedRoot.get("endTime"), startTime), cb.equal(joinedRoot.get("status"), Status.ACTIVE));
+        joinedRoot.on(cb.lessThan(joinedRoot.get("startTime"), endTime), cb.greaterThan(joinedRoot.get("endTime"), startTime), cb.equal(joinedRoot.get("status"), Status.STARTED));
 
         cq.where(cb.isNull(joinedRoot.get("id")));
 

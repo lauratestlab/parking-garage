@@ -12,7 +12,7 @@ import java.math.BigInteger;
 public class Price {
 
     @Id
-    private int duration;
+    private long duration;
 
     private BigDecimal price;
 }

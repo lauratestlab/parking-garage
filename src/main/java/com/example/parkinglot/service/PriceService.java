@@ -26,4 +26,10 @@ public class PriceService {
         }
         return null;
     }
+
+    public BigDecimal getPrice(long hours) {
+        Price price = priceRepository.findFirstByDurationGreaterThanEqualOrderByDurationAsc(hours)
+                .orElseThrow(RuntimeException::new);
+        return price.getPrice();
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.parkinglot.service;
 
 
+import com.example.parkinglot.dto.ReservationCompletionDTO;
 import com.example.parkinglot.dto.ReservationDTO;
 import com.example.parkinglot.dto.ReservationInfoDTO;
 import com.example.parkinglot.entity.*;
@@ -8,15 +9,20 @@ import com.example.parkinglot.enums.Status;
 import com.example.parkinglot.exception.*;
 import com.example.parkinglot.mapper.CarMapper;
 import com.example.parkinglot.mapper.PaymentMethodMapper;
+import com.example.parkinglot.mapper.ReservationMapper;
 import com.example.parkinglot.repo.*;
 import com.example.parkinglot.security.RandomUtil;
 import com.example.parkinglot.security.SecurityUtils;
 import jakarta.persistence.NoResultException;
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -35,8 +41,10 @@ public class ReservationService {
     private final ReportRepository reportRepository;
     private final MailService mailService;
     private final CarMapper carMapper;
+    private final PriceService priceService;
+    private final ReservationMapper reservationMapper;
 
-    public ReservationService(UserRepository userRepository, PaymentService paymentService, ReservationRepository reservationRepository, CarService carService, CarRepository carRepository, PaymentMethodRepository paymentMethodRepository, PaymentMethodMapper paymentMethodMapper, ReportRepository reportRepository, MailService mailService, CarMapper carMapper) {
+    public ReservationService(UserRepository userRepository, PaymentService paymentService, ReservationRepository reservationRepository, CarService carService, CarRepository carRepository, PaymentMethodRepository paymentMethodRepository, PaymentMethodMapper paymentMethodMapper, ReportRepository reportRepository, MailService mailService, CarMapper carMapper, PriceService priceService, ReservationMapper reservationMapper) {
         this.userRepository = userRepository;
         this.paymentService = paymentService;
         this.reservationRepository = reservationRepository;
@@ -47,6 +55,8 @@ public class ReservationService {
         this.reportRepository = reportRepository;
         this.mailService = mailService;
         this.carMapper = carMapper;
+        this.priceService = priceService;
+        this.reservationMapper = reservationMapper;
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
@@ -76,7 +86,7 @@ public class ReservationService {
         reservation.setUser(user);
         reservation.setSpot(spot);
         reservation.setCar(registerCar(reservationDTO));
-        reservation.setStatus(Status.ACTIVE);
+        reservation.setStatus(Status.ORDERED);
         reservation.setConfirmationCode(RandomUtil.generateRandomAlphanumericString());
 
         reservationRepository.save(reservation);
@@ -84,6 +94,54 @@ public class ReservationService {
         mailService.sendOrderInfoMail(user, reservation.getConfirmationCode());
 
         return new ReservationInfoDTO(true, "");
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+    public ReservationInfoDTO startReservation(@Valid ReservationDTO reservationDTO) {
+        Spot spot;
+        try {
+            spot = reportRepository.findFirstAvailableSpot(reservationDTO.startTime(), reservationDTO.endTime());
+        } catch (NoResultException e) {
+            return new ReservationInfoDTO(false, "No spots available");
+        }
+
+        User user = null;
+        if (reservationDTO.email() != null) {
+            user = userRepository.findOneByEmailIgnoreCase(reservationDTO.email()).orElseThrow(() -> new UserNotFoundException("Couldn't find a member with the given email: " + reservationDTO.email()));
+        }
+
+        Reservation reservation = new Reservation();
+        reservation.setStartTime(LocalDateTime.now());
+        reservation.setSpot(spot);
+        reservation.setCar(registerCar(reservationDTO));
+        reservation.setStatus(Status.STARTED);
+        reservation.setConfirmationCode(RandomUtil.generateRandomAlphanumericString());
+
+        reservationRepository.save(reservation);
+
+        if (user != null) {
+            mailService.sendOrderInfoMail(user, reservation.getConfirmationCode());
+        }
+
+        return new ReservationInfoDTO(true, "");
+    }
+
+    public ReservationDTO closeReservation(@Valid ReservationCompletionDTO reservationCompletionDTO) {
+
+        Reservation reservation = reservationRepository.findOneByConfirmationCode(reservationCompletionDTO.confirmationCode())
+                .orElseThrow(() -> new ReservationNotFoundException("Reservation: " + reservationCompletionDTO.confirmationCode() + " not found"));
+        reservation.setStatus(Status.COMPLETED);
+        reservation.setEndTime(LocalDateTime.now());
+
+        Duration duration = Duration.between(reservation.getEndTime(), reservation.getStartTime());
+        long hours = duration.toHours();
+        BigDecimal price = priceService.getPrice(hours);
+
+        reservation.setPrice(price);
+
+        reservation = reservationRepository.save(reservation);
+
+        return reservationMapper.toDto(reservation);
     }
 
     private PaymentMethod processPayment(ReservationDTO reservationDTO) {

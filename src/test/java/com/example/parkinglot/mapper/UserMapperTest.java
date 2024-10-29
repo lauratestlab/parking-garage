@@ -64,7 +64,6 @@ class UserMapperTest {
         assertThat(convertedUserDto.getLastName()).isEqualTo(user.getLastName());
         assertThat(convertedUserDto.getEmail()).isEqualTo(user.getEmail());
         assertThat(convertedUserDto.isActivated()).isEqualTo(user.isActivated());
-        assertThat(convertedUserDto.getImageUrl()).isEqualTo(user.getImageUrl());
         assertThat(convertedUserDto.getCreatedBy()).isEqualTo(user.getCreatedBy());
         assertThat(convertedUserDto.getCreatedDate()).isEqualTo(user.getCreatedDate());
         assertThat(convertedUserDto.getLastModifiedBy()).isEqualTo(user.getLastModifiedBy());
@@ -82,7 +81,6 @@ class UserMapperTest {
         assertThat(convertedUser.getLastName()).isEqualTo(userDto.getLastName());
         assertThat(convertedUser.getEmail()).isEqualTo(userDto.getEmail());
         assertThat(convertedUser.isActivated()).isEqualTo(userDto.isActivated());
-        assertThat(convertedUser.getImageUrl()).isEqualTo(userDto.getImageUrl());
         assertThat(convertedUser.getCreatedBy()).isEqualTo(userDto.getCreatedBy());
         assertThat(convertedUser.getCreatedDate()).isEqualTo(userDto.getCreatedDate());
         assertThat(convertedUser.getLastModifiedBy()).isEqualTo(userDto.getLastModifiedBy());

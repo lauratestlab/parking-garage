@@ -42,7 +42,7 @@ public class Reservation extends AbstractAuditingEntity<Long> {
     private Spot spot;
 
     @Enumerated(EnumType.STRING)
-    private Status status = Status.ACTIVE;
+    private Status status = Status.STARTED;
 
     @ManyToOne
     @JoinColumn(name = "car_id")

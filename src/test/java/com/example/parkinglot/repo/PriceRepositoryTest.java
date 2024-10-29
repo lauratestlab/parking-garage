@@ -59,6 +59,14 @@ class PriceRepositoryTest {
 
         assertThrows(DataIntegrityViolationException.class, () -> priceRepository.saveAndFlush(price3));
     }
+
+    @Test
+    void findFirstByDurationGreaterThanEqualOrOrderByDurationAsc() {
+        Optional<Price> priceOptional = priceRepository.findFirstByDurationGreaterThanEqualOrderByDurationAsc(4);
+        assertThat(priceOptional).isNotNull();
+        assertThat(priceOptional.get().getPrice()).isEqualTo(new BigDecimal("8.00"));
+    }
+
     /*
     LocalAccount account = new LocalAccount("Savings", new BigDecimal("100"), null, SORT_CODE);
         account.setNumber(request.fromAccount());

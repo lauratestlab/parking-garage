@@ -51,9 +51,6 @@ class UserResourceIT {
     private static final String DEFAULT_LASTNAME = "doe";
     private static final String UPDATED_LASTNAME = "userLastName";
 
-    private static final String DEFAULT_IMAGEURL = "http://placehold.it/50x50";
-    private static final String UPDATED_IMAGEURL = "http://placehold.it/40x40";
-
     @Autowired
     private ObjectMapper om;
 
@@ -95,7 +92,6 @@ class UserResourceIT {
         persistUser.setEmail(RandomStringUtils.randomAlphabetic(5) + DEFAULT_EMAIL);
         persistUser.setFirstName(DEFAULT_FIRSTNAME);
         persistUser.setLastName(DEFAULT_LASTNAME);
-        persistUser.setImageUrl(DEFAULT_IMAGEURL);
         return persistUser;
     }
 
@@ -134,7 +130,6 @@ class UserResourceIT {
         userDTO.setLastName(DEFAULT_LASTNAME);
         userDTO.setEmail(DEFAULT_EMAIL);
         userDTO.setActivated(true);
-        userDTO.setImageUrl(DEFAULT_IMAGEURL);
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         var returnedUserDTO = om.readValue(
@@ -153,7 +148,6 @@ class UserResourceIT {
         assertThat(convertedUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(convertedUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
         assertThat(convertedUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
-        assertThat(convertedUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
     }
 
     @Test
@@ -168,7 +162,6 @@ class UserResourceIT {
         userDTO.setLastName(DEFAULT_LASTNAME);
         userDTO.setEmail(DEFAULT_EMAIL);
         userDTO.setActivated(true);
-        userDTO.setImageUrl(DEFAULT_IMAGEURL);
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // An entity with an existing ID cannot be created, so this API call must fail
@@ -193,7 +186,6 @@ class UserResourceIT {
         userDTO.setLastName(DEFAULT_LASTNAME);
         userDTO.setEmail("anothermail@localhost");
         userDTO.setActivated(true);
-        userDTO.setImageUrl(DEFAULT_IMAGEURL);
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // Create the User
@@ -218,7 +210,6 @@ class UserResourceIT {
         userDTO.setLastName(DEFAULT_LASTNAME);
         userDTO.setEmail(DEFAULT_EMAIL); // this email should already be used
         userDTO.setActivated(true);
-        userDTO.setImageUrl(DEFAULT_IMAGEURL);
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // Create the User
@@ -244,8 +235,7 @@ class UserResourceIT {
             .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_LOGIN)))
             .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRSTNAME)))
             .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LASTNAME)))
-            .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
-            .andExpect(jsonPath("$.[*].imageUrl").value(hasItem(DEFAULT_IMAGEURL)));
+            .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)));
     }
 
     @Test
@@ -262,8 +252,7 @@ class UserResourceIT {
             .andExpect(jsonPath("$.login").value(user.getLogin()))
             .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRSTNAME))
             .andExpect(jsonPath("$.lastName").value(DEFAULT_LASTNAME))
-            .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
-            .andExpect(jsonPath("$.imageUrl").value(DEFAULT_IMAGEURL));
+            .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL));
     }
 
     @Test
@@ -289,7 +278,6 @@ class UserResourceIT {
         userDTO.setLastName(UPDATED_LASTNAME);
         userDTO.setEmail(UPDATED_EMAIL);
         userDTO.setActivated(updatedUser.isActivated());
-        userDTO.setImageUrl(UPDATED_IMAGEURL);
         userDTO.setCreatedBy(updatedUser.getCreatedBy());
         userDTO.setCreatedDate(updatedUser.getCreatedDate());
         userDTO.setLastModifiedBy(updatedUser.getLastModifiedBy());
@@ -307,7 +295,6 @@ class UserResourceIT {
             assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
             assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
             assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
-            assertThat(testUser.getImageUrl()).isEqualTo(UPDATED_IMAGEURL);
         });
     }
 
@@ -328,7 +315,6 @@ class UserResourceIT {
         userDTO.setLastName(UPDATED_LASTNAME);
         userDTO.setEmail(UPDATED_EMAIL);
         userDTO.setActivated(updatedUser.isActivated());
-        userDTO.setImageUrl(UPDATED_IMAGEURL);
         userDTO.setCreatedBy(updatedUser.getCreatedBy());
         userDTO.setCreatedDate(updatedUser.getCreatedDate());
         userDTO.setLastModifiedBy(updatedUser.getLastModifiedBy());
@@ -347,7 +333,6 @@ class UserResourceIT {
             assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
             assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
             assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
-            assertThat(testUser.getImageUrl()).isEqualTo(UPDATED_IMAGEURL);
         });
     }
 
@@ -377,7 +362,6 @@ class UserResourceIT {
         userDTO.setLastName(updatedUser.getLastName());
         userDTO.setEmail("user@localhost"); // this email should already be used by anotherUser
         userDTO.setActivated(updatedUser.isActivated());
-        userDTO.setImageUrl(updatedUser.getImageUrl());
         userDTO.setCreatedBy(updatedUser.getCreatedBy());
         userDTO.setCreatedDate(updatedUser.getCreatedDate());
         userDTO.setLastModifiedBy(updatedUser.getLastModifiedBy());
@@ -415,7 +399,6 @@ class UserResourceIT {
         userDTO.setLastName(updatedUser.getLastName());
         userDTO.setEmail(updatedUser.getEmail());
         userDTO.setActivated(updatedUser.isActivated());
-        userDTO.setImageUrl(updatedUser.getImageUrl());
         userDTO.setCreatedBy(updatedUser.getCreatedBy());
         userDTO.setCreatedDate(updatedUser.getCreatedDate());
         userDTO.setLastModifiedBy(updatedUser.getLastModifiedBy());

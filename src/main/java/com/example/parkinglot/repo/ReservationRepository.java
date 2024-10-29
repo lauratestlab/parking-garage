@@ -33,4 +33,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     @Query("SELECT SUM(reservation.price) FROM Reservation reservation WHERE reservation.status = :status AND reservation.startTime BETWEEN :start AND :end")
     Optional<BigDecimal> revenue(Status status, LocalDateTime start, LocalDateTime end);
+
+    Optional<Reservation> findOneByConfirmationCode(String confirmationCode);
 }
