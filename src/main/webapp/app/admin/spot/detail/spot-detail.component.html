@@ -1,30 +1,42 @@
 <div class="d-flex justify-content-center main-content">
-    <div class="col-8">
-        @if (spot(); as spotRef) {
-            <div>
-                <h2>
-                    <span>Spot</span> [<strong>{{ spotRef.id }}</strong
-                >]
-                </h2>
+  <div class="col-8">
+    @if (spot(); as spotRef) {
+      <div>
+        <h2 data-cy="spotDetailsHeading"><span>Spot</span></h2>
 
-                <dl class="row-md jh-entity-details">
-                    <dt><span>Id</span></dt>
-                    <dd>
-                        <span>{{ spotRef.id }}</span>
-                    </dd>
+        <hr />
 
-                    <dt><span>Name</span></dt>
-                    <dd>{{ spotRef.name }}</dd>
+        <app-alert-error></app-alert-error>
 
+        <app-alert></app-alert>
 
-                    <dt><span>Floor</span></dt>
-                    <dd>{{ spotRef.floor }}</dd>
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ spotRef.id }}</span>
+          </dd>
+          <dt><span>Name</span></dt>
+          <dd>
+            <span>{{ spotRef.name }}</span>
+          </dd>
+          <dt><span>Floor</span></dt>
+          <dd>
+            @if (spot()!.floor) {
+              <div>
+                <a [routerLink]="['/admin/floor', spot()!.floor?.id, 'view']">{{ spotRef.floor?.name }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
 
-                </dl>
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
 
-                <button type="submit" routerLink="../../" class="btn btn-info">
-                    <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span></button>
-            </div>
-        }
-    </div>
+        <button type="button" [routerLink]="['/spot', spotRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
 </div>

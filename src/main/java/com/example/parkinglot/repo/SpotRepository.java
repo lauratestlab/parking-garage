@@ -1,26 +1,33 @@
 package com.example.parkinglot.repo;
 
 import com.example.parkinglot.entity.Spot;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 public interface SpotRepository extends JpaRepository<Spot, Long> {
+    default Optional<Spot> findOneWithEagerRelationships(Long id) {
+        return this.findOneWithToOneRelationships(id);
+    }
 
+    default List<Spot> findAllWithEagerRelationships() {
+        return this.findAllWithToOneRelationships();
+    }
 
-    List<Spot> findByName(String name);
+    default Page<Spot> findAllWithEagerRelationships(Pageable pageable) {
+        return this.findAllWithToOneRelationships(pageable);
+    }
 
-    //        @Query("SELECT s.spotId, s.name, s.floor FROM Spot s")
-//        List<Object[]> findAllSpotsWithLimitedFields();
-//    @Query("SELECT s.spot_id, s.name, s.floor.id FROM Spot s")
-//    List<Object[]> findAllSpotsWithLimitedFields(Pageable pageable);
+    @Query(value = "select spot from Spot spot left join fetch spot.floor", countQuery = "select count(spot) from Spot spot")
+    Page<Spot> findAllWithToOneRelationships(Pageable pageable);
+
+    @Query("select spot from Spot spot left join fetch spot.floor")
+    List<Spot> findAllWithToOneRelationships();
+
+    @Query("select spot from Spot spot left join fetch spot.floor where spot.id =:id")
+    Optional<Spot> findOneWithToOneRelationships(@Param("id") Long id);
 }
-
-
-
-
-
-

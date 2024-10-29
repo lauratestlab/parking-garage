@@ -1,19 +1,17 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, OnInit, inject } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
 
 import SharedModule from 'app/shared/shared.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { IFloor } from 'app/admin/floor/floor.model';
+import { FloorService } from 'app/admin/floor/service/floor.service';
 import { ISpot } from '../spot.model';
 import { SpotService } from '../service/spot.service';
-import {IFloor} from "../../floors/floor.model";
-import {FloorService} from "../../floors/service/floor.service";
-import {map} from "rxjs/operators";
-import {HttpResponse} from "@angular/common/http";
-
-const spotTemplate = {} as ISpot;
-
-const newSpot: ISpot = {
-} as ISpot;
+import { SpotFormGroup, SpotFormService } from './spot-form.service';
 
 @Component({
   standalone: true,
@@ -22,35 +20,29 @@ const newSpot: ISpot = {
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })
 export class SpotUpdateComponent implements OnInit {
-  isSaving = signal(false);
+  isSaving = false;
   spot: ISpot | null = null;
 
   floorsSharedCollection: IFloor[] = [];
 
-  private spotService = inject(SpotService);
-  protected bookFormService = inject(SpotFormService);
-  private floorService = inject(FloorService);
-  private route = inject(ActivatedRoute);
+  protected spotService = inject(SpotService);
+  protected spotFormService = inject(SpotFormService);
+  protected floorService = inject(FloorService);
+  protected activatedRoute = inject(ActivatedRoute);
 
-  editForm = new FormGroup({
-    id: new FormControl(spotTemplate.id),
-    name: new FormControl(spotTemplate.name),
-    floor: new FormControl(spotTemplate.floor)
-  });
-
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  editForm: SpotFormGroup = this.spotFormService.createSpotFormGroup();
 
   compareFloor = (o1: IFloor | null, o2: IFloor | null): boolean => this.floorService.compareFloor(o1, o2);
 
-
-
-
   ngOnInit(): void {
-    this.route.data.subscribe(({ spot }) => {
+    this.activatedRoute.data.subscribe(({ spot }) => {
+      this.spot = spot;
       if (spot) {
-        this.editForm.reset(spot);
-      } else {
-        this.editForm.reset(newSpot);
+        this.updateForm(spot);
       }
+
+      this.loadRelationshipsOptions();
     });
   }
 
@@ -59,28 +51,32 @@ export class SpotUpdateComponent implements OnInit {
   }
 
   save(): void {
-    this.isSaving.set(true);
-    const spot = this.editForm.getRawValue();
+    this.isSaving = true;
+    const spot = this.spotFormService.getSpot(this.editForm);
     if (spot.id !== null) {
-      this.spotService.update(spot).subscribe({
-        next: () => this.onSaveSuccess(),
-        error: () => this.onSaveError(),
-      });
+      this.subscribeToSaveResponse(this.spotService.update(spot));
     } else {
-      this.spotService.create(spot).subscribe({
-        next: () => this.onSaveSuccess(),
-        error: () => this.onSaveError(),
-      });
+      this.subscribeToSaveResponse(this.spotService.create(spot));
     }
   }
 
-  private onSaveSuccess(): void {
-    this.isSaving.set(false);
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<ISpot>>): void {
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
+  }
+
+  protected onSaveSuccess(): void {
     this.previousState();
   }
 
-  private onSaveError(): void {
-    this.isSaving.set(false);
+  protected onSaveError(): void {
+    // Api for inheritance.
+  }
+
+  protected onSaveFinalize(): void {
+    this.isSaving = false;
   }
 
   protected updateForm(spot: ISpot): void {
@@ -92,9 +88,9 @@ export class SpotUpdateComponent implements OnInit {
 
   protected loadRelationshipsOptions(): void {
     this.floorService
-        .query()
-        .pipe(map((res: HttpResponse<IFloor[]>) => res.body ?? []))
-        .pipe(map((floors: IFloor[]) => this.floorService.addFloorToCollectionIfMissing<IFloor>(floors, this.spot?.floor)))
-        .subscribe((floors: IFloor[]) => (this.floorsSharedCollection = floors));
+      .query()
+      .pipe(map((res: HttpResponse<IFloor[]>) => res.body ?? []))
+      .pipe(map((floors: IFloor[]) => this.floorService.addFloorToCollectionIfMissing<IFloor>(floors, this.spot?.floor)))
+      .subscribe((floors: IFloor[]) => (this.floorsSharedCollection = floors));
   }
 }

@@ -1,95 +1,140 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
-import { combineLatest } from 'rxjs';
+import { Component, NgZone, OnInit, inject } from '@angular/core';
+import { HttpHeaders } from '@angular/common/http';
+import { ActivatedRoute, Data, ParamMap, Router, RouterModule } from '@angular/router';
+import { Observable, Subscription, combineLatest, filter, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import SharedModule from 'app/shared/shared.module';
-import { SortByDirective, SortDirective, SortService, SortState, sortStateSignal } from 'app/shared/sort';
-import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
-import { SORT } from 'app/config/navigation.constants';
+import { SortByDirective, SortDirective, SortService, type SortState, sortStateSignal } from 'app/shared/sort';
+import { DurationPipe, FormatMediumDatePipe, FormatMediumDatetimePipe } from 'app/shared/date';
 import { ItemCountComponent } from 'app/shared/pagination';
-import { SpotService } from '../service/spot.service';
-import {Spot, ISpot} from '../spot.model';
-import SpotManagementDeleteDialogComponent from '../delete/spot-delete-dialog.component';
+import { FormsModule } from '@angular/forms';
+
+import { ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
+import { DEFAULT_SORT_DATA, ITEM_DELETED_EVENT, SORT } from 'app/config/navigation.constants';
+import { ISpot } from '../spot.model';
+import { EntityArrayResponseType, SpotService } from '../service/spot.service';
+import { SpotDeleteDialogComponent } from '../delete/spot-delete-dialog.component';
 
 @Component({
   standalone: true,
   selector: 'app-spot',
   templateUrl: './spot.component.html',
-  imports: [RouterModule, SharedModule, SpotManagementDeleteDialogComponent, SortDirective, SortByDirective, ItemCountComponent],
+  imports: [
+    RouterModule,
+    FormsModule,
+    SharedModule,
+    SortDirective,
+    SortByDirective,
+    DurationPipe,
+    FormatMediumDatetimePipe,
+    FormatMediumDatePipe,
+    ItemCountComponent,
+  ],
 })
-export default class SpotManagementComponent implements OnInit {
-  spots = signal<Spot[] | null>(null);
-  isLoading = signal(false);
-  totalItems = signal(0);
-  itemsPerPage = ITEMS_PER_PAGE;
-  page!: number;
+export class SpotComponent implements OnInit {
+  subscription: Subscription | null = null;
+  spots?: ISpot[];
+  isLoading = false;
+
   sortState = sortStateSignal({});
 
-  private spotService = inject(SpotService);
-  private activatedRoute = inject(ActivatedRoute);
-  private router = inject(Router);
-  private sortService = inject(SortService);
-  private modalService = inject(NgbModal);
+  itemsPerPage = ITEMS_PER_PAGE;
+  totalItems = 0;
+  page = 1;
+
+  public readonly router = inject(Router);
+  protected readonly spotService = inject(SpotService);
+  protected readonly activatedRoute = inject(ActivatedRoute);
+  protected readonly sortService = inject(SortService);
+  protected modalService = inject(NgbModal);
+  protected ngZone = inject(NgZone);
+
+  trackId = (item: ISpot): number => this.spotService.getSpotIdentifier(item);
 
   ngOnInit(): void {
-    this.handleNavigation();
+    this.subscription = combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data])
+      .pipe(
+        tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
+        tap(() => this.load()),
+      )
+      .subscribe();
   }
 
-  trackIdentity(item: Spot): number {
-    return item.id!;
-  }
-
-  deleteSpot(spot: Spot): void {
-    const modalRef = this.modalService.open(SpotManagementDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+  delete(spot: ISpot): void {
+    const modalRef = this.modalService.open(SpotDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.spot = spot;
     // unsubscribe not needed because closed completes on modal close
-    modalRef.closed.subscribe(reason => {
-      if (reason === 'deleted') {
-        this.loadAll();
-      }
-    });
+    modalRef.closed
+      .pipe(
+        filter(reason => reason === ITEM_DELETED_EVENT),
+        tap(() => this.load()),
+      )
+      .subscribe();
   }
 
-  loadAll(): void {
-    this.isLoading.set(true);
-    this.spotService
-      .query({
-        page: this.page - 1,
-        size: this.itemsPerPage,
-        sort: this.sortService.buildSortParam(this.sortState(), 'id'),
-      })
-      .subscribe({
-        next: (res: HttpResponse<Spot[]>) => {
-          this.isLoading.set(false);
-          this.onSuccess(res.body, res.headers);
-        },
-        error: () => this.isLoading.set(false),
-      });
-  }
-
-  transition(sortState?: SortState): void {
-    this.router.navigate(['./'], {
-      relativeTo: this.activatedRoute.parent,
-      queryParams: {
-        page: this.page,
-        sort: this.sortService.buildSortParam(sortState ?? this.sortState()),
+  load(): void {
+    this.queryBackend().subscribe({
+      next: (res: EntityArrayResponseType) => {
+        this.onResponseSuccess(res);
       },
     });
   }
 
-  private handleNavigation(): void {
-    combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
-      const page = params.get('page');
-      this.page = +(page ?? 1);
-      this.sortState.set(this.sortService.parseSortParam(params.get(SORT) ?? data.defaultSort));
-      this.loadAll();
-    });
+  navigateToWithComponentValues(event: SortState): void {
+    this.handleNavigation(this.page, event);
   }
 
-  private onSuccess(spots: Spot[] | null, headers: HttpHeaders): void {
-    this.totalItems.set(Number(headers.get('X-Total-Count')));
-    this.spots.set(spots);
+  navigateToPage(page: number): void {
+    this.handleNavigation(page, this.sortState());
+  }
+
+  protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
+    const page = params.get(PAGE_HEADER);
+    this.page = +(page ?? 1);
+    this.sortState.set(this.sortService.parseSortParam(params.get(SORT) ?? data[DEFAULT_SORT_DATA]));
+  }
+
+  protected onResponseSuccess(response: EntityArrayResponseType): void {
+    this.fillComponentAttributesFromResponseHeader(response.headers);
+    const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
+    this.spots = dataFromBody;
+  }
+
+  protected fillComponentAttributesFromResponseBody(data: ISpot[] | null): ISpot[] {
+    return data ?? [];
+  }
+
+  protected fillComponentAttributesFromResponseHeader(headers: HttpHeaders): void {
+    this.totalItems = Number(headers.get(TOTAL_COUNT_RESPONSE_HEADER));
+  }
+
+  protected queryBackend(): Observable<EntityArrayResponseType> {
+    const { page } = this;
+
+    this.isLoading = true;
+    const pageToLoad: number = page;
+    const queryObject: any = {
+      page: pageToLoad - 1,
+      size: this.itemsPerPage,
+      eagerload: true,
+      sort: this.sortService.buildSortParam(this.sortState()),
+    };
+    return this.spotService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
+  }
+
+  protected handleNavigation(page: number, sortState: SortState): void {
+    const queryParamsObj = {
+      page,
+      size: this.itemsPerPage,
+      sort: this.sortService.buildSortParam(sortState),
+    };
+
+    this.ngZone.run(() => {
+      this.router.navigate(['./'], {
+        relativeTo: this.activatedRoute,
+        queryParams: queryParamsObj,
+      });
+    });
   }
 }

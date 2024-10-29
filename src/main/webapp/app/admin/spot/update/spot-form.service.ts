@@ -19,7 +19,7 @@ type SpotFormDefaults = Pick<NewSpot, 'id'>;
 type SpotFormGroupContent = {
   id: FormControl<ISpot['id'] | NewSpot['id']>;
   name: FormControl<ISpot['name']>;
-  author: FormControl<ISpot['floor']>;
+  floor: FormControl<ISpot['floor']>;
 };
 
 export type SpotFormGroup = FormGroup<SpotFormGroupContent>;
@@ -39,8 +39,12 @@ export class SpotFormService {
           validators: [Validators.required],
         },
       ),
-      name: new FormControl(spotRawValue.name),
-      author: new FormControl(spotRawValue.floor),
+      name: new FormControl(spotRawValue.name, {
+        validators: [Validators.required, Validators.minLength(1), Validators.maxLength(20)],
+      }),
+      floor: new FormControl(spotRawValue.floor, {
+        validators: [Validators.required],
+      }),
     });
   }
 

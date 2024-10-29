@@ -1,100 +1,176 @@
-jest.mock('app/core/auth/account.service');
-
-import { ComponentFixture, TestBed, fakeAsync, inject, tick, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, inject, tick } from '@angular/core/testing';
 import { HttpHeaders, HttpResponse, provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
+import { Subject, of } from 'rxjs';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { AccountService } from 'app/core/auth/account.service';
+import { sampleWithRequiredData } from '../spot.test-samples';
 import { SpotService } from '../service/spot.service';
-import { Spot } from '../spot.model';
 
-import SpotManagementComponent from './spot.component';
+import { SpotComponent } from './spot.component';
+import SpyInstance = jest.SpyInstance;
 
 describe('Spot Management Component', () => {
-  let comp: SpotManagementComponent;
-  let fixture: ComponentFixture<SpotManagementComponent>;
+  let comp: SpotComponent;
+  let fixture: ComponentFixture<SpotComponent>;
   let service: SpotService;
-  let mockAccountService: AccountService;
-  const data = of({
-    defaultSort: 'id,asc',
-  });
-  const queryParamMap = of(
-    jest.requireActual('@angular/router').convertToParamMap({
-      page: '1',
-      size: '1',
-      sort: 'id,desc',
-    }),
-  );
-
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [SpotManagementComponent],
-      providers: [provideHttpClient(), { provide: ActivatedRoute, useValue: { data, queryParamMap } }, AccountService],
-    })
-      .overrideTemplate(SpotManagementComponent, '')
-      .compileComponents();
-  }));
+  let routerNavigateSpy: SpyInstance<Promise<boolean>>;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SpotManagementComponent);
+    TestBed.configureTestingModule({
+      imports: [SpotComponent],
+      providers: [
+        provideHttpClient(),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            data: of({
+              defaultSort: 'id,asc',
+            }),
+            queryParamMap: of(
+              jest.requireActual('@angular/router').convertToParamMap({
+                page: '1',
+                size: '1',
+                sort: 'id,desc',
+              }),
+            ),
+            snapshot: {
+              queryParams: {},
+              queryParamMap: jest.requireActual('@angular/router').convertToParamMap({
+                page: '1',
+                size: '1',
+                sort: 'id,desc',
+              }),
+            },
+          },
+        },
+      ],
+    })
+      .overrideTemplate(SpotComponent, '')
+      .compileComponents();
+
+    fixture = TestBed.createComponent(SpotComponent);
     comp = fixture.componentInstance;
     service = TestBed.inject(SpotService);
-    mockAccountService = TestBed.inject(AccountService);
-    mockAccountService.identity = jest.fn(() => of(null));
+    routerNavigateSpy = jest.spyOn(comp.router, 'navigate');
+
+    jest
+      .spyOn(service, 'query')
+      .mockReturnValueOnce(
+        of(
+          new HttpResponse({
+            body: [{ id: 123 }],
+            headers: new HttpHeaders({
+              link: '<http://localhost/api/foo?page=1&size=20>; rel="next"',
+            }),
+          }),
+        ),
+      )
+      .mockReturnValueOnce(
+        of(
+          new HttpResponse({
+            body: [{ id: 456 }],
+            headers: new HttpHeaders({
+              link: '<http://localhost/api/foo?page=0&size=20>; rel="prev",<http://localhost/api/foo?page=2&size=20>; rel="next"',
+            }),
+          }),
+        ),
+      );
   });
 
-  describe('OnInit', () => {
-    it('Should call load all on init', inject(
+  it('Should call load all on init', () => {
+    // WHEN
+    comp.ngOnInit();
+
+    // THEN
+    expect(service.query).toHaveBeenCalled();
+    expect(comp.spots?.[0]).toEqual(expect.objectContaining({ id: 123 }));
+  });
+
+  describe('trackId', () => {
+    it('Should forward to spotService', () => {
+      const entity = { id: 123 };
+      jest.spyOn(service, 'getSpotIdentifier');
+      const id = comp.trackId(entity);
+      expect(service.getSpotIdentifier).toHaveBeenCalledWith(entity);
+      expect(id).toBe(entity.id);
+    });
+  });
+
+  it('should calculate the sort attribute for a non-id attribute', () => {
+    // WHEN
+    comp.navigateToWithComponentValues({ predicate: 'non-existing-column', order: 'asc' });
+
+    // THEN
+    expect(routerNavigateSpy).toHaveBeenLastCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        queryParams: expect.objectContaining({
+          sort: ['non-existing-column,asc'],
+        }),
+      }),
+    );
+  });
+
+  it('should load a page', () => {
+    // WHEN
+    comp.navigateToPage(1);
+
+    // THEN
+    expect(routerNavigateSpy).toHaveBeenCalled();
+  });
+
+  it('should calculate the sort attribute for an id', () => {
+    // WHEN
+    comp.ngOnInit();
+
+    // THEN
+    expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ sort: ['id,desc'] }));
+  });
+
+  describe('delete', () => {
+    let ngbModal: NgbModal;
+    let deleteModalMock: any;
+
+    beforeEach(() => {
+      deleteModalMock = { componentInstance: {}, closed: new Subject() };
+      // NgbModal is not a singleton using TestBed.inject.
+      // ngbModal = TestBed.inject(NgbModal);
+      ngbModal = (comp as any).modalService;
+      jest.spyOn(ngbModal, 'open').mockReturnValue(deleteModalMock);
+    });
+
+    it('on confirm should call load', inject(
       [],
       fakeAsync(() => {
         // GIVEN
-        const headers = new HttpHeaders().append('link', 'link;link');
-        jest.spyOn(service, 'query').mockReturnValue(
-          of(
-            new HttpResponse({
-              body: [new Spot(123, "test")],
-              headers,
-            }),
-          ),
-        );
+        jest.spyOn(comp, 'load');
 
         // WHEN
-        comp.ngOnInit();
-        tick(); // simulate async
+        comp.delete(sampleWithRequiredData);
+        deleteModalMock.closed.next('deleted');
+        tick();
 
         // THEN
-        expect(service.query).toHaveBeenCalled();
-        expect(comp.spots()?.[0]).toEqual(expect.objectContaining({ id: 123 }));
+        expect(ngbModal.open).toHaveBeenCalled();
+        expect(comp.load).toHaveBeenCalled();
       }),
     ));
-  });
 
-  describe('setActive', () => {
-    it('Should update spot and call load all', inject(
+    it('on dismiss should call load', inject(
       [],
       fakeAsync(() => {
         // GIVEN
-        const headers = new HttpHeaders().append('link', 'link;link');
-        const spot = new Spot(123);
-        jest.spyOn(service, 'query').mockReturnValue(
-          of(
-            new HttpResponse({
-              body: [spot],
-              headers,
-            }),
-          ),
-        );
-        jest.spyOn(service, 'update').mockReturnValue(of(spot));
+        jest.spyOn(comp, 'load');
 
         // WHEN
-        comp.setActive(spot, true);
-        tick(); // simulate async
+        comp.delete(sampleWithRequiredData);
+        deleteModalMock.closed.next();
+        tick();
 
         // THEN
-        expect(service.update).toHaveBeenCalledWith({ ...spot, activated: true });
-        expect(service.query).toHaveBeenCalled();
-        expect(comp.spots()?.[0]).toEqual(expect.objectContaining({ id: 123 }));
+        expect(ngbModal.open).toHaveBeenCalled();
+        expect(comp.load).not.toHaveBeenCalled();
       }),
     ));
   });

@@ -1,14 +1,21 @@
 <div class="main-content">
-  <h2>
-    <span id="spot-page-heading" data-cy="spotManagementPageHeading">Spots</span>
+  <h2 id="page-heading" data-cy="SpotHeading">
+    <span>Spots</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading()">
-        <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined"></fa-icon>
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
         <span>Refresh list</span>
       </button>
-      <button class="btn btn-primary" [routerLink]="['./new']">
-        <fa-icon icon="plus"></fa-icon> <span>Create a new spot</span>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-spot"
+        [routerLink]="['/admin/spot/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span>Create a new Spot</span>
       </button>
     </div>
   </h2>
@@ -17,47 +24,67 @@
 
   <app-alert></app-alert>
 
-  @if (spots()) {
-    <div class="table-responsive">
-      <table class="table table-striped" aria-describedby="spot-page-heading">
+  @if (spots?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span>No Spots found</span>
+    </div>
+  }
+
+  @if (spots && spots.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
         <thead>
-          <tr appSort [sortState]="sortState" (sortChange)="transition($event)">
-            <th scope="col" appSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-            <th scope="col" appSortBy="name"><span>Name</span> <fa-icon icon="sort"></fa-icon></th>
-            <th scope="col" appSortBy="floor"><span>Floor</span> <fa-icon icon="sort"></fa-icon></th>
+          <tr appSort [sortState]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" appSortBy="id">
+              <div class="d-flex">
+                <span>ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" appSortBy="name">
+              <div class="d-flex">
+                <span>Name</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" appSortBy="floor.name">
+              <div class="d-flex">
+                <span>Floor</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
             <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
-          @for (spot of spots(); track trackIdentity(spot)) {
-            <tr>
+          @for (spot of spots; track trackId(spot)) {
+            <tr data-cy="entityTable">
               <td>
-                <a [routerLink]="['./', spot.id, 'view']">{{ spot.id }}</a>
+                <a [routerLink]="['/admin/spot', spot.id, 'view']">{{ spot.id }}</a>
               </td>
               <td>{{ spot.name }}</td>
-                <td>{{ spot.floor }}</td>
+              <td>
+                @if (spot.floor) {
+                  <div>
+                    <a [routerLink]="['/admin/floor', spot.floor.id, 'view']">{{ spot.floor.name }}</a>
+                  </div>
+                }
+              </td>
               <td class="text-end">
                 <div class="btn-group">
-                  <button type="submit" [routerLink]="['./', spot.id, 'view']" class="btn btn-info btn-sm">
+                  <a [routerLink]="['/admin/spot', spot.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
                     <fa-icon icon="eye"></fa-icon>
                     <span class="d-none d-md-inline">View</span>
-                  </button>
+                  </a>
 
-                  <button
-                    type="submit"
-                    [routerLink]="['./', spot.id, 'edit']"
-                    queryParamsHandling="merge"
-                    class="btn btn-primary btn-sm"
-                  >
+                  <a [routerLink]="['/admin/spot', spot.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
                     <fa-icon icon="pencil-alt"></fa-icon>
                     <span class="d-none d-md-inline">Edit</span>
-                  </button>
+                  </a>
 
-                  <button
-                    type="button"
-                    (click)="deleteSpot(spot)"
-                    class="btn btn-danger btn-sm"
-                  >
+                  <button type="submit" (click)="delete(spot)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                     <fa-icon icon="times"></fa-icon>
                     <span class="d-none d-md-inline">Delete</span>
                   </button>
@@ -68,21 +95,22 @@
         </tbody>
       </table>
     </div>
-
+  }
+  @if (spots && spots.length > 0) {
     <div>
       <div class="d-flex justify-content-center">
-        <app-item-count [params]="{ page: page, totalItems: totalItems(), itemsPerPage: itemsPerPage }"></app-item-count>
+        <app-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></app-item-count>
       </div>
 
       <div class="d-flex justify-content-center">
         <ngb-pagination
-          [collectionSize]="totalItems()"
-          [(page)]="page"
+          [collectionSize]="totalItems"
+          [page]="page"
           [pageSize]="itemsPerPage"
           [maxSize]="5"
           [rotate]="true"
           [boundaryLinks]="true"
-          (pageChange)="transition()"
+          (pageChange)="navigateToPage($event)"
         ></ngb-pagination>
       </div>
     </div>

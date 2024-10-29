@@ -1,7 +1,5 @@
 package com.example.parkinglot.dto;
 
-import com.example.parkinglot.entity.PaymentMethod;
-
 import java.time.LocalDateTime;
 
 public record ReservationDTO(

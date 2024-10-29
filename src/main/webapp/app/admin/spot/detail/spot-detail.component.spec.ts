@@ -1,13 +1,14 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { of } from 'rxjs';
 
-import { Authority } from 'app/config/authority.constants';
-
-import SpotDetailComponent from './spot-detail.component';
+import { SpotDetailComponent } from './spot-detail.component';
 
 describe('Spot Management Detail Component', () => {
+  let comp: SpotDetailComponent;
+  let fixture: ComponentFixture<SpotDetailComponent>;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SpotDetailComponent],
@@ -16,21 +17,8 @@ describe('Spot Management Detail Component', () => {
           [
             {
               path: '**',
-              loadComponent: () => import('./spot-detail.component'),
-              resolve: {
-                spot: () =>
-                  of({
-                    id: 123,
-                    login: 'spot',
-                    firstName: 'first',
-                    lastName: 'last',
-                    email: 'first@last.com',
-                    activated: true,
-                    langKey: 'en',
-                    authorities: [Authority.USER],
-                    createdBy: 'admin',
-                  }),
-              },
+              loadComponent: () => import('./spot-detail.component').then(m => m.SpotDetailComponent),
+              resolve: { spot: () => of({ id: 123 }) },
             },
           ],
           withComponentInputBinding(),
@@ -41,26 +29,26 @@ describe('Spot Management Detail Component', () => {
       .compileComponents();
   });
 
-  describe('Construct', () => {
-    it('Should call load all on construct', async () => {
-      // WHEN
+  beforeEach(() => {
+    fixture = TestBed.createComponent(SpotDetailComponent);
+    comp = fixture.componentInstance;
+  });
+
+  describe('OnInit', () => {
+    it('Should load spot on init', async () => {
       const harness = await RouterTestingHarness.create();
       const instance = await harness.navigateByUrl('/', SpotDetailComponent);
 
       // THEN
-      expect(instance.spot()).toEqual(
-        expect.objectContaining({
-          id: 123,
-          login: 'spot',
-          firstName: 'first',
-          lastName: 'last',
-          email: 'first@last.com',
-          activated: true,
-          langKey: 'en',
-          authorities: [Authority.USER],
-          createdBy: 'admin',
-        }),
-      );
+      expect(instance.spot()).toEqual(expect.objectContaining({ id: 123 }));
+    });
+  });
+
+  describe('PreviousState', () => {
+    it('Should navigate to previous state', () => {
+      jest.spyOn(window.history, 'back');
+      comp.previousState();
+      expect(window.history.back).toHaveBeenCalled();
     });
   });
 });

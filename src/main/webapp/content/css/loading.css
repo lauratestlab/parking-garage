@@ -1,21 +1,29 @@
 /* HTML: <div class="loader"></div> */
 .loader {
-  font-weight: bold;
-  font-family: monospace;
-  font-size: 30px;
-  display: inline-grid;
+  width: 65px;
+  aspect-ratio: 1;
+  position: relative;
 }
 .loader:before,
 .loader:after {
-  content:"Loading...";
-  grid-area: 1/1;
-  -webkit-mask:linear-gradient(90deg,#000 50%,#0000 0) 0 50%/2ch 100%;
-  animation: l29 2s infinite;
+  content: "";
+  position: absolute;
+  border-radius: 50px;
+  box-shadow: 0 0 0 3px inset #fff;
+  animation: l5 2.5s infinite;
 }
 .loader:after {
-  -webkit-mask-position:1ch 50%;
-  --s:-1;
+  animation-delay: -1.25s;
+  border-radius: 0;
 }
-@keyframes l29 {
-  80%,100% {transform: rotate(calc(var(--s,1)*1turn))}
+@keyframes l5{
+  0%    {inset:0    35px 35px 0   }
+  12.5% {inset:0    35px 0    0   }
+  25%   {inset:35px 35px 0    0   }
+  37.5% {inset:35px 0    0    0   }
+  50%   {inset:35px 0    0    35px}
+  62.5% {inset:0    0    0    35px}
+  75%   {inset:0    0    35px 35px}
+  87.5% {inset:0    0    35px 0   }
+  100%  {inset:0    35px 35px 0   }
 }
