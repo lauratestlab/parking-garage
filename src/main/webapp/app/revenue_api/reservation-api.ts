@@ -16,8 +16,12 @@ export class ReservationApi{
 
     constructor(private http: HttpClient) {}
 
-    get(): Observable<ReservationResponse[]> {
+    getAll(): Observable<ReservationResponse[]> {
         return this.http.get<ReservationResponse[]>(`${this.baseUrl}`);
+    }
+
+    getAllForUser(): Observable<ReservationResponse[]> {
+        return this.http.get<ReservationResponse[]>(`${this.baseUrl}/my`);
     }
 
     add(reservationDetail: any): Observable<any> {

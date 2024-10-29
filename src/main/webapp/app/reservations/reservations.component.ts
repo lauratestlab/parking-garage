@@ -3,6 +3,8 @@ import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ReservationApi} from "../revenue_api/reservation-api";
 import {ReservationResponse} from "../model/reservation.model";
+import { AccountService } from 'app/core/auth/account.service';
+import HasAnyAuthorityDirective from "../shared/auth/has-any-authority.directive";
 
 
 @Component({
@@ -11,7 +13,8 @@ import {ReservationResponse} from "../model/reservation.model";
   imports: [
     ReactiveFormsModule,
     CommonModule,
-    FormsModule
+    FormsModule,
+    HasAnyAuthorityDirective
   ],
   templateUrl: './reservations.component.html',
   styleUrl: './reservations.component.css'
@@ -24,7 +27,8 @@ export class ReservationsComponent implements OnInit{
 
   reservations: ReservationResponse[] = [];
 
-  constructor(private api: ReservationApi) {
+  constructor(private api: ReservationApi, private accountService: AccountService) {
+
     this.reservationForm = this.fb.group({
       startTime: ['', Validators.required],
       endTime: ['', Validators.required],
@@ -50,11 +54,22 @@ export class ReservationsComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.fetchAll();
+    if(this.accountService.hasAnyAuthority("ROLE_ADMIN")) {
+      this.fetchAll();
+    } else {
+      this.fetchAllForUser();
+    }
   }
 
   fetchAll(): void {
-    this.api.get().subscribe((data) => {
+    this.api.getAll().subscribe((data) => {
+      this.reservations = data;
+      console.log(this.reservations);
+    })
+  }
+
+  fetchAllForUser(): void {
+    this.api.getAllForUser().subscribe((data) => {
       this.reservations = data;
       console.log(this.reservations);
     })
@@ -62,7 +77,6 @@ export class ReservationsComponent implements OnInit{
 
   addReservation() {
     const request: any = this.reservationForm.value;
-    console.log('Form submitted: ', request);
 
     if(this.reservationForm.valid) {
       this.api.add(request).subscribe({
