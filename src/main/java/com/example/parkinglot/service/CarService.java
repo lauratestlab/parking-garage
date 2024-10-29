@@ -2,8 +2,11 @@ package com.example.parkinglot.service;
 
 
 import com.example.parkinglot.dto.CarDTO;
-import com.example.parkinglot.entity.*;
-import com.example.parkinglot.repo.*;
+import com.example.parkinglot.entity.Car;
+import com.example.parkinglot.repo.CarRepository;
+
+
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,10 +14,12 @@ import java.util.List;
 @Service
 public class CarService {
     private final CarRepository carRepository;
-
+    
     public CarService(CarRepository carRepository) {
         this.carRepository = carRepository;
     }
+ 
+  
 
     public Car createCar(CarDTO carDTO) {
         Car car = new Car();
@@ -42,5 +47,7 @@ public class CarService {
     }
 
 
+
+  
 
 }

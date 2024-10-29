@@ -2,6 +2,7 @@
     <div class="sidebar">
         <a routerLink="/dashboard" (click)="currentPage = 'dashboard'" [ngClass]="{active: currentPage === 'dashboard'}" *appHasAnyAuthority="'ROLE_ADMIN'">Dashboard</a>
         <a routerLink="/pricing" (click)="currentPage = 'pricing'" [ngClass]="{active: currentPage === 'pricing'}">Pricing</a>
+        <a routerLink="/cars" (click)="currentPage = 'cars'" [ngClass]="{active: currentPage === 'cars'}">Car</a>
         <a routerLink="/reservations" (click)="currentPage = 'reservations'" [ngClass]="{active: currentPage === 'reservations'}">Reservations</a>
         <a routerLink="/admin/user-management" (click)="currentPage = 'user-management'" [ngClass]="{active: currentPage === 'user-management'}" routerLinkActive="active" *appHasAnyAuthority="'ROLE_ADMIN'">Users</a>
         <a routerLink="/admin/floors" (click)="currentPage = 'floors'" [ngClass]="{active: currentPage === 'floors'}" routerLinkActive="active" *appHasAnyAuthority="'ROLE_ADMIN'">Floors</a>

@@ -11,6 +11,7 @@ const routes: Routes = [
     loadChildren: () => import('./floors/floor.route'),
     title: 'Floors',
   },
+
   {
     path: 'docs',
     loadComponent: () => import('./docs/docs.component'),

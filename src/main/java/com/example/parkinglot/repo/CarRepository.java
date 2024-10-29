@@ -21,6 +21,7 @@ public interface CarRepository extends JpaRepository<Car, Long> {
 
     Optional<Car> getOneByCarId(Long aLong);
 
+
     @Query("SELECT COUNT(c) FROM Car c WHERE c.color = 'Red'")
     long countRedCars();
 }

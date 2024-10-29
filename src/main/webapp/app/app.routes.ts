@@ -5,6 +5,7 @@ import { PricingComponent } from './pricing/pricing.component';
 import { SpotComponent } from './spot/spot.component';
 import SignupComponent from "./account/signup/signup.component";
 import LoginComponent from "./login/login.component";
+// import { CarComponent } from './car/car.component';
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {Authority} from "./config/authority.constants";
 import {UserRouteAccessService} from "./core/auth/user-route-access.service";
@@ -19,6 +20,7 @@ export const routes: Routes = [
     { path: 'dashboard', component: DashboardComponent, title: "dashboard" },
     { path: 'reservations', component: ReservationsComponent },
     { path: 'pricing', component: PricingComponent },
+    // { path: 'car', component: CarComponent },
     // { path: '',   redirectTo: '/dashboard', pathMatch: 'full' },
     // { path: 'register', component: SignupComponent },
     // { path: 'login', component: LoginComponent },
@@ -41,6 +43,11 @@ export const routes: Routes = [
         canActivate: [UserRouteAccessService],
         loadChildren: () => import('./admin/admin.routes'),
     },
+       {
+    path: 'cars',
+    loadChildren: () => import('./car/car.route'),
+    title: 'cars',
+  },
     ...errorRoute,
 ];
 

@@ -1,6 +1,7 @@
 package com.example.parkinglot.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 
@@ -17,6 +18,8 @@ public class Car {
     private String make;
     private String color;
     private String registration;
+
+  
 
     // Many Cars can belong to one User
     @ManyToOne(fetch = FetchType.LAZY)
