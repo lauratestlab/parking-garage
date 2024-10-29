@@ -1,4 +1,5 @@
 package com.example.parkinglot.web.rest;
+import com.example.parkinglot.dto.CarDTO;
 import com.example.parkinglot.service.CarService;
 import com.example.parkinglot.service.CarService.*;
 import com.example.parkinglot.entity.Car;
@@ -24,8 +25,12 @@ public class CarController {
     public Long getAllRedCars() {
 
         return carService.getRedCarCount();
-
-
     }
+
+    @GetMapping("/all")
+    public List<CarDTO> getAllCars() {
+        return carService.getAllCars();
+    }
+
 
 }
