@@ -2,6 +2,7 @@ package com.example.parkinglot.service;
 
 
 import com.example.parkinglot.dto.ReservationCompletionDTO;
+import com.example.parkinglot.config.Constants;
 import com.example.parkinglot.dto.ReservationDTO;
 import com.example.parkinglot.dto.ReservationInfoDTO;
 import com.example.parkinglot.entity.*;
@@ -61,14 +62,14 @@ public class ReservationService {
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public ReservationInfoDTO createReservation(@Valid ReservationDTO reservationDTO) {
-        Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
+        String currentUserLogin = SecurityUtils.getCurrentUserLogin().orElse(Constants.SYSTEM);
 
-        User user = userRepository.getReferenceById(reservationDTO.userId());
+        User user = userRepository.findOneByLogin(currentUserLogin).orElse(null);
 
         PaymentMethod paymentMethod = processPayment(reservationDTO);
         paymentService.processPayment(paymentMethod);
 
-        if (currentUserLogin.isPresent() && reservationDTO.saveCreditCard()) {
+        if (reservationDTO.saveCreditCard()) {
             paymentMethod.setUser(user);
             paymentMethodRepository.save(paymentMethod);
         }
@@ -151,7 +152,6 @@ public class ReservationService {
             return paymentMethodRepository.findPaymentMethodByPaymentMethodId(reservationDTO.paymentMethodId())
                     .orElseThrow(() -> new PaymentMethodNotFoundException("Payment method with id " + reservationDTO.paymentMethodId() + " was not found in the database"));
         }
-
     }
 
     private Car registerCar(ReservationDTO reservationDTO) {

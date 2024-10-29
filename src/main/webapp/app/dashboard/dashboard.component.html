@@ -10,30 +10,31 @@
     <hr>
     <div class="card-container">
         <div class="box red available-spots">
-            <div class="flip-card-front">
-                <form [formGroup]="revenueForm" (ngSubmit)="fetchRevenue()" >
-                    <label for="start">Start Date:</label>
-                    <input type="date" id="start" formControlName="start" required>
+            <form [formGroup]="revenueForm" (ngSubmit)="fetchRevenue()" >
+                <div class="input-group input-group-sm">
+                    <input type="date" aria-label="Start Date" formControlName="start" class="form-control">
+                    <input type="date" aria-label="End Date" formControlName="end" class="form-control">
+                    <button class="btn btn-outline-primary" type="submit" [disabled]="revenueForm.invalid">View Revenue</button>
+                </div>
+            </form>
 
-                    <label for="end">End Date:</label>
-                    <input type="date" id="end" formControlName="end" required>
-
-                    <button type="submit" [disabled]="revenueForm.invalid">View Revenue</button>
-                </form>
-
-                <span class="price">{{ revenueData }}</span><br>/ as of today
-                <br>
-                <h2 class="card-title">Today's Revenue</h2>
-            </div>
+            <span class="price"><sup>$</sup>{{ revenueData }}</span>
+            <h2 class="card-title">Today's Revenue</h2>
         </div>
 
         <div class="box green revenue">
-            <div class="flip-card-front">
-
-                <span class="price">{{ availSpots }}</span><br>/ in total
-                <br>
-                <h2 class="card-title">Spot Availability</h2>
+            <div class="input-group mb-3 input-group-sm">
+                <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="#">Action</a></li>
+                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">Separated link</a></li>
+                </ul>
             </div>
+            <span class="price">{{ availSpots }}</span>
+            <h2 class="card-title">Spot Availability</h2>
         </div>
 
         <div class="box blue">

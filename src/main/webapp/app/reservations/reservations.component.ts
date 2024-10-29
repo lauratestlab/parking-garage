@@ -1,7 +1,10 @@
 import { CommonModule } from '@angular/common';
 import {Component, inject, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ReservationApi} from "../revenue_api/reservation-api";
+import {ReservationResponse} from "../model/reservation.model";
+import { AccountService } from 'app/core/auth/account.service';
+import HasAnyAuthorityDirective from "../shared/auth/has-any-authority.directive";
 
 
 @Component({
@@ -9,60 +12,81 @@ import {ReservationApi} from "../revenue_api/reservation-api";
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
+    FormsModule,
+    HasAnyAuthorityDirective
   ],
   templateUrl: './reservations.component.html',
   styleUrl: './reservations.component.css'
 })
-export class ReservationsComponent{
+export class ReservationsComponent implements OnInit{
   currentPage: string = 'reservations';
 
   reservationForm: FormGroup;
   fb = inject(FormBuilder);
 
-  constructor(private api: ReservationApi) {
+  reservations: ReservationResponse[] = [];
+
+  constructor(private api: ReservationApi, private accountService: AccountService) {
+
     this.reservationForm = this.fb.group({
-      startDate: ['', Validators.required],
       startTime: ['', Validators.required],
-      endDate: ['', Validators.required],
       endTime: ['', Validators.required],
-      carInfo: this.fb.group({
+      car: this.fb.group({
         color: ['', Validators.required],
         make: ['', Validators.required],
         model: ['', Validators.required],
-        registrationNumber: ['', Validators.required]
+        registration: ['', Validators.required]
       }),
-      paymentInfo: this.fb.group({
-        cardNumber: ['', [Validators.required]],
+      paymentMethod: this.fb.group({
+        card_number: ['', [Validators.required]],
         ccv: ['', [Validators.required]],
         expirationDate: ['', Validators.required],
         fullName: ['', Validators.required],
         address: this.fb.group({
-          street: ['', Validators.required],
-          city: ['', Validators.required],
-          state: ['', Validators.required],
-          zipCode: ['', [Validators.required]]
+          deliveryStreet: ['', Validators.required],
+          deliveryCity: ['', Validators.required],
+          deliveryState: ['', Validators.required],
+          deliveryZip: ['', [Validators.required]]
         })
       })
     });
   }
 
-  submitForm() {
+  ngOnInit(): void {
+    if(this.accountService.hasAnyAuthority("ROLE_ADMIN")) {
+      this.fetchAll();
+    } else {
+      this.fetchAllForUser();
+    }
+  }
+
+  fetchAll(): void {
+    this.api.getAll().subscribe((data) => {
+      this.reservations = data;
+      console.log(this.reservations);
+    })
+  }
+
+  fetchAllForUser(): void {
+    this.api.getAllForUser().subscribe((data) => {
+      this.reservations = data;
+      console.log(this.reservations);
+    })
+  }
+
+  addReservation() {
     const request: any = this.reservationForm.value;
-    console.log('Form submitted: ', request);
 
     if(this.reservationForm.valid) {
-      this.api.addReservation(request).subscribe({
+      this.api.add(request).subscribe({
           next: () => {
-            console.log('Check db');
+            window.alert('Booking was successful!');
           },
           error: () => {
-            console.error("'Error submitting reservation data");
+            window.alert('Booking was unsuccessful!');
           }
       });
-
-    } else {
-
     }
   }
 

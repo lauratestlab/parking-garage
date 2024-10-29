@@ -30,4 +30,8 @@ public class Spot {
     @JsonIgnoreProperties(value = { "spots" }, allowSetters = true)
     private Floor floor;
 
+    @OneToMany(mappedBy = "spot", fetch = FetchType.LAZY)
+    private List<Reservation> reservations = new ArrayList<>();
+
+
 }

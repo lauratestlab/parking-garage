@@ -37,6 +37,5 @@ public class Car {
     private String registration;
 
     @ManyToOne(optional = false)
-    @NotNull
     private User user;
 }

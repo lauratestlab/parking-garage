@@ -424,7 +424,6 @@ databaseChangeLog:
                   name: user_id
                   type: BIGINT
                   constraints:
-                    nullable: false
                     foreignKeyName: fk_user_reservation
                     references: users(id)
               - column:

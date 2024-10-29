@@ -4,7 +4,7 @@ import {Observable} from "rxjs";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Revenue} from "../model/revenue.model";
 import {error} from "@angular/compiler-cli/src/transformers/util";
-import {NgIf} from "@angular/common";
+import {CurrencyPipe, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-dashboard',
@@ -12,7 +12,8 @@ import {NgIf} from "@angular/common";
   imports: [
     FormsModule,
     NgIf,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CurrencyPipe
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
@@ -25,23 +26,34 @@ export class DashboardComponent implements OnInit{
   revenueData?: Revenue;
 
 
-
   constructor(
       private api: DashboardApiService,
       private fb: FormBuilder,
   ) {
+
+    const today = new Date().toISOString().split('T')[0];
+
     this.revenueForm = this.fb.group({
-      start: ['', Validators.required],
-      end: ['', Validators.required]
+      start: [today],
+      end: [today]
     });
   }
 
   ngOnInit(): void {
     this.getAvailSpots();
+
+    this.revenueForm.valueChanges.subscribe(() => {
+      if(this.revenueForm.valid) {
+        this.fetchRevenue();
+      }
+    });
+
+    // Initial fetch for today's revenue
+    this.fetchRevenue();
   }
 
   getAvailSpots(): void {
-    this.api.getAvailableSpots().subscribe({
+    this.api.getSpots().subscribe({
       next: (data) => {
         this.availSpots = data;
       },
