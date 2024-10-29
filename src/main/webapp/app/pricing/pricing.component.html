@@ -1,64 +1,148 @@
 <div class="content">
     <div class="header">
         <h2>Pricing</h2>
-        <div class="buttons">
-            <button type="button" class="btn btn-outline-danger">Delete</button>
-            <button type="button" class="btn btn-outline-light">Update</button>
-            <button type="button" class="btn btn-success">Add</button>
-        </div>
     </div>
     <p>Price may vary depending on the member.</p>
     <hr>
     <div class="card-container">
+        <h3>Add New Price</h3>
+        <form [formGroup]="priceForm" (ngSubmit)="add()">
+            <div class="input-group ">
+                <input formControlName="duration" type="number" class="form-control" id="duration" placeholder="Duration">
+                <input formControlName="price" type="number" class="form-control" id="price" placeholder="Price">
+                <button class="btn btn-success" (click)="add()">Add</button>
+            </div>
+        </form>
+        <hr>
+
         <table>
             <thead>
             <tr>
-<!--                <th></th>-->
+                <th>Hours</th>
                 <th>Price</th>
-                <th>Duration (in hours)</th>
+                <th>Actions</th>
             </tr>
             </thead>
+            <tbody>
+            <tr *ngFor="let price of prices">
+                <td>{{ price.duration }}</td>
+                <td>{{ price.price | currency: 'USD' }}</td>
+                <td>
+                    <button (click)="edit(price)">Edit</button>
+                    <button (click)="delete(price.duration)">Delete</button>
+                </td>
+            </tr>
+            </tbody>
         </table>
-        <div class="tbl-content">
-            <table>
-                <tbody>
-                <tr class="hover-effect" *ngFor="let price of prices">
-<!--                    <td *ngIf="price.duration === 1">Quick Stop</td>-->
-<!--                    <td *ngIf="price.duration === 2">Double Time</td>-->
-<!--                    <td *ngIf="price.duration === 5">Half Day Hustle</td>-->
-<!--                    <td *ngIf="price.duration === 24">Full Day Flex</td>-->
-<!--                    <td *ng>No Name</td>-->
-                    <td>{{ price.price | currency: 'USD' }}</td>
-                    <td>{{ price.duration }}</td>
-                </tr>
-                </tbody>
-            </table>
+
+        <!-- Trigger the modal with a button -->
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Launch demo modal
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <hr>
+        <!-- Modal for Editing -->
 
-    <div class="update-price-div">
-        <h3>Update an existing price</h3>
-        <form [formGroup]="priceForm" (ngSubmit)="updatePrice()">
-            <div class="mb-3">
-                <label for="price" class="form-label">Price</label>
-                <input formControlName="price" type="number" class="form-control" id="price" placeholder="Price">
-                <div *ngIf="priceForm?.invalid && priceForm.get('price')?.touched" class="text-danger">
-                    Price is required.
-                </div>
-            </div>
+<!--        <div style="border: 1px solid blue; z-index: 1000;" *ngIf="selectedPrice" class="modal">-->
+<!--            <h3>Edit Pricing</h3>-->
+<!--            <label>Hours:</label>-->
+<!--            <input [(ngModel)]="selectedPrice.duration" type="number" />-->
+<!--            <label>Price:</label>-->
+<!--            <input [(ngModel)]="selectedPrice.price" type="number" />-->
+<!--            <button (click)="update()">Save</button>-->
+<!--            <button (click)="cancel()">Cancel</button>-->
+<!--        </div>-->
+<!--        <table>-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--                <th>Hours</th>-->
+<!--                <th>Price</th>-->
+<!--                <th>Actions</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            <tr *ngFor="let price of prices">-->
+<!--                <td>-->
+<!--                    <input [(ngModel)]="price.duration" />-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                    <input [(ngModel)]="price.price" />-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                    <button class="btn btn-warning" (click)="update(price)">Update</button>-->
+<!--                    <button class="btn btn-danger" (click)="delete(price.duration)">Delete</button>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--        <table>-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--&lt;!&ndash;                <th></th>&ndash;&gt;-->
+<!--                <th>Price</th>-->
+<!--                <th>Duration (in hours)</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--        </table>-->
+<!--        <div class="tbl-content">-->
+<!--            <table>-->
+<!--                <tbody>-->
+<!--                <tr class="hover-effect" *ngFor="let price of prices">-->
+<!--&lt;!&ndash;                    <td *ngIf="price.duration === 1">Quick Stop</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <td *ngIf="price.duration === 2">Double Time</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <td *ngIf="price.duration === 5">Half Day Hustle</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <td *ngIf="price.duration === 24">Full Day Flex</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <td *ng>No Name</td>&ndash;&gt;-->
+<!--                    <td>{{ price.price | currency: 'USD' }}</td>-->
+<!--                    <td>{{ price.duration }}</td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </div>-->
+<!--    </div>-->
 
-            <div class="mb-3">
-                <label for="duration" class="form-label">Duration</label>
-                <input formControlName="duration" type="number" class="form-control" id="duration" placeholder="Duration">
-                <div *ngIf="priceForm.get('price')?.invalid && priceForm.get('duration')?.touched" class="text-danger">
-                    Duration is required.
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary" [disabled]="priceForm.invalid">Update price</button>
-        </form>
-    </div>
+<!--    <hr>-->
+
+<!--    <div class="update-price-div">-->
+<!--        <h3>Update an existing price</h3>-->
+<!--        <form [formGroup]="priceForm" (ngSubmit)="updatePrice()">-->
+<!--            <div class="mb-3">-->
+<!--                <label for="price" class="form-label">Price</label>-->
+<!--                <input formControlName="price" type="number" class="form-control" id="price" placeholder="Price">-->
+<!--                <div *ngIf="priceForm?.invalid && priceForm.get('price')?.touched" class="text-danger">-->
+<!--                    Price is required.-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <div class="mb-3">-->
+<!--                <label for="duration" class="form-label">Duration</label>-->
+<!--                <input formControlName="duration" type="number" class="form-control" id="duration" placeholder="Duration">-->
+<!--                <div *ngIf="priceForm.get('price')?.invalid && priceForm.get('duration')?.touched" class="text-danger">-->
+<!--                    Duration is required.-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <button type="submit" class="btn btn-primary" [disabled]="priceForm.invalid">Update price</button>-->
+<!--        </form>-->
+<!--    </div>-->
 
 </div>
 

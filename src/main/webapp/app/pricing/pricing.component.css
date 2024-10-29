@@ -24,18 +24,8 @@
     gap: 6px;
 }
 
-/*.card-container {*/
-/*    display: flex;*/
-/*    flex-direction: column;*/
-/*    !* justify-content: center;*/
-/*    align-items: center; *!*/
-/*    height: 100%;*/
-/*    gap: 12px;*/
-/*    !* border: 1px solid greenyellow; *!*/
-/*}*/
-
 table{
-    width: 90%;
+    width: 100%;
     table-layout: fixed;
 }
 .tbl-header{
@@ -45,7 +35,6 @@ table{
     height:100%;
     overflow-x: hidden;
     margin-top: 0px;
-    /*border: 1px solid rgba(255,255,255,0.3);*/
 }
 th{
     padding: 20px 20px;
@@ -64,14 +53,6 @@ td{
     color: #fff;
     border-bottom: solid 2px #2e3033;
 }
-tr:nth-child(even){
-    background-color: #2e3033;
-}
-
-.hover-effect:hover {
-    background-color: rgba(173, 255, 47, 0.22);
-}
-
 
 .add-price-div {
     width: 40%;
