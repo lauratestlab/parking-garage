@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit{
   }
 
   getAvailSpots(): void {
-    this.api.getAvailableSpots().subscribe({
+    this.api.getSpots().subscribe({
       next: (data) => {
         this.availSpots = data;
       },

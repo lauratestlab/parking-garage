@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import {Component, inject, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ReservationApi} from "../revenue_api/reservation-api";
+import {ReservationResponse} from "../model/reservation.model";
 
 
 @Component({
@@ -9,16 +10,19 @@ import {ReservationApi} from "../revenue_api/reservation-api";
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
+    FormsModule
   ],
   templateUrl: './reservations.component.html',
   styleUrl: './reservations.component.css'
 })
-export class ReservationsComponent{
+export class ReservationsComponent implements OnInit{
   currentPage: string = 'reservations';
 
   reservationForm: FormGroup;
   fb = inject(FormBuilder);
+
+  reservations: ReservationResponse[] = [];
 
   constructor(private api: ReservationApi) {
     this.reservationForm = this.fb.group({
@@ -45,12 +49,23 @@ export class ReservationsComponent{
     });
   }
 
+  ngOnInit(): void {
+    this.fetchAll();
+  }
+
+  fetchAll(): void {
+    this.api.get().subscribe((data) => {
+      this.reservations = data;
+      console.log(this.reservations);
+    })
+  }
+
   addReservation() {
     const request: any = this.reservationForm.value;
     console.log('Form submitted: ', request);
 
     if(this.reservationForm.valid) {
-      this.api.addReservation(request).subscribe({
+      this.api.add(request).subscribe({
           next: () => {
             window.alert('Booking was successful!');
           },
