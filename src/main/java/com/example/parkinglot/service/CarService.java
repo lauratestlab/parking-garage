@@ -112,18 +112,4 @@ public class CarService {
         LOG.debug("Request to delete Car : {}", id);
         carRepository.deleteById(id);
     }
-
-//    public List<Car> getAllCars() {
-//        return carRepository.findAll();
-//    }
-
-    public List<CarDTO> getAllCars() {
-        List<Car> cars = carRepository.findAll();
-        return cars.stream()
-                .map(car -> new CarDTO(car.getModel(), car.getMake(), car.getColor(), car.getRegistration()))
-                .toList();
-    }
-
-
-
 }

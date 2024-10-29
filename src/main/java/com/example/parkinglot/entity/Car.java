@@ -39,8 +39,4 @@ public class Car {
     @ManyToOne(optional = false)
     @NotNull
     private User user;
-
-    public Long getId() {
-        return carId;
-    }
 }

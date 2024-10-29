@@ -34,8 +34,9 @@ public class ReservationService {
     private final PaymentMethodMapper paymentMethodMapper;
     private final ReportRepository reportRepository;
     private final MailService mailService;
+    private final CarMapper carMapper;
 
-    public ReservationService(UserRepository userRepository, PaymentService paymentService, ReservationRepository reservationRepository, CarService carService, CarRepository carRepository, PaymentMethodRepository paymentMethodRepository, PaymentMethodMapper paymentMethodMapper, ReportRepository reportRepository, MailService mailService) {
+    public ReservationService(UserRepository userRepository, PaymentService paymentService, ReservationRepository reservationRepository, CarService carService, CarRepository carRepository, PaymentMethodRepository paymentMethodRepository, PaymentMethodMapper paymentMethodMapper, ReportRepository reportRepository, MailService mailService, CarMapper carMapper) {
         this.userRepository = userRepository;
         this.paymentService = paymentService;
         this.reservationRepository = reservationRepository;
@@ -45,6 +46,7 @@ public class ReservationService {
         this.paymentMethodMapper = paymentMethodMapper;
         this.reportRepository = reportRepository;
         this.mailService = mailService;
+        this.carMapper = carMapper;
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
