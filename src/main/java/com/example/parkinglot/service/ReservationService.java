@@ -96,7 +96,6 @@ public class ReservationService {
             return paymentMethodRepository.findPaymentMethodByPaymentMethodId(reservationDTO.paymentMethodId())
                     .orElseThrow(() -> new PaymentMethodNotFoundException("Payment method with id " + reservationDTO.paymentMethodId() + " was not found in the database"));
         }
-
     }
 
     private Car registerCar(ReservationDTO reservationDTO) {
