@@ -7,8 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { IUser } from 'app/entities/user/user.model';
-import { UserService } from 'app/entities/user/service/user.service';
+import { IUser } from 'app/user/user.model';
+import { UserService } from 'app/user/service/user.service';
 import { ICar } from '../car.model';
 import { CarService } from '../service/car.service';
 import { CarFormGroup, CarFormService } from './car-form.service';

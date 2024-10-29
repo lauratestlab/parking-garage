@@ -1,4 +1,4 @@
-import { IUser } from 'app/entities/user/user.model';
+import { IUser } from 'app/user/user.model';
 
 export interface ICar {
   id: number;
