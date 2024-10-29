@@ -1,6 +1,7 @@
 package com.example.parkinglot.service;
 
 
+import com.example.parkinglot.config.Constants;
 import com.example.parkinglot.dto.ReservationDTO;
 import com.example.parkinglot.dto.ReservationInfoDTO;
 import com.example.parkinglot.entity.*;
@@ -48,14 +49,14 @@ public class ReservationService {
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public ReservationInfoDTO createReservation(@Valid ReservationDTO reservationDTO) {
-        Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
+        String currentUserLogin = SecurityUtils.getCurrentUserLogin().orElse(Constants.SYSTEM);
 
-        User user = userRepository.getReferenceById(reservationDTO.userId());
+        User user = userRepository.findOneByLogin(currentUserLogin).orElse(null);
 
         PaymentMethod paymentMethod = processPayment(reservationDTO);
         paymentService.processPayment(paymentMethod);
 
-        if (currentUserLogin.isPresent() && reservationDTO.saveCreditCard()) {
+        if (reservationDTO.saveCreditCard()) {
             paymentMethod.setUser(user);
             paymentMethodRepository.save(paymentMethod);
         }
@@ -78,7 +79,9 @@ public class ReservationService {
 
         reservationRepository.save(reservation);
 
-        mailService.sendOrderInfoMail(user, reservation.getConfirmationCode());
+        if (user != null) {
+            mailService.sendOrderInfoMail(user, reservation.getConfirmationCode());
+        }
 
         return new ReservationInfoDTO(true, "");
     }

@@ -28,7 +28,7 @@ export class ReservationsComponent{
         color: ['', Validators.required],
         make: ['', Validators.required],
         model: ['', Validators.required],
-        registrationNumber: ['', Validators.required]
+        registration: ['', Validators.required]
       }),
       paymentMethod: this.fb.group({
         card_number: ['', [Validators.required]],
