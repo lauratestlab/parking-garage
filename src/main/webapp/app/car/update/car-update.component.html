@@ -1,0 +1,133 @@
+<div class="d-flex justify-content-center main-content">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="app-car-heading" data-cy="CarCreateUpdateHeading">Create or edit a Car</h2>
+
+      <div>
+        <app-alert-error></app-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let modelRef = editForm.get('model')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_model">Model</label>
+          <input type="text" class="form-control" name="model" id="field_model" data-cy="model" formControlName="model" />
+          @if (modelRef.invalid && (modelRef.dirty || modelRef.touched)) {
+            <div>
+              @if (editForm.get('model')?.errors?.required) {
+                <small class="form-text text-danger">This field is required.</small>
+              }
+              @if (editForm.get('model')?.errors?.minlength) {
+                <small class="form-text text-danger">This field is required to be at least 1 characters.</small>
+              }
+              @if (editForm.get('model')?.errors?.maxlength) {
+                <small class="form-text text-danger">This field cannot be longer than 25 characters.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let makeRef = editForm.get('make')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_make">Make</label>
+          <input type="text" class="form-control" name="make" id="field_make" data-cy="make" formControlName="make" />
+          @if (makeRef.invalid && (makeRef.dirty || makeRef.touched)) {
+            <div>
+              @if (editForm.get('make')?.errors?.required) {
+                <small class="form-text text-danger">This field is required.</small>
+              }
+              @if (editForm.get('make')?.errors?.minlength) {
+                <small class="form-text text-danger">This field is required to be at least 1 characters.</small>
+              }
+              @if (editForm.get('make')?.errors?.maxlength) {
+                <small class="form-text text-danger">This field cannot be longer than 25 characters.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let colorRef = editForm.get('color')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_color">Color</label>
+          <input type="text" class="form-control" name="color" id="field_color" data-cy="color" formControlName="color" />
+          @if (colorRef.invalid && (colorRef.dirty || colorRef.touched)) {
+            <div>
+              @if (editForm.get('color')?.errors?.required) {
+                <small class="form-text text-danger">This field is required.</small>
+              }
+              @if (editForm.get('color')?.errors?.minlength) {
+                <small class="form-text text-danger">This field is required to be at least 1 characters.</small>
+              }
+              @if (editForm.get('color')?.errors?.maxlength) {
+                <small class="form-text text-danger">This field cannot be longer than 25 characters.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let registrationRef = editForm.get('registration')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_registration">Registration</label>
+          <input
+            type="text"
+            class="form-control"
+            name="registration"
+            id="field_registration"
+            data-cy="registration"
+            formControlName="registration"
+          />
+          @if (registrationRef.invalid && (registrationRef.dirty || registrationRef.touched)) {
+            <div>
+              @if (editForm.get('registration')?.errors?.required) {
+                <small class="form-text text-danger">This field is required.</small>
+              }
+              @if (editForm.get('registration')?.errors?.minlength) {
+                <small class="form-text text-danger">This field is required to be at least 1 characters.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_user">User</label>
+          <select class="form-control" id="field_user" data-cy="user" name="user" formControlName="user" [compareWith]="compareUser">
+            @if (!editForm.get('user')!.value) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (userOption of usersSharedCollection; track $index) {
+              <option [ngValue]="userOption">{{ userOption.login }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['user'])!.invalid && (editForm.get(['user'])!.dirty || editForm.get(['user'])!.touched)) {
+          <div>
+            @if (editForm.get(['user'])?.errors?.required) {
+              <small class="form-text text-danger">This field is required.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

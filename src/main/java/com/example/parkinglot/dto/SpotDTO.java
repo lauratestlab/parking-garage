@@ -1,42 +1,18 @@
 package com.example.parkinglot.dto;
 
-public class SpotDTO {
-    private Long spotId;
-    private String name;
-    private Long floorId; // Assuming you return the floorId
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
-    public SpotDTO(Long spotId, String name, Long floorId) {
-        this.spotId = spotId;
-        this.name = name;
-        this.floorId = floorId;
-    }
+public record SpotDTO(
+        Long id,
 
-    // Getters and setters
+        @NotNull
+        @Size(min = 1, max = 20)
+        String name,
 
-
-    public Long getSpotId() {
-        return spotId;
-    }
-
-    public void setSpotId(Long spotId) {
-        this.spotId = spotId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Long getFloorId() {
-        return floorId;
-    }
-
-    public void setFloorId(Long floorId) {
-        this.floorId = floorId;
-    }
+        @NotNull
+        FloorDTO floor
+) {
 }
 
 

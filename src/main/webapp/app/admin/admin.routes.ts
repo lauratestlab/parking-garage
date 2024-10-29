@@ -7,9 +7,14 @@ const routes: Routes = [
     title: 'userManagement.home.title',
   },
   {
-    path: 'floors',
-    loadChildren: () => import('./floors/floor.route'),
+    path: 'floor',
+    loadChildren: () => import('./floor/floor.routes'),
     title: 'Floors',
+  },
+  {
+    path: 'spot',
+    loadChildren: () => import('./spot/spot.routes'),
+    title: 'Spots',
   },
   {
     path: 'docs',

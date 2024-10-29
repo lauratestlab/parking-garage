@@ -1,6 +1,8 @@
 package com.example.parkinglot.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 
@@ -8,22 +10,33 @@ import lombok.Data;
 @Entity
 @Table(name = "cars")
 public class Car {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "car_id")
-    private Long carId;
-    //private Long userId;
+    private Long id;
+
+    @NotNull
+    @Size(min = 1, max = 25)
+    @Column(name = "model", length = 25, nullable = false)
     private String model;
+
+    @NotNull
+    @Size(min = 1, max = 25)
+    @Column(name = "make", length = 25, nullable = false)
     private String make;
+
+    @NotNull
+    @Size(min = 1, max = 25)
+    @Column(name = "color", length = 25, nullable = false)
     private String color;
+
+    @NotNull
+    @Size(min = 1)
+    @Column(name = "registration", nullable = false)
     private String registration;
 
-    // Many Cars can belong to one User
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id") // Foreign key column in Car table
+    @ManyToOne(optional = false)
+    @NotNull
     private User user;
-
-    public Long getId() {
-        return carId;
-    }
 }

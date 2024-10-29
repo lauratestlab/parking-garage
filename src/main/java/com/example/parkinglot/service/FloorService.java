@@ -1,106 +1,112 @@
 package com.example.parkinglot.service;
 
-import com.example.parkinglot.dto.FloorDTO;
-import com.example.parkinglot.dto.SpotDTO;
 import com.example.parkinglot.entity.Floor;
-import com.example.parkinglot.entity.Spot;
 import com.example.parkinglot.repo.FloorRepository;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.parkinglot.dto.FloorDTO;
+import com.example.parkinglot.mapper.FloorMapper;
+import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
+/**
+ * Service Implementation for managing {@link com.example.parkinglot.entity.Floor}.
+ */
 @Service
+@Transactional
 public class FloorService {
 
-    private FloorRepository floorRepository;
+    private static final Logger LOG = LoggerFactory.getLogger(FloorService.class);
 
-    @Autowired
-    public FloorService(FloorRepository floorRepository) {
+    private final FloorRepository floorRepository;
+
+    private final FloorMapper floorMapper;
+
+    public FloorService(FloorRepository floorRepository, FloorMapper floorMapper) {
         this.floorRepository = floorRepository;
+        this.floorMapper = floorMapper;
     }
 
-    @Transactional
-    public Floor updateFloorName(Long floorId, String newName) {
-        Optional<Floor> optFloor = floorRepository.findById(floorId);
-        if (optFloor.isPresent()) {
-            Floor floor = optFloor.get();
-            floor.setName(newName);
-            return floorRepository.save(floor);
-        }
-        return null;
+    /**
+     * Save a floor.
+     *
+     * @param floorDTO the entity to save.
+     * @return the persisted entity.
+     */
+    public FloorDTO save(FloorDTO floorDTO) {
+        LOG.debug("Request to save Floor : {}", floorDTO);
+        Floor floor = floorMapper.toEntity(floorDTO);
+        floor = floorRepository.save(floor);
+        return floorMapper.toDto(floor);
     }
 
+    /**
+     * Update a floor.
+     *
+     * @param floorDTO the entity to save.
+     * @return the persisted entity.
+     */
+    public FloorDTO update(FloorDTO floorDTO) {
+        LOG.debug("Request to update Floor : {}", floorDTO);
+        Floor floor = floorMapper.toEntity(floorDTO);
+        floor = floorRepository.save(floor);
+        return floorMapper.toDto(floor);
+    }
+
+    /**
+     * Partially update a floor.
+     *
+     * @param floorDTO the entity to update partially.
+     * @return the persisted entity.
+     */
+    public Optional<FloorDTO> partialUpdate(FloorDTO floorDTO) {
+        LOG.debug("Request to partially update Floor : {}", floorDTO);
+
+        return floorRepository
+            .findById(floorDTO.id())
+            .map(existingFloor -> {
+                floorMapper.partialUpdate(existingFloor, floorDTO);
+
+                return existingFloor;
+            })
+            .map(floorRepository::save)
+            .map(floorMapper::toDto);
+    }
+
+    /**
+     * Get all the floors.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
     @Transactional(readOnly = true)
-    public Page<FloorDTO> getAllFloors(Pageable pageable) {
-        return floorRepository.findAll(pageable).map(this::convertToDto);
+    public Page<FloorDTO> findAll(Pageable pageable) {
+        LOG.debug("Request to get all Floors");
+        return floorRepository.findAll(pageable).map(floorMapper::toDto);
     }
 
-    public Optional<Floor> getFloorById(Long floorId) {
-        Optional<Floor> floor = floorRepository.findById(floorId);
-        floor.ifPresent(f -> System.out.println("Floor found: " + f));
-        return floor;
-
+    /**
+     * Get one floor by id.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<FloorDTO> findOne(Long id) {
+        LOG.debug("Request to get Floor : {}", id);
+        return floorRepository.findById(id).map(floorMapper::toDto);
     }
 
-    public Optional<FloorDTO> getFloorDTOById(Long floorId) {
-        return floorRepository.findById(floorId)
-                .map(this::convertToDTO);
+    /**
+     * Delete the floor by id.
+     *
+     * @param id the id of the entity.
+     */
+    public void delete(Long id) {
+        LOG.debug("Request to delete Floor : {}", id);
+        floorRepository.deleteById(id);
     }
-
-    private FloorDTO convertToDTO(Floor floor) {
-        List<SpotDTO> spotDTOs = floor.getSpots().stream()
-                .map(this::convertSpotToDTO)
-                .collect(Collectors.toList());
-
-        return new FloorDTO(floor.getId(), floor.getName(), spotDTOs);
-    }
-
-    private SpotDTO convertSpotToDTO(Spot spot) {
-        return new SpotDTO(spot.getSpotId(), spot.getName(), spot.getFloor().getId());
-    }
-
-    public Floor addFloor(@Valid FloorDTO floorDTO) {
-        Floor floor = convertToEntity(floorDTO);
-        return floorRepository.save(floor);
-    }
-
-    public void deleteFloor(Long floorId) {
-        floorRepository.deleteById(floorId);
-    }
-
-
-
-  //begining od L's code. Not used int the controller
-  private FloorDTO convertToDto(Floor floor) {
-//        Long spotId = floor.getSpots().isEmpty() ? null : floor.getSpots().get(0).getSpotId();
-        return new FloorDTO(floor.getId(), floor.getName(), List.of());
-    }
-
-  
-    private Floor convertToEntity(FloorDTO floorDTO) {
-        Floor floor = new Floor();
-        floor.setId(floorDTO.getId());
-        floor.setName(floorDTO.getName());
-        return floor;
-    }
-
-//    public FloorDTO saveFloor(FloorDTO floorDTO) {
-//      Floor floor = convertToEntity(floorDTO);
-//      Floor savedFloor = floorRepository.save(floor);
-//      return convertToDto(savedFloor);
-//    }
-    //    public List<FloorDTO> getAllFloors() {
-    //     return floorRepository.findAll().stream()
-    //             .map(this::convertToDto)
-    //             .collect(Collectors.toList());
-    // }
-
-    //end of L's code.
 }

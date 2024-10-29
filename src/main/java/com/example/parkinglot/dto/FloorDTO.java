@@ -1,39 +1,14 @@
 package com.example.parkinglot.dto;
 
-import java.util.List;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
-public class FloorDTO {
-  private Long id;
-  private String name;
-  private List<SpotDTO> spots;
+public record FloorDTO(
+        Long id,
 
-  public FloorDTO(Long floorId, String name, List<SpotDTO> spots) {
-    this.id = floorId;
-    this.name = name;
-    this.spots = spots;
-  }
+        @NotNull
+        @Size(min = 1, max = 20)
+        String name
+) {
 
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public List<SpotDTO> getSpots() {
-    return spots;
-  }
-
-  public void setSpots(List<SpotDTO> spots) {
-    this.spots = spots;
-  }
 }

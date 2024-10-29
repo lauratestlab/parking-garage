@@ -194,6 +194,7 @@ databaseChangeLog:
                   name: car_id
                   type: BIGINT
                   autoIncrement: true
+                  startWith: 100
                   constraints:
                     nullable: false
                     primaryKey: true
@@ -258,6 +259,7 @@ databaseChangeLog:
                     name: payment_method_id
                     type: BIGINT
                     autoIncrement: true
+                    startWith: 100
                     constraints:
                       nullable: false
                       primaryKey: true
@@ -317,6 +319,7 @@ databaseChangeLog:
                   name: floor_id
                   type: BIGINT
                   autoIncrement: true
+                  startWith: 100
               - column:
                   constraints:
                     nullable: false
@@ -357,6 +360,7 @@ databaseChangeLog:
                   name: spot_id
                   type: BIGINT
                   autoIncrement: true
+                  startWith: 100
               - column:
                   name: name
                   type: VARCHAR(10)
@@ -388,6 +392,7 @@ databaseChangeLog:
                   name: reservation_id
                   type: BIGINT
                   autoIncrement: true
+                  startWith: 100
                   constraints:
                     nullable: false
                     primaryKey: true

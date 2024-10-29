@@ -68,5 +68,12 @@ public class ReservationResource {
         LOG.debug("REST request to get reservations for current user");
         return reservationService.findReservationsForCurrentUser();
     }
+    @GetMapping("/countByColor/{color}")
+    public long countCarsByColor(@PathVariable String color) {
+        LOG.debug("REST request to count cars by color: {}", color);
+        return reservationService.countCarsByColor(color);
+    }
+
+
 
 }

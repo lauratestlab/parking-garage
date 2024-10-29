@@ -1,5 +1,5 @@
-model;make;color;registration;user_id
-Tesla;Model S;Black;ABC123;2
-Toyota;Corolla;White;XYZ789;2
-Fiat;Model S;Red;ABC123;2
-KrAZ;Model100;Red;XYZ789;2
+car_id;model;make;color;registration;user_id
+1;Tesla;Model S;Black;ABC123;2
+2;Toyota;Corolla;White;XYZ789;2
+3;Fiat;Model S;Red;ABC123;2
+4;KrAZ;Model100;Red;XYZ789;2

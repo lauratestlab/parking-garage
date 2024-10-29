@@ -7,6 +7,7 @@ import com.example.parkinglot.dto.ReservationInfoDTO;
 import com.example.parkinglot.entity.*;
 import com.example.parkinglot.enums.Status;
 import com.example.parkinglot.exception.*;
+import com.example.parkinglot.mapper.CarMapper;
 import com.example.parkinglot.mapper.PaymentMethodMapper;
 import com.example.parkinglot.repo.*;
 import com.example.parkinglot.security.RandomUtil;
@@ -34,8 +35,9 @@ public class ReservationService {
     private final PaymentMethodMapper paymentMethodMapper;
     private final ReportRepository reportRepository;
     private final MailService mailService;
+    private final CarMapper carMapper;
 
-    public ReservationService(UserRepository userRepository, PaymentService paymentService, ReservationRepository reservationRepository, CarService carService, CarRepository carRepository, PaymentMethodRepository paymentMethodRepository, PaymentMethodMapper paymentMethodMapper, ReportRepository reportRepository, MailService mailService) {
+    public ReservationService(UserRepository userRepository, PaymentService paymentService, ReservationRepository reservationRepository, CarService carService, CarRepository carRepository, PaymentMethodRepository paymentMethodRepository, PaymentMethodMapper paymentMethodMapper, ReportRepository reportRepository, MailService mailService, CarMapper carMapper) {
         this.userRepository = userRepository;
         this.paymentService = paymentService;
         this.reservationRepository = reservationRepository;
@@ -45,6 +47,7 @@ public class ReservationService {
         this.paymentMethodMapper = paymentMethodMapper;
         this.reportRepository = reportRepository;
         this.mailService = mailService;
+        this.carMapper = carMapper;
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
@@ -98,9 +101,9 @@ public class ReservationService {
 
     private Car registerCar(ReservationDTO reservationDTO) {
         if (reservationDTO.car() != null) {
-            return carService.createCar(reservationDTO.car());
+            return carMapper.toEntity(carService.save(reservationDTO.car()));
         } else {
-            return carRepository.getOneByCarId(reservationDTO.carId())
+            return carRepository.findByUserIsCurrentUserAndId(reservationDTO.carId())
                     .orElseThrow(() -> new CarNotFoundException("Car with id " + reservationDTO.carId() + " was not found in the database"));
         }
     }
@@ -125,6 +128,19 @@ public class ReservationService {
         }
         return Collections.emptyList();
     }
+
+//    public long countCarsByColor(String color) {
+//        List<ReservationDTO> reservations = findAllReservations();
+//        return reservations.stream()
+//                .filter(reservation -> reservation.car() != null &&
+//                        reservation.car().color().equalsIgnoreCase(color))
+//                .count();
+//    }
+    public long countCarsByColor(String color) {
+        return reservationRepository.countByCarColor(color);
+    }
+
+
 
 
 }

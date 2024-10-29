@@ -41,6 +41,11 @@ export const routes: Routes = [
         canActivate: [UserRouteAccessService],
         loadChildren: () => import('./admin/admin.routes'),
     },
+    {
+        path: 'car',
+        loadChildren: () => import('./car/car.routes'),
+        title: 'cars',
+    },
     ...errorRoute,
 ];
 
