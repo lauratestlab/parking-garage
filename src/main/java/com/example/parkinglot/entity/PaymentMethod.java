@@ -46,4 +46,8 @@ public class PaymentMethod {
 
     @NotBlank(message="Zip code is required")
     private String deliveryZip;
+
+    public Long getId() {
+        return paymentMethodId;
+    }
 }

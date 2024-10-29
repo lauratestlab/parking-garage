@@ -2,5 +2,7 @@ package com.example.parkinglot.enums;
 
 public enum Status {
     ACTIVE,
-    CANCELED
+    CANCELED,
+    ORDERED
+
 }

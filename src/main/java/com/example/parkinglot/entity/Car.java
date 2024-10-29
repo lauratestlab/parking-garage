@@ -40,4 +40,7 @@ public class Car {
     @NotNull
     private User user;
 
+    public Long getId() {
+        return carId;
+    }
 }

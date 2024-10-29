@@ -38,4 +38,13 @@ public interface CarRepository extends JpaRepository<Car, Long> {
 
     @Query("select car from Car car left join fetch car.user where car.id =:id")
     Optional<Car> findOneWithToOneRelationships(@Param("id") Long id);
+
+    List<Car> findAll();
+
+    List<Car> findByUserFirstName(String firstName);
+
+    Optional<Car> getOneByCarId(Long aLong);
+
+    @Query("SELECT COUNT(c) FROM Car c WHERE c.color = 'Red'")
+    long countRedCars();
 }
