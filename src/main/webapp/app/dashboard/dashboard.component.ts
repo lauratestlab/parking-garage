@@ -30,14 +30,26 @@ export class DashboardComponent implements OnInit{
       private api: DashboardApiService,
       private fb: FormBuilder,
   ) {
+
+    const today = new Date().toISOString().split('T')[0];
+
     this.revenueForm = this.fb.group({
-      start: ['', Validators.required],
-      end: ['', Validators.required]
+      start: [today],
+      end: [today]
     });
   }
 
   ngOnInit(): void {
     this.getAvailSpots();
+
+    this.revenueForm.valueChanges.subscribe(() => {
+      if(this.revenueForm.valid) {
+        this.fetchRevenue();
+      }
+    });
+
+    // Initial fetch for today's revenue
+    this.fetchRevenue();
   }
 
   getAvailSpots(): void {
