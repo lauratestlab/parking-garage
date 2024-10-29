@@ -123,5 +123,18 @@ public class ReservationService {
         return Collections.emptyList();
     }
 
+//    public long countCarsByColor(String color) {
+//        List<ReservationDTO> reservations = findAllReservations();
+//        return reservations.stream()
+//                .filter(reservation -> reservation.car() != null &&
+//                        reservation.car().color().equalsIgnoreCase(color))
+//                .count();
+//    }
+    public long countCarsByColor(String color) {
+        return reservationRepository.countByCarColor(color);
+    }
+
+
+
 
 }

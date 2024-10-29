@@ -16,6 +16,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     List<Reservation> findByUser(User user);
 
+    @Query("SELECT COUNT(res) FROM Reservation res JOIN res.car c WHERE LOWER(c.color) = LOWER(:color)")
+    long countByCarColor(String color);
 
 
     @Query("SELECT EXISTS(" +
