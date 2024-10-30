@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -134,5 +135,11 @@ public class CarService {
         LOG.debug("Request to get all Cars with eager load for user: {}", userLogin);
         return carRepository.findAllWithEagerRelationshipsByUser(pageable, userLogin).map(carMapper::toDto);
     }
+
+    public List<CarDTO> searchCars(String model, String make, String color, String registration, Long userId) {
+        List<Car> cars = carRepository.searchCars(model, make, color, registration, userId);
+        return cars.stream().map(carMapper::toDto).collect(Collectors.toList());
+    }
+
 
 }

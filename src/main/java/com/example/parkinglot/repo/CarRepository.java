@@ -52,6 +52,16 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     @Query("select car from Car car left join fetch car.user where car.user.login = :userLogin")
     Page<Car> findAllWithEagerRelationshipsByUser(Pageable pageable, @Param("userLogin") String userLogin);
 
-
+    @Query("SELECT car FROM Car car WHERE " +
+            "(:model IS NULL OR car.model = :model) AND " +
+            "(:make IS NULL OR car.make = :make) AND " +
+            "(:color IS NULL OR car.color = :color) AND " +
+            "(:registration IS NULL OR car.registration = :registration) AND " +
+            "(:userId IS NULL OR car.user.id = :userId)")
+    List<Car> searchCars(@Param("model") String model,
+                         @Param("make") String make,
+                         @Param("color") String color,
+                         @Param("registration") String registration,
+                         @Param("userId") Long userId);
 
 }
