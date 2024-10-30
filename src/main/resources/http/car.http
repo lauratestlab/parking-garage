@@ -1,17 +1,10 @@
-### GET request to example server
-GET http://localhost:8080/api/cars/red-cars/count
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyIiwiZXhwIjoxNzMyMjExOTA5LCJhdXRoIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzI5NjE5OTA5fQ.SiIQrIUHy-kA0AzbHo0o6Gc9WrjRZzIO_Z8316AUVSiYf8IduJXleL9aKyA_s-fwqFy7fZscbRXqDTGeoqAsXw
-
-
-
-###
-GET http://localhost:8080/api/cars/all
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyIiwiZXhwIjoxNzMyMjExOTA5LCJhdXRoIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzI5NjE5OTA5fQ.SiIQrIUHy-kA0AzbHo0o6Gc9WrjRZzIO_Z8316AUVSiYf8IduJXleL9aKyA_s-fwqFy7fZscbRXqDTGeoqAsXw
-
-
-### how many cars by color do we currenlty have in the parkingLot
+### how many cars by color do we currenlty have in the parkingLot from table reservation
 GET http://localhost:8080/api/reservation/countByColor/Black
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyIiwiZXhwIjoxNzMyMjExOTA5LCJhdXRoIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzI5NjE5OTA5fQ.SiIQrIUHy-kA0AzbHo0o6Gc9WrjRZzIO_Z8316AUVSiYf8IduJXleL9aKyA_s-fwqFy7fZscbRXqDTGeoqAsXw
+
+### cars for admin cars from users from table cars
+GET http://localhost:8080/api/cars?eagerload=false
+Content-Type: application/json
+//Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyIiwiZXhwIjoxNzMyMjExOTA5LCJhdXRoIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzI5NjE5OTA5fQ.SiIQrIUHy-kA0AzbHo0o6Gc9WrjRZzIO_Z8316AUVSiYf8IduJXleL9aKyA_s-fwqFy7fZscbRXqDTGeoqAsXw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjIxMjY0MCwiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzI5NjIwNjQwfQ.A8djeccnKXFg-6JWQ1DmH0AtGpdTcfh4yxEsMw92-29vcUYemQ29vf4-gmOtsZuCOxMeyieXwuX2IdAUx1SRFQ
