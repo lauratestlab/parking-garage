@@ -16,6 +16,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     List<Reservation> findByUser(User user);
 
+    @Query("SELECT COUNT(res) FROM Reservation res JOIN res.car c WHERE LOWER(c.color) = LOWER(:color)")
+    long countByCarColor(String color);
 
 
     @Query("SELECT EXISTS(" +
@@ -31,4 +33,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     @Query("SELECT SUM(reservation.price) FROM Reservation reservation WHERE reservation.status = :status AND reservation.startTime BETWEEN :start AND :end")
     Optional<BigDecimal> revenue(Status status, LocalDateTime start, LocalDateTime end);
+
+    Optional<Reservation> findOneByConfirmationCodeAndStatus(String confirmationCode, Status status);
 }

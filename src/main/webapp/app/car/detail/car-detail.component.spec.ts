@@ -1,65 +1,54 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { of } from 'rxjs';
 
-import { Authority } from 'app/config/authority.constants';
+import { CarDetailComponent } from './car-detail.component';
 
-import UserManagementDetailComponent from './car-detail.component';
+describe('Car Management Detail Component', () => {
+  let comp: CarDetailComponent;
+  let fixture: ComponentFixture<CarDetailComponent>;
 
-describe('User Management Detail Component', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UserManagementDetailComponent],
+      imports: [CarDetailComponent],
       providers: [
         provideRouter(
           [
             {
               path: '**',
-              loadComponent: () => import('./car-detail.component'),
-              resolve: {
-                user: () =>
-                  of({
-                    carId: 123,
-                    model: 'Sedan',
-                    make: 'Toyota',
-                    color: 'Red',
-                    registration: 'ABC-1234',
-                    activated: true,
-                    langKey: 'en',
-                    authorities: [Authority.USER],
-                    createdBy: 'user',
-                  }),
-              },
+              loadComponent: () => import('./car-detail.component').then(m => m.CarDetailComponent),
+              resolve: { car: () => of({ id: 123 }) },
             },
           ],
           withComponentInputBinding(),
         ),
       ],
     })
-      .overrideTemplate(UserManagementDetailComponent, '')
+      .overrideTemplate(CarDetailComponent, '')
       .compileComponents();
   });
 
-  describe('Construct', () => {
-    it('Should call load all on construct', async () => {
-      // WHEN
+  beforeEach(() => {
+    fixture = TestBed.createComponent(CarDetailComponent);
+    comp = fixture.componentInstance;
+  });
+
+  describe('OnInit', () => {
+    it('Should load car on init', async () => {
       const harness = await RouterTestingHarness.create();
-      const instance = await harness.navigateByUrl('/', UserManagementDetailComponent);
+      const instance = await harness.navigateByUrl('/', CarDetailComponent);
 
       // THEN
-      expect(instance.user()).toEqual(
-        expect.objectContaining({
-          carId: 123,
-          model: 'Sedan',
-          make: 'Toyota',
-          color: 'Red',
-          registration: 'ABC-1234',
-          langKey: 'en',
-          authorities: [Authority.USER],
-          createdBy: 'user',
-        }),
-      );
+      expect(instance.car()).toEqual(expect.objectContaining({ id: 123 }));
+    });
+  });
+
+  describe('PreviousState', () => {
+    it('Should navigate to previous state', () => {
+      jest.spyOn(window.history, 'back');
+      comp.previousState();
+      expect(window.history.back).toHaveBeenCalled();
     });
   });
 });

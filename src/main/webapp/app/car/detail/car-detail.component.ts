@@ -1,15 +1,20 @@
 import { Component, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import SharedModule from 'app/shared/shared.module';
 
-import { Car } from '../car.model';
+import SharedModule from 'app/shared/shared.module';
+import { DurationPipe, FormatMediumDatePipe, FormatMediumDatetimePipe } from 'app/shared/date';
+import { ICar } from '../car.model';
 
 @Component({
   standalone: true,
-  selector: 'app-user-mgmt-detail',
+  selector: 'app-car-detail',
   templateUrl: './car-detail.component.html',
-  imports: [RouterModule, SharedModule],
+  imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe],
 })
-export default class UserManagementDetailComponent {
-  user = input<Car | null>(null);
+export class CarDetailComponent {
+  car = input<ICar | null>(null);
+
+  previousState(): void {
+    window.history.back();
+  }
 }

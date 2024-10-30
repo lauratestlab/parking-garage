@@ -1,24 +1,49 @@
 <div class="d-flex justify-content-center main-content">
   <div class="col-8">
-    @if (user(); as userRef) {
+    @if (car(); as carRef) {
       <div>
-        <h2>
-          <span>User</span> [<strong>{{ userRef.id }}</strong
-          >]
-        </h2>
+        <h2 data-cy="carDetailsHeading"><span>Car</span></h2>
+
+        <hr />
+
+        <app-alert-error></app-alert-error>
+
+        <app-alert></app-alert>
 
         <dl class="row-md jh-entity-details">
-          <dt><span>Login</span></dt>
+          <dt><span>ID</span></dt>
           <dd>
-            <span>{{ userRef.id }}</span>
+            <span>{{ carRef.id }}</span>
           </dd>
-
-          <dt><span>Name</span></dt>
-          <dd>{{ userRef.name }}</dd>
-
+          <dt><span>Model</span></dt>
+          <dd>
+            <span>{{ carRef.model }}</span>
+          </dd>
+          <dt><span>Make</span></dt>
+          <dd>
+            <span>{{ carRef.make }}</span>
+          </dd>
+          <dt><span>Color</span></dt>
+          <dd>
+            <span>{{ carRef.color }}</span>
+          </dd>
+          <dt><span>Registration</span></dt>
+          <dd>
+            <span>{{ carRef.registration }}</span>
+          </dd>
+          <dt><span>User</span></dt>
+          <dd>
+            <span>{{ carRef.user?.login }}</span>
+          </dd>
         </dl>
 
-        <button type="submit" routerLink="../../" class="btn btn-info"><fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span></button>
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/car', carRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
       </div>
     }
   </div>

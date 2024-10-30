@@ -8,5 +8,7 @@ import java.time.LocalDateTime;
 public interface ReportRepository {
     Long numberOfAvailableSports(LocalDateTime startTime, LocalDateTime endTime) throws NoResultException;
 
-    Spot findFirstAvailableSpot(LocalDateTime startTime, LocalDateTime endTime);
+    Spot findFirstAvailableSpot(LocalDateTime startTime, Long maxDurationInHours);
+
+    Spot findFirstAvailableSpot(LocalDateTime startTime, LocalDateTime endTime, Long maxDurationInHours);
 }

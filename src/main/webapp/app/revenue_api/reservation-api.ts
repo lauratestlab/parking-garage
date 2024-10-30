@@ -1,18 +1,31 @@
-import {Injectable} from "@angular/core";
+import {inject, Injectable, OnInit} from "@angular/core";
 import {Observable} from "rxjs";
 import {Pricing} from "../model/pricing-model";
 import {HttpClient} from "@angular/common/http";
+import {ApplicationConfigService} from "../core/config/application-config.service";
+import {ReservationResponse} from "../model/reservation.model";
 
 @Injectable({
     providedIn: 'root'
 })
 
-export class ReservationApi {
-    private baseUrl = 'http://localhost:8080/api';
+export class ReservationApi{
+    private applicationConfigService = inject(ApplicationConfigService);
+
+    private baseUrl = this.applicationConfigService.getEndpointFor('api/reservation');
 
     constructor(private http: HttpClient) {}
 
-    addReservation(reservationDetail: any): Observable<any> {
-        return this.http.post<any>(`${this.baseUrl}/reservation`, reservationDetail);
+    getAll(): Observable<ReservationResponse[]> {
+        return this.http.get<ReservationResponse[]>(`${this.baseUrl}`);
     }
+
+    getAllForUser(): Observable<ReservationResponse[]> {
+        return this.http.get<ReservationResponse[]>(`${this.baseUrl}/my`);
+    }
+
+    add(reservationDetail: any): Observable<any> {
+        return this.http.post<any>(`${this.baseUrl}`, reservationDetail);
+    }
+
 }

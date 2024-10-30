@@ -79,26 +79,6 @@ export default class SignupComponent {
           .save({ login, email, password, firstName, lastName })
           .subscribe({ next: () => this.success.set(true), error: response => this.processError(response) });
     }
-
-    // // Extract form values into a SignupModel object
-    // const request: SignupModel = this.signupForm.value;
-    // console.log(request);
-    //
-    // if (this.signupForm.valid) {
-    //   console.log("Form is valid");
-    //
-    //   this.lotService.register(request).subscribe({
-    //     next: () => {
-    //       this.router.navigate(['activate']);
-    //     },
-    //     error: (err) => {
-    //       console.error("Error Received: ", err);
-    //     }
-    //   });
-    // } else {
-    //   console.log("Form submission failed");
-    // }
-
   }
 
   private processError(response: HttpErrorResponse): void {
@@ -111,38 +91,6 @@ export default class SignupComponent {
     }
   }
 
-
-  // register(): void {
-  //   this.storage.remove('auth-key');
-  //
-  //   const formValue = this.form.value;
-  //   // @ts-ignore
-  //   this.request.first_name = formValue.first_name;
-  //   // if (this.form.valid) {
-  //   //   alert("You've been registered!");
-  //   //
-  //   //   this.http.post<SignupModel>('http://localhost:8080/api/register', {
-  //   //     user: this.form.getRawValue()
-  //   //   }).subscribe({
-  //   //     next: (response) => {
-  //   //       console.log('response', response);  // Log the response here
-  //   //       this.router.navigate(['activate']);  // Navigate to the 'activate' page
-  //   //     },
-  //   //     error: (err) => {
-  //   //       console.error('Error during registration:', err);  // Log the error if any
-  //   //     },
-  //   //     complete: () => {
-  //   //       console.log('Registration request completed.');  // Optionally handle completion
-  //   //     }
-  //   //   });
-  //   //
-  //   // } else {
-  //   //   alert("Please fill out all fields correctly.");
-  //   // }
-
-  // login(): void {
-  //   this.router.navigate(['login']);
-  // }
   login(): void {
     this.router.navigate(['login']);
   }

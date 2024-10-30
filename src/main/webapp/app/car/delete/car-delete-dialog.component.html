@@ -1,13 +1,12 @@
 @if (car) {
   <form name="deleteForm" (ngSubmit)="confirmDelete(car.id!)">
     <div class="modal-header">
-      <h4 class="modal-title">Confirm delete operation</h4>
+      <h4 class="modal-title" data-cy="carDeleteDialogHeading">Confirm delete operation</h4>
     </div>
 
     <div class="modal-body">
       <app-alert-error></app-alert-error>
-
-      <p>Are you sure you want to delete user {{ car.id }}?</p>
+      <p id="app-delete-car-heading">Are you sure you want to delete Car {{ car.id }}?</p>
     </div>
 
     <div class="modal-footer">
@@ -15,7 +14,9 @@
         <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
       </button>
 
-      <button type="submit" class="btn btn-danger"><fa-icon icon="times"></fa-icon>&nbsp;<span>Delete</span></button>
+      <button id="app-confirm-delete-car" data-cy="entityConfirmDeleteButton" type="submit" class="btn btn-danger">
+        <fa-icon icon="times"></fa-icon>&nbsp;<span>Delete</span>
+      </button>
     </div>
   </form>
 }

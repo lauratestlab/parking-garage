@@ -1,7 +1,10 @@
 package com.example.parkinglot.web.rest;
 
+import com.example.parkinglot.dto.ReservationCompletionDTO;
 import com.example.parkinglot.dto.ReservationDTO;
+import com.example.parkinglot.dto.ReservationDTO2;
 import com.example.parkinglot.dto.ReservationInfoDTO;
+import com.example.parkinglot.dto.ReservationStartDTO;
 import com.example.parkinglot.service.ReservationService;
 import com.example.parkinglot.service.util.BarcodeUtils;
 import com.google.zxing.WriterException;
@@ -11,10 +14,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -40,6 +45,30 @@ public class ReservationResource {
         return reservationService.createReservation(reservationDTO);
     }
 
+    @PostMapping("/start")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ReservationInfoDTO startParking(@Valid @RequestBody ReservationStartDTO reservationDTO) {
+        LOG.debug("REST request to register customer at the counter");
+        return reservationService.startReservation(reservationDTO);
+    }
+
+    @PostMapping("/complete")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.OK)
+    public ReservationInfoDTO completeParking(@Valid @RequestBody ReservationCompletionDTO reservationDTO) {
+        LOG.debug("REST request to accept payment at the exit");
+        return reservationService.closeReservation(reservationDTO);
+    }
+
+    @PostMapping("/startReservation")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.OK)
+    public ReservationInfoDTO startReservation(@Valid @RequestBody ReservationCompletionDTO reservationDTO) {
+        LOG.debug("REST request to accept payment at the exit");
+        return reservationService.startReservation(reservationDTO);
+    }
+
     @GetMapping(value = "/qr/{confirmationCode}", produces = MediaType.IMAGE_JPEG_VALUE)
     @PermitAll
     public byte[] getReservationQR(@PathVariable String confirmationCode) {
@@ -57,16 +86,23 @@ public class ReservationResource {
 
     @GetMapping
     @PermitAll // Or @PreAuthorize("hasRole('ADMIN')")
-    public List<ReservationDTO> getAllReservations() {
+    public List<ReservationDTO2> getAllReservations() {
         LOG.debug("REST request to get all reservations");
         return reservationService.findAllReservations();
     }
 
     @GetMapping("/my")
     @ResponseStatus(HttpStatus.OK)
-    public List<ReservationDTO> getMyReservations() {
+    public List<ReservationDTO2> getMyReservations() {
         LOG.debug("REST request to get reservations for current user");
         return reservationService.findReservationsForCurrentUser();
     }
+    @GetMapping("/countByColor/{color}")
+    public long countCarsByColor(@PathVariable String color) {
+        LOG.debug("REST request to count cars by color: {}", color);
+        return reservationService.countCarsByColor(color);
+    }
+
+
 
 }

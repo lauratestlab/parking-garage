@@ -1,41 +1,48 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, OnInit, inject } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
 
 import SharedModule from 'app/shared/shared.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { IUser } from 'app/user/user.model';
+import { UserService } from 'app/user/service/user.service';
 import { ICar } from '../car.model';
 import { CarService } from '../service/car.service';
-
-const carTemplate = {} as ICar;
-
-const newCar: ICar = {
-} as ICar;
+import { CarFormGroup, CarFormService } from './car-form.service';
 
 @Component({
   standalone: true,
-  selector: 'app-user-mgmt-update',
+  selector: 'app-car-update',
   templateUrl: './car-update.component.html',
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })
-export default class UserManagementUpdateComponent implements OnInit {
-  authorities = signal<string[]>([]);
-  isSaving = signal(false);
+export class CarUpdateComponent implements OnInit {
+  isSaving = false;
+  car: ICar | null = null;
 
-  editForm = new FormGroup({
-    id: new FormControl(carTemplate.id),
-    name: new FormControl(carTemplate.name)
-  });
+  usersSharedCollection: IUser[] = [];
 
-  private carService = inject(CarService);
-  private route = inject(ActivatedRoute);
+  protected carService = inject(CarService);
+  protected carFormService = inject(CarFormService);
+  protected userService = inject(UserService);
+  protected activatedRoute = inject(ActivatedRoute);
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  editForm: CarFormGroup = this.carFormService.createCarFormGroup();
+
+  compareUser = (o1: IUser | null, o2: IUser | null): boolean => this.userService.compareUser(o1, o2);
 
   ngOnInit(): void {
-    this.route.data.subscribe(({ car }) => {
+    this.activatedRoute.data.subscribe(({ car }) => {
+      this.car = car;
       if (car) {
-        this.editForm.reset(car);
-      } else {
-        this.editForm.reset(newCar);
+        this.updateForm(car);
       }
+
+      this.loadRelationshipsOptions();
     });
   }
 
@@ -44,27 +51,46 @@ export default class UserManagementUpdateComponent implements OnInit {
   }
 
   save(): void {
-    this.isSaving.set(true);
-    const car = this.editForm.getRawValue();
+    this.isSaving = true;
+    const car = this.carFormService.getCar(this.editForm);
     if (car.id !== null) {
-      this.carService.update(car).subscribe({
-        next: () => this.onSaveSuccess(),
-        error: () => this.onSaveError(),
-      });
+      this.subscribeToSaveResponse(this.carService.update(car));
     } else {
-      this.carService.create(car).subscribe({
-        next: () => this.onSaveSuccess(),
-        error: () => this.onSaveError(),
-      });
+      this.subscribeToSaveResponse(this.carService.create(car));
     }
   }
 
-  private onSaveSuccess(): void {
-    this.isSaving.set(false);
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<ICar>>): void {
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
+  }
+
+  protected onSaveSuccess(): void {
     this.previousState();
   }
 
-  private onSaveError(): void {
-    this.isSaving.set(false);
+  protected onSaveError(): void {
+    // Api for inheritance.
+  }
+
+  protected onSaveFinalize(): void {
+    this.isSaving = false;
+  }
+
+  protected updateForm(car: ICar): void {
+    this.car = car;
+    this.carFormService.resetForm(this.editForm, car);
+
+    this.usersSharedCollection = this.userService.addUserToCollectionIfMissing<IUser>(this.usersSharedCollection, car.user);
+  }
+
+  protected loadRelationshipsOptions(): void {
+    this.userService
+      .query()
+      .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
+      .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing<IUser>(users, this.car?.user)))
+      .subscribe((users: IUser[]) => (this.usersSharedCollection = users));
   }
 }

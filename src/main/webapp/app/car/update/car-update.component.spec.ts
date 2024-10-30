@@ -1,95 +1,164 @@
-import { ComponentFixture, TestBed, fakeAsync, inject, tick, waitForAsync } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpResponse, provideHttpClient } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
+import { Subject, from, of } from 'rxjs';
 
-import { Authority } from 'app/config/authority.constants';
+import { IUser } from 'app/entities/user/user.model';
+import { UserService } from 'app/entities/user/service/user.service';
 import { CarService } from '../service/car.service';
-import { Car } from '../car.model';
+import { ICar } from '../car.model';
+import { CarFormService } from './car-form.service';
 
-import UserManagementUpdateComponent from './car-update.component';
+import { CarUpdateComponent } from './car-update.component';
 
-describe('User Management Update Component', () => {
-  let comp: UserManagementUpdateComponent;
-  let fixture: ComponentFixture<UserManagementUpdateComponent>;
-  let service: CarService;
+describe('Car Management Update Component', () => {
+  let comp: CarUpdateComponent;
+  let fixture: ComponentFixture<CarUpdateComponent>;
+  let activatedRoute: ActivatedRoute;
+  let carFormService: CarFormService;
+  let carService: CarService;
+  let userService: UserService;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [UserManagementUpdateComponent],
+      imports: [CarUpdateComponent],
       providers: [
         provideHttpClient(),
         FormBuilder,
         {
           provide: ActivatedRoute,
           useValue: {
-            data: of({ user: new User(123, 'model', 'make', 'color', 'registration', true, 'en', [Authority.USER], 'user') }),
+            params: from([{}]),
           },
         },
       ],
     })
-      .overrideTemplate(UserManagementUpdateComponent, '')
+      .overrideTemplate(CarUpdateComponent, '')
       .compileComponents();
-  }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(UserManagementUpdateComponent);
+    fixture = TestBed.createComponent(CarUpdateComponent);
+    activatedRoute = TestBed.inject(ActivatedRoute);
+    carFormService = TestBed.inject(CarFormService);
+    carService = TestBed.inject(CarService);
+    userService = TestBed.inject(UserService);
+
     comp = fixture.componentInstance;
-    service = TestBed.inject(CarService);
   });
 
-  describe('OnInit', () => {
-    it('Should load authorities and language on init', inject(
-      [],
-      fakeAsync(() => {
-        // GIVEN
-        jest.spyOn(service, 'authorities').mockReturnValue(of(['USER']));
+  describe('ngOnInit', () => {
+    it('Should call User query and add missing value', () => {
+      const car: ICar = { id: 456 };
+      const user: IUser = { id: 1723 };
+      car.user = user;
 
-        // WHEN
-        comp.ngOnInit();
+      const userCollection: IUser[] = [{ id: 26801 }];
+      jest.spyOn(userService, 'query').mockReturnValue(of(new HttpResponse({ body: userCollection })));
+      const additionalUsers = [user];
+      const expectedCollection: IUser[] = [...additionalUsers, ...userCollection];
+      jest.spyOn(userService, 'addUserToCollectionIfMissing').mockReturnValue(expectedCollection);
 
-        // THEN
-        expect(service.authorities).toHaveBeenCalled();
-        expect(comp.authorities()).toEqual(['USER']);
-      }),
-    ));
+      activatedRoute.data = of({ car });
+      comp.ngOnInit();
+
+      expect(userService.query).toHaveBeenCalled();
+      expect(userService.addUserToCollectionIfMissing).toHaveBeenCalledWith(
+        userCollection,
+        ...additionalUsers.map(expect.objectContaining),
+      );
+      expect(comp.usersSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should update editForm', () => {
+      const car: ICar = { id: 456 };
+      const user: IUser = { id: 24073 };
+      car.user = user;
+
+      activatedRoute.data = of({ car });
+      comp.ngOnInit();
+
+      expect(comp.usersSharedCollection).toContain(user);
+      expect(comp.car).toEqual(car);
+    });
   });
 
   describe('save', () => {
-    it('Should call update service on save for existing user', inject(
-      [],
-      fakeAsync(() => {
-        // GIVEN
+    it('Should call update service on save for existing entity', () => {
+      // GIVEN
+      const saveSubject = new Subject<HttpResponse<ICar>>();
+      const car = { id: 123 };
+      jest.spyOn(carFormService, 'getCar').mockReturnValue(car);
+      jest.spyOn(carService, 'update').mockReturnValue(saveSubject);
+      jest.spyOn(comp, 'previousState');
+      activatedRoute.data = of({ car });
+      comp.ngOnInit();
+
+      // WHEN
+      comp.save();
+      expect(comp.isSaving).toEqual(true);
+      saveSubject.next(new HttpResponse({ body: car }));
+      saveSubject.complete();
+
+      // THEN
+      expect(carFormService.getCar).toHaveBeenCalled();
+      expect(comp.previousState).toHaveBeenCalled();
+      expect(carService.update).toHaveBeenCalledWith(expect.objectContaining(car));
+      expect(comp.isSaving).toEqual(false);
+    });
+
+    it('Should call create service on save for new entity', () => {
+      // GIVEN
+      const saveSubject = new Subject<HttpResponse<ICar>>();
+      const car = { id: 123 };
+      jest.spyOn(carFormService, 'getCar').mockReturnValue({ id: null });
+      jest.spyOn(carService, 'create').mockReturnValue(saveSubject);
+      jest.spyOn(comp, 'previousState');
+      activatedRoute.data = of({ car: null });
+      comp.ngOnInit();
+
+      // WHEN
+      comp.save();
+      expect(comp.isSaving).toEqual(true);
+      saveSubject.next(new HttpResponse({ body: car }));
+      saveSubject.complete();
+
+      // THEN
+      expect(carFormService.getCar).toHaveBeenCalled();
+      expect(carService.create).toHaveBeenCalled();
+      expect(comp.isSaving).toEqual(false);
+      expect(comp.previousState).toHaveBeenCalled();
+    });
+
+    it('Should set isSaving to false on error', () => {
+      // GIVEN
+      const saveSubject = new Subject<HttpResponse<ICar>>();
+      const car = { id: 123 };
+      jest.spyOn(carService, 'update').mockReturnValue(saveSubject);
+      jest.spyOn(comp, 'previousState');
+      activatedRoute.data = of({ car });
+      comp.ngOnInit();
+
+      // WHEN
+      comp.save();
+      expect(comp.isSaving).toEqual(true);
+      saveSubject.error('This is an error!');
+
+      // THEN
+      expect(carService.update).toHaveBeenCalled();
+      expect(comp.isSaving).toEqual(false);
+      expect(comp.previousState).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Compare relationships', () => {
+    describe('compareUser', () => {
+      it('Should forward to userService', () => {
         const entity = { id: 123 };
-        jest.spyOn(service, 'update').mockReturnValue(of(entity));
-        comp.editForm.patchValue(entity);
-        // WHEN
-        comp.save();
-        tick(); // simulate async
-
-        // THEN
-        expect(service.update).toHaveBeenCalledWith(expect.objectContaining(entity));
-        expect(comp.isSaving()).toEqual(false);
-      }),
-    ));
-
-    it('Should call create service on save for new user', inject(
-      [],
-      fakeAsync(() => {
-        // GIVEN
-        const entity = { login: 'foo' } as User;
-        jest.spyOn(service, 'create').mockReturnValue(of(entity));
-        comp.editForm.patchValue(entity);
-        // WHEN
-        comp.save();
-        tick(); // simulate async
-
-        // THEN
-        expect(comp.editForm.getRawValue().id).toBeNull();
-        expect(service.create).toHaveBeenCalledWith(expect.objectContaining(entity));
-        expect(comp.isSaving()).toEqual(false);
-      }),
-    ));
+        const entity2 = { id: 456 };
+        jest.spyOn(userService, 'compareUser');
+        comp.compareUser(entity, entity2);
+        expect(userService.compareUser).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
   });
 });

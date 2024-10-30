@@ -1,14 +1,21 @@
 <div class="main-content">
-  <h2>
-    <span id="car-page-heading" data-cy="carManagementPageHeading">Cars</span>
+  <h2 id="page-heading" data-cy="CarHeading">
+    <span>Cars</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading()">
-        <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined"></fa-icon>
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
         <span>Refresh list</span>
       </button>
-      <button class="btn btn-primary" [routerLink]="['./new']">
-        <fa-icon icon="plus"></fa-icon> <span>Create a new car</span>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-car"
+        [routerLink]="['/car/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span>Create a new Car</span>
       </button>
     </div>
   </h2>
@@ -17,45 +24,87 @@
 
   <app-alert></app-alert>
 
-  @if (cars()) {
-    <div class="table-responsive">
-      <table class="table table-striped" aria-describedby="car-page-heading">
+  @if (cars?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span>No Cars found</span>
+    </div>
+  }
+
+  @if (cars && cars.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
         <thead>
-          <tr appSort [sortState]="sortState" (sortChange)="transition($event)">
-            <th scope="col" appSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-            <th scope="col" appSortBy="name"><span>Name</span> <fa-icon icon="sort"></fa-icon></th>
+          <tr appSort [sortState]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" appSortBy="id">
+              <div class="d-flex">
+                <span>ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" appSortBy="model">
+              <div class="d-flex">
+                <span>Model</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" appSortBy="make">
+              <div class="d-flex">
+                <span>Make</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" appSortBy="color">
+              <div class="d-flex">
+                <span>Color</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" appSortBy="registration">
+              <div class="d-flex">
+                <span>Registration</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" appSortBy="user.login">
+              <div class="d-flex">
+                <span>User</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
             <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
-          @for (car of cars(); track trackIdentity(car)) {
-            <tr>
+          @for (car of cars; track trackId(car)) {
+            <tr data-cy="entityTable">
               <td>
-                <a [routerLink]="['./', car.id, 'view']">{{ car.id }}</a>
+                <a [routerLink]="['/car', car.id, 'view']">{{ car.id }}</a>
               </td>
-              <td>{{ car.name }}</td>
+              <td>{{ car.model }}</td>
+              <td>{{ car.make }}</td>
+              <td>{{ car.color }}</td>
+              <td>{{ car.registration }}</td>
+              <td>
+                {{ car.user?.login }}
+              </td>
               <td class="text-end">
                 <div class="btn-group">
-                  <button type="submit" [routerLink]="['./', car.id, 'view']" class="btn btn-info btn-sm">
+                  <a [routerLink]="['/car', car.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
                     <fa-icon icon="eye"></fa-icon>
                     <span class="d-none d-md-inline">View</span>
-                  </button>
+                  </a>
 
-                  <button
-                    type="submit"
-                    [routerLink]="['./', car.id, 'edit']"
-                    queryParamsHandling="merge"
-                    class="btn btn-primary btn-sm"
-                  >
+                  <a [routerLink]="['/car', car.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
                     <fa-icon icon="pencil-alt"></fa-icon>
                     <span class="d-none d-md-inline">Edit</span>
-                  </button>
+                  </a>
 
-                  <button
-                    type="button"
-                    (click)="deleteCar(car)"
-                    class="btn btn-danger btn-sm"
-                  >
+                  <button type="submit" (click)="delete(car)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                     <fa-icon icon="times"></fa-icon>
                     <span class="d-none d-md-inline">Delete</span>
                   </button>
@@ -66,21 +115,22 @@
         </tbody>
       </table>
     </div>
-
+  }
+  @if (cars && cars.length > 0) {
     <div>
       <div class="d-flex justify-content-center">
-        <app-item-count [params]="{ page: page, totalItems: totalItems(), itemsPerPage: itemsPerPage }"></app-item-count>
+        <app-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></app-item-count>
       </div>
 
       <div class="d-flex justify-content-center">
         <ngb-pagination
-          [collectionSize]="totalItems()"
-          [(page)]="page"
+          [collectionSize]="totalItems"
+          [page]="page"
           [pageSize]="itemsPerPage"
           [maxSize]="5"
           [rotate]="true"
           [boundaryLinks]="true"
-          (pageChange)="transition()"
+          (pageChange)="navigateToPage($event)"
         ></ngb-pagination>
       </div>
     </div>

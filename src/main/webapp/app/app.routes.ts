@@ -6,7 +6,6 @@ import { HomeComponent } from './home/home.component';
 import { SpotComponent } from './spot/spot.component';
 import SignupComponent from "./account/signup/signup.component";
 import LoginComponent from "./login/login.component";
-// import { CarComponent } from './car/car.component';
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {Authority} from "./config/authority.constants";
 import {UserRouteAccessService} from "./core/auth/user-route-access.service";
@@ -45,11 +44,11 @@ export const routes: Routes = [
         canActivate: [UserRouteAccessService],
         loadChildren: () => import('./admin/admin.routes'),
     },
-       {
-    path: 'cars',
-    loadChildren: () => import('./car/car.route'),
-    title: 'cars',
-  },
+    {
+        path: 'car',
+        loadChildren: () => import('./car/car.routes'),
+        title: 'cars',
+    },
     ...errorRoute,
 ];
 

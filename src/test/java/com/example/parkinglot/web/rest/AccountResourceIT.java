@@ -107,7 +107,6 @@ class AccountResourceIT {
         user.setFirstName("john");
         user.setLastName("doe");
         user.setEmail("john.doe@gmail.com");
-        user.setImageUrl("http://placehold.it/50x50");
         user.setAuthorities(authorities);
         userService.createUser(user);
 
@@ -140,7 +139,6 @@ class AccountResourceIT {
         validUser.setFirstName("Alice");
         validUser.setLastName("Test");
         validUser.setEmail("test-register-valid@example.com");
-        validUser.setImageUrl("http://placehold.it/50x50");
         validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
         assertThat(userRepository.findOneByLogin("test-register-valid")).isEmpty();
 
@@ -163,7 +161,6 @@ class AccountResourceIT {
         invalidUser.setLastName("One");
         invalidUser.setEmail("funky@example.com");
         invalidUser.setActivated(true);
-        invalidUser.setImageUrl("http://placehold.it/50x50");
         invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         restAccountMockMvc
@@ -209,7 +206,6 @@ class AccountResourceIT {
         invalidUser.setLastName(lastName);
         invalidUser.setEmail(email);
         invalidUser.setActivated(activated);
-        invalidUser.setImageUrl("http://placehold.it/50x50");
         invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
         return invalidUser;
     }
@@ -224,7 +220,6 @@ class AccountResourceIT {
         firstUser.setFirstName("Alice");
         firstUser.setLastName("Something");
         firstUser.setEmail("alice@example.com");
-        firstUser.setImageUrl("http://placehold.it/50x50");
         firstUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // Duplicate login, different email
@@ -234,7 +229,6 @@ class AccountResourceIT {
         secondUser.setFirstName(firstUser.getFirstName());
         secondUser.setLastName(firstUser.getLastName());
         secondUser.setEmail("alice2@example.com");
-        secondUser.setImageUrl(firstUser.getImageUrl());
         secondUser.setCreatedBy(firstUser.getCreatedBy());
         secondUser.setCreatedDate(firstUser.getCreatedDate());
         secondUser.setLastModifiedBy(firstUser.getLastModifiedBy());
@@ -274,7 +268,6 @@ class AccountResourceIT {
         firstUser.setFirstName("Alice");
         firstUser.setLastName("Test");
         firstUser.setEmail("test-register-duplicate-email@example.com");
-        firstUser.setImageUrl("http://placehold.it/50x50");
         firstUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // Register first user
@@ -292,7 +285,6 @@ class AccountResourceIT {
         secondUser.setFirstName(firstUser.getFirstName());
         secondUser.setLastName(firstUser.getLastName());
         secondUser.setEmail(firstUser.getEmail());
-        secondUser.setImageUrl(firstUser.getImageUrl());
         secondUser.setAuthorities(new HashSet<>(firstUser.getAuthorities()));
 
         // Register second (non activated) user
@@ -314,7 +306,6 @@ class AccountResourceIT {
         userWithUpperCaseEmail.setFirstName(firstUser.getFirstName());
         userWithUpperCaseEmail.setLastName(firstUser.getLastName());
         userWithUpperCaseEmail.setEmail("TEST-register-duplicate-email@example.com");
-        userWithUpperCaseEmail.setImageUrl(firstUser.getImageUrl());
         userWithUpperCaseEmail.setAuthorities(new HashSet<>(firstUser.getAuthorities()));
 
         // Register third (not activated) user
@@ -347,7 +338,6 @@ class AccountResourceIT {
         validUser.setLastName("Guy");
         validUser.setEmail("badguy@example.com");
         validUser.setActivated(true);
-        validUser.setImageUrl("http://placehold.it/50x50");
         validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
 
         restAccountMockMvc
@@ -407,7 +397,6 @@ class AccountResourceIT {
         userDTO.setLastName("lastname");
         userDTO.setEmail("save-account@example.com");
         userDTO.setActivated(false);
-        userDTO.setImageUrl("http://placehold.it/50x50");
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
 
         restAccountMockMvc
@@ -419,7 +408,6 @@ class AccountResourceIT {
         assertThat(updatedUser.getLastName()).isEqualTo(userDTO.getLastName());
         assertThat(updatedUser.getEmail()).isEqualTo(userDTO.getEmail());
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
-        assertThat(updatedUser.getImageUrl()).isEqualTo(userDTO.getImageUrl());
         assertThat(updatedUser.isActivated()).isTrue();
         assertThat(updatedUser.getAuthorities()).isEmpty();
 
@@ -444,7 +432,6 @@ class AccountResourceIT {
         userDTO.setLastName("lastname");
         userDTO.setEmail("invalid email");
         userDTO.setActivated(false);
-        userDTO.setImageUrl("http://placehold.it/50x50");
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
 
         restAccountMockMvc
@@ -481,7 +468,6 @@ class AccountResourceIT {
         userDTO.setLastName("lastname");
         userDTO.setEmail("save-existing-email2@example.com");
         userDTO.setActivated(false);
-        userDTO.setImageUrl("http://placehold.it/50x50");
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
 
         restAccountMockMvc
@@ -512,7 +498,6 @@ class AccountResourceIT {
         userDTO.setLastName("lastname");
         userDTO.setEmail("save-existing-email-and-login@example.com");
         userDTO.setActivated(false);
-        userDTO.setImageUrl("http://placehold.it/50x50");
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
 
         restAccountMockMvc

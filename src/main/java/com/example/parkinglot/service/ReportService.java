@@ -29,6 +29,6 @@ public class ReportService {
     }
 
     public BigDecimal getRevenue(LocalDate start, LocalDate end) {
-        return reservationRepository.revenue(Status.ACTIVE, start.atStartOfDay(),  LocalDateTime.of(end, LocalTime.MAX)).orElse(BigDecimal.ZERO);
+        return reservationRepository.revenue(Status.COMPLETED, start.atStartOfDay(),  LocalDateTime.of(end, LocalTime.MAX)).orElse(BigDecimal.ZERO);
     }
 }

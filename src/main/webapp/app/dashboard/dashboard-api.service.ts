@@ -15,7 +15,7 @@ export class DashboardApiService {
   private resourceUrl = this.applicationConfigService.getEndpointFor('api/report');
 
 
-  getAvailableSpots(): Observable<any> {
+  getSpots(): Observable<any> {
     return this.http.get<any>(`${this.resourceUrl}/availableSpots`);
   }
 

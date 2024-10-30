@@ -1,0 +1,13 @@
+GET http://localhost:8080/api/admin/settings
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjg0MzMxNywiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzMwMjUxMzE3fQ.kUEWRqjOUJP6oMToabHzrZHWQY9c5bEzNJXeoG-4ipMUF_5qMV_BUIDReqQX0DQPaRAJFoAPEe2Zvf63CtDsXQ
+
+###
+PUT http://localhost:8080/api/admin/settings
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjg0MzMxNywiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzMwMjUxMzE3fQ.kUEWRqjOUJP6oMToabHzrZHWQY9c5bEzNJXeoG-4ipMUF_5qMV_BUIDReqQX0DQPaRAJFoAPEe2Zvf63CtDsXQ
+
+{
+  "name": "New name",
+  "address": "sadgasdg",
+  "memberDiscount": 50.0
+}

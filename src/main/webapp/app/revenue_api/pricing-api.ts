@@ -1,7 +1,8 @@
 import {HttpClient, HttpParams} from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import {inject, Injectable} from "@angular/core";
 import { map, Observable } from "rxjs";
 import { Pricing } from "../model/pricing-model";
+import {ApplicationConfigService} from "../core/config/application-config.service";
 
 
 @Injectable({
@@ -10,26 +11,25 @@ import { Pricing } from "../model/pricing-model";
 
 export class PricingService {
     // Endpoint for pricing data
-    private baseUrl = 'http://localhost:8080/api'
+    private applicationConfigService = inject(ApplicationConfigService);
+
+    private baseUrl = this.applicationConfigService.getEndpointFor('api/price');
 
     constructor(private http: HttpClient) { }
 
-    getPricingList(): Observable<Pricing[]> {
-        return this.http.get<Pricing[]>(`${this.baseUrl}/price`);
+    get(): Observable<Pricing[]> {
+        return this.http.get<Pricing[]>(`${this.baseUrl}`);
     }
 
-    addPrice(priceDetail: any): Observable<Pricing> {
-        return this.http.post<Pricing>(`${this.baseUrl}/price/update`, priceDetail);
+    add(priceDetail: any): Observable<Pricing> {
+        return this.http.post<Pricing>(`${this.baseUrl}/update`, priceDetail);
     }
 
-    updatePrice(id: number, price: number): Observable<Pricing> {
-        // Define URL with parameters
-        const url = `${this.baseUrl}/price/update/${id}`;
+    update(price: Pricing): Observable<Pricing> {
+        return this.http.put<Pricing>(`${this.baseUrl}/update/${price.duration}`, price);
+    }
 
-        // Set up query parameters
-        const params = new HttpParams().set('price', price.toString());
-
-        // Make HTTP PUT request
-        return this.http.put<Pricing>(url, {}, { params });
+    delete(id: number): Observable<void> {
+        return this.http.delete<void>(`${this.baseUrl}/${id}`);
     }
 }
