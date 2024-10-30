@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 // import { DashboardComponent } from './dashboard/dashboard.component';
 import { ReservationsComponent } from './reservations/reservations.component';
 import { PricingComponent } from './pricing/pricing.component';
+import { HomeComponent } from './home/home.component';
 import { SpotComponent } from './spot/spot.component';
 import SignupComponent from "./account/signup/signup.component";
 import LoginComponent from "./login/login.component";
@@ -20,6 +21,7 @@ export const routes: Routes = [
     { path: 'dashboard', component: DashboardComponent, title: "dashboard" },
     { path: 'reservations', component: ReservationsComponent },
     { path: 'pricing', component: PricingComponent },
+     { path: 'home', component: HomeComponent },
     // { path: 'car', component: CarComponent },
     // { path: '',   redirectTo: '/dashboard', pathMatch: 'full' },
     // { path: 'register', component: SignupComponent },
