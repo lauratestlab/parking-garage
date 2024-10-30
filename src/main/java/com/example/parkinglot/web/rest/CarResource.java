@@ -163,4 +163,18 @@ public class CarResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
     }
+    @GetMapping("/search")
+    public ResponseEntity<List<CarDTO>> searchCars(
+            @RequestParam(required = false) String model,
+            @RequestParam(required = false) String make,
+            @RequestParam(required = false) String color,
+            @RequestParam(required = false) String registration,
+            @RequestParam(required = false) Long userId
+    ) {
+        LOG.debug("REST request to search Cars with criteria: model={}, make={}, color={}, registration={}, userId={}",
+                model, make, color, registration, userId);
+        List<CarDTO> cars = carService.searchCars(model, make, color, registration, userId);
+        return ResponseEntity.ok(cars);
+    }
+
 }
