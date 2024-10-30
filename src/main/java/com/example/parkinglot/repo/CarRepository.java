@@ -45,4 +45,13 @@ public interface CarRepository extends JpaRepository<Car, Long> {
 
     @Query("SELECT COUNT(c) FROM Car c WHERE c.color = 'Red'")
     long countRedCars();
+
+    @Query("select car from Car car where car.user.login = :userLogin")
+    Page<Car> findAllByUser(Pageable pageable, @Param("userLogin") String userLogin);
+
+    @Query("select car from Car car left join fetch car.user where car.user.login = :userLogin")
+    Page<Car> findAllWithEagerRelationshipsByUser(Pageable pageable, @Param("userLogin") String userLogin);
+
+
+
 }

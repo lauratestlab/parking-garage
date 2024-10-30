@@ -1,28 +1,32 @@
 package com.example.parkinglot.web.rest;
 
-import com.example.parkinglot.repo.CarRepository;
-import com.example.parkinglot.service.CarService;
 import com.example.parkinglot.dto.CarDTO;
+import com.example.parkinglot.repo.CarRepository;
+import com.example.parkinglot.security.SecurityUtils;
+import com.example.parkinglot.service.CarService;
 import com.example.parkinglot.web.rest.errors.BadRequestAlertException;
 import com.example.parkinglot.web.util.HeaderUtil;
 import com.example.parkinglot.web.util.PaginationUtil;
 import com.example.parkinglot.web.util.ResponseUtil;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/cars")
@@ -109,10 +113,30 @@ public class CarResource {
     ) {
         LOG.debug("REST request to get a page of Cars");
         Page<CarDTO> page;
-        if (eagerload) {
-            page = carService.findAllWithEagerRelationships(pageable);
+        if (SecurityUtils.hasCurrentUserThisAuthority("ROLE_ADMIN")) {
+            //Page<CarDTO> page;
+            if (eagerload) {
+                page = carService.findAllWithEagerRelationships(pageable);
+            } else {
+                page = carService.findAll(pageable);
+            }
         } else {
-            page = carService.findAll(pageable);
+//            Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
+//            Page<CarDTO> page;
+//            if (eagerload) {
+//                page = carService.findAllWithEagerRelationshipsByUser(pageable, user);
+//            } else {
+//                page = carService.findAllByUser(pageable, user);
+//            }
+            Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
+            if (currentUserLogin.isPresent()) {
+                String userLogin = currentUserLogin.get();
+                page = eagerload ? carService.findAllWithEagerRelationshipsByUser(pageable, userLogin)
+                        : carService.findAllByUser(pageable, userLogin);
+            } else {
+
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.emptyList());
+            }
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
