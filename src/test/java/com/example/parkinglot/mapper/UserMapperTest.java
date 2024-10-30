@@ -39,7 +39,6 @@ class UserMapperTest {
         user.setEmail("johndoe@localhost");
         user.setFirstName("john");
         user.setLastName("doe");
-        user.setImageUrl("image_url");
         user.setCreatedBy(DEFAULT_LOGIN);
         user.setCreatedDate(Instant.now());
         user.setLastModifiedBy(DEFAULT_LOGIN);

@@ -30,7 +30,7 @@ public class Spot {
     @JsonIgnoreProperties(value = { "spots" }, allowSetters = true)
     private Floor floor;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "car_id")
     @JsonIgnoreProperties(value = { "spots" }, allowSetters = true)
     private Car car;

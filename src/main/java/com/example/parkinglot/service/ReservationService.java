@@ -57,7 +57,8 @@ public class ReservationService {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public ReservationInfoDTO createReservation(@Valid ReservationDTO reservationDTO) {
         Long maxDuration = priceService.maxDuration();
-        checkReservationDuration(reservationDTO, maxDuration);
+        Duration duration = Duration.between(reservationDTO.startTime(), reservationDTO.endTime());
+        checkReservationDuration(duration, maxDuration);
 
         String currentUserLogin = SecurityUtils.getCurrentUserLogin().orElse("");
 
@@ -79,6 +80,9 @@ public class ReservationService {
             return reservationInfoMapper.toDto(false, "No spots available", reservation);
         }
 
+        BigDecimal price = priceService.getPrice(duration.toSeconds() / 3600,  maxDuration, reservation.getUser() != null);
+
+        reservation.setPrice(price);
 
         reservation.setStartTime(reservationDTO.startTime());
         reservation.setEndTime(reservationDTO.endTime());
@@ -146,11 +150,15 @@ public class ReservationService {
 
         Duration duration = Duration.between(reservation.getEndTime(), reservation.getStartTime());
         long durationSeconds = duration.toSeconds();
+        long maxDuration = priceService.maxDuration();
 
-        Long maxDuration = priceService.maxDuration();
-        BigDecimal price = priceService.getPrice(durationSeconds / 3600,  maxDuration, reservation.getUser() != null);
+        // If it was not prepaid
+        if (reservation.getPrice().equals(BigDecimal.ZERO)) {
 
-        reservation.setPrice(price);
+            BigDecimal price = priceService.getPrice(durationSeconds / 3600, maxDuration, reservation.getUser() != null);
+
+            reservation.setPrice(price);
+        }
 
         reservation = reservationRepository.save(reservation);
 
@@ -160,6 +168,28 @@ public class ReservationService {
 
         String message = "";
         return reservationInfoMapper.toDto(true, message, durationSeconds > maxDuration * 3600, reservation);
+    }
+
+    public ReservationInfoDTO startReservation(@Valid ReservationCompletionDTO reservationCompletionDTO) {
+
+        Reservation reservation = reservationRepository.findOneByConfirmationCodeAndStatus(reservationCompletionDTO.confirmationCode(), Status.ORDERED)
+                .orElseThrow(() -> new ReservationNotFoundException("Reservation: " + reservationCompletionDTO.confirmationCode() + " not found"));
+
+        LocalDateTime startTime = reservation.getStartTime();
+        if (LocalDateTime.now().isBefore(startTime)) {
+            throw new RuntimeException("It's not your reservation time yet");
+        }
+
+        reservation.setStatus(Status.STARTED);
+
+        reservation = reservationRepository.save(reservation);
+
+        var spot = reservation.getSpot();
+        spot.setCar(reservation.getCar());
+        spotRepository.save(spot);
+
+        String message = "Spot: " + spot.getName() + "; Flor: " + spot.getFloor().getName();
+        return reservationInfoMapper.toDto(true, message, reservation);
     }
 
     public List<ReservationDTO> findAllReservations() {
@@ -195,8 +225,7 @@ public class ReservationService {
     }
 
 
-    private void checkReservationDuration(ReservationDTO reservationDTO , Long maxDuration) {
-        Duration between = Duration.between(reservationDTO.startTime(), reservationDTO.endTime());
+    private void checkReservationDuration(Duration between, Long maxDuration) {
         Duration duration = Duration.ofHours(maxDuration);
         if (between.getSeconds() > duration.toSeconds()) {
             throw new NotAllowedTimeException("You can't reserve more than for " + maxDuration + " hours");

@@ -60,6 +60,14 @@ public class ReservationResource {
         return reservationService.closeReservation(reservationDTO);
     }
 
+    @PostMapping("/startReservation")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.OK)
+    public ReservationInfoDTO startReservation(@Valid @RequestBody ReservationCompletionDTO reservationDTO) {
+        LOG.debug("REST request to accept payment at the exit");
+        return reservationService.startReservation(reservationDTO);
+    }
+
     @GetMapping(value = "/qr/{confirmationCode}", produces = MediaType.IMAGE_JPEG_VALUE)
     @PermitAll
     public byte[] getReservationQR(@PathVariable String confirmationCode) {

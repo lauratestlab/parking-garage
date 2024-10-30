@@ -98,9 +98,6 @@ databaseChangeLog:
                   name: activated
                   type: BOOLEAN
               - column:
-                  name: image_url
-                  type: VARCHAR(256)
-              - column:
                   name: activation_key
                   type: VARCHAR(20)
               - column:
