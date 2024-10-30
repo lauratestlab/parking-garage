@@ -12,7 +12,7 @@ export class DashboardApiService {
   private http = inject(HttpClient);
   private applicationConfigService = inject(ApplicationConfigService);
 
-  private resourceUrl = this.applicationConfigService.getEndpointFor('api/report');
+  private resourceUrl = this.applicationConfigService.getEndpointFor('api/admin/report');
 
 
   getSpots(): Observable<any> {

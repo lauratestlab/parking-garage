@@ -11,14 +11,12 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 
 @Repository
-public class ReportRepositoryImpl implements ReportRepository {
+public class CriteriaBasedRepositoryImpl implements CriteriaBasedRepository {
 
     private final EntityManager em;
-    private final PriceRepository priceRepository;
 
-    public ReportRepositoryImpl(EntityManager em, PriceRepository priceRepository) {
+    public CriteriaBasedRepositoryImpl(EntityManager em, PriceRepository priceRepository) {
         this.em = em;
-        this.priceRepository = priceRepository;
     }
 
     @Override

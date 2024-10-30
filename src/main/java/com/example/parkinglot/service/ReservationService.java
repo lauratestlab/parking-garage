@@ -1,7 +1,6 @@
 package com.example.parkinglot.service;
 
 
-import com.example.parkinglot.config.Constants;
 import com.example.parkinglot.dto.*;
 import com.example.parkinglot.entity.*;
 import com.example.parkinglot.enums.Status;
@@ -35,19 +34,19 @@ public class ReservationService {
     private final PaymentService paymentService;
     private final ReservationRepository reservationRepository;
     private final CarService carService;
-    private final ReportRepository reportRepository;
+    private final CriteriaBasedRepository criteriaBasedRepository;
     private final MailService mailService;
     private final PriceService priceService;
     private final ReservationMapper reservationMapper;
     private final SpotRepository spotRepository;
     private final ReservationInfoMapper reservationInfoMapper;
 
-    public ReservationService(UserRepository userRepository, PaymentService paymentService, ReservationRepository reservationRepository, CarService carService, CarRepository carRepository, PaymentMethodRepository paymentMethodRepository, PaymentMethodMapper paymentMethodMapper, ReportRepository reportRepository, MailService mailService, CarMapper carMapper, PriceService priceService, ReservationMapper reservationMapper, SpotRepository spotRepository, ReservationInfoMapper reservationInfoMapper) {
+    public ReservationService(UserRepository userRepository, PaymentService paymentService, ReservationRepository reservationRepository, CarService carService, CarRepository carRepository, PaymentMethodRepository paymentMethodRepository, PaymentMethodMapper paymentMethodMapper, CriteriaBasedRepository criteriaBasedRepository, MailService mailService, CarMapper carMapper, PriceService priceService, ReservationMapper reservationMapper, SpotRepository spotRepository, ReservationInfoMapper reservationInfoMapper) {
         this.userRepository = userRepository;
         this.paymentService = paymentService;
         this.reservationRepository = reservationRepository;
         this.carService = carService;
-        this.reportRepository = reportRepository;
+        this.criteriaBasedRepository = criteriaBasedRepository;
         this.mailService = mailService;
         this.priceService = priceService;
         this.reservationMapper = reservationMapper;
@@ -76,7 +75,7 @@ public class ReservationService {
 
         Spot spot;
         try {
-            spot = reportRepository.findFirstAvailableSpot(reservationDTO.startTime(), reservationDTO.endTime(), maxDuration);
+            spot = criteriaBasedRepository.findFirstAvailableSpot(reservationDTO.startTime(), reservationDTO.endTime(), maxDuration);
         } catch (NoResultException e) {
             return reservationInfoMapper.toDto(false, "No spots available", reservation);
         }
@@ -98,6 +97,10 @@ public class ReservationService {
 
         reservationRepository.save(reservation);
 
+        if (user == null) {
+            user = new User();
+            user.setEmail(reservationDTO.email());
+        }
         mailService.sendOrderInfoMail(user, reservation.getConfirmationCode());
 
         String message = "Spot: " + spot.getName() + "; Flor: " + spot.getFloor().getName();
@@ -117,7 +120,7 @@ public class ReservationService {
 
         Spot spot;
         try {
-            spot = reportRepository.findFirstAvailableSpot(reservation.getStartTime(), maxDurationInHours);
+            spot = criteriaBasedRepository.findFirstAvailableSpot(reservation.getStartTime(), maxDurationInHours);
         } catch (NoResultException e) {
             return reservationInfoMapper.toDto(false, "No spots available", reservation);
         }

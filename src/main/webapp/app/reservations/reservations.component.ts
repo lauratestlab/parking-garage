@@ -5,17 +5,21 @@ import {ReservationApi} from "../revenue_api/reservation-api";
 import {ReservationResponse} from "../model/reservation.model";
 import { AccountService } from 'app/core/auth/account.service';
 import HasAnyAuthorityDirective from "../shared/auth/has-any-authority.directive";
+import {AlertErrorComponent} from "../shared/alert/alert-error.component";
+import {AlertComponent} from "../shared/alert/alert.component";
 
 
 @Component({
   selector: 'app-reservations',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    CommonModule,
-    FormsModule,
-    HasAnyAuthorityDirective
-  ],
+    imports: [
+        ReactiveFormsModule,
+        CommonModule,
+        FormsModule,
+        HasAnyAuthorityDirective,
+        AlertErrorComponent,
+        AlertComponent
+    ],
   templateUrl: './reservations.component.html',
   styleUrl: './reservations.component.css'
 })
