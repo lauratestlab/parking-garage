@@ -5,14 +5,16 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjIyO
 
 {
   "userId": 1,
-  "startTime": "2025-04-23T18:25:43.511Z",
-  "endTime": "2025-04-28T18:25:43.511Z",
+  "startTime": "2024-10-30T14:36:00.511Z",
+  "endTime": "2024-10-30T18:27:43.511Z",
   "car": {
     "color": "red",
     "make": "Ford",
     "model": "Fusion",
     "registration": "GSDD#34534"
   },
+  "saveCar": true,
+  "saveCreditCard": true,
   "paymentMethod": {
     "card_number": "374245455400126",
     "ccv": 343,
@@ -26,4 +28,36 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjIyO
 }
 
 ###
-GET http://localhost:8080/api/reservation/qr/FDF434634
+POST http://localhost:8080/api/reservation/startReservation
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjg0MzMxNywiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzMwMjUxMzE3fQ.kUEWRqjOUJP6oMToabHzrZHWQY9c5bEzNJXeoG-4ipMUF_5qMV_BUIDReqQX0DQPaRAJFoAPEe2Zvf63CtDsXQ
+
+{
+  "confirmationCode": "uhTty5afID9hdDcfrxXy"
+}
+
+###
+GET http://localhost:8080/api/reservation/qr/QmomeSzP3RWGugNjGqHd
+
+###
+###
+POST http://localhost:8080/api/reservation/start
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjg0MzMxNywiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzMwMjUxMzE3fQ.kUEWRqjOUJP6oMToabHzrZHWQY9c5bEzNJXeoG-4ipMUF_5qMV_BUIDReqQX0DQPaRAJFoAPEe2Zvf63CtDsXQ
+
+{
+  "registration": "YRH45645",
+  "model": "Tundra",
+  "make": "Toyota",
+  "color": "Gray",
+  "email": "user@localhost"
+}
+
+###
+POST http://localhost:8080/api/reservation/complete
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjg0MzMxNywiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzMwMjUxMzE3fQ.kUEWRqjOUJP6oMToabHzrZHWQY9c5bEzNJXeoG-4ipMUF_5qMV_BUIDReqQX0DQPaRAJFoAPEe2Zvf63CtDsXQ
+
+{
+  "confirmationCode": "6AnAwqJV2vqXKiqxAkMX"
+}

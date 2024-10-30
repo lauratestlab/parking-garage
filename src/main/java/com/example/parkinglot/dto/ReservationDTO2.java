@@ -2,6 +2,7 @@ package com.example.parkinglot.dto;
 
 import com.example.parkinglot.entity.PaymentMethod;
 import com.example.parkinglot.entity.Reservation;
+import com.example.parkinglot.enums.Status;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -20,7 +21,8 @@ public record ReservationDTO2(
         Long spotId,
         Long carId,
         BigDecimal price,
-        String confirmationCode
+        String confirmationCode,
+        Status status
 )
 
 
@@ -34,7 +36,8 @@ public record ReservationDTO2(
                 reservation.getSpot() != null ? reservation.getSpot().getId() : null,
                 reservation.getCar() != null ? reservation.getCar().getId() : null,
                 reservation.getPrice(),
-                reservation.getConfirmationCode()
+                reservation.getConfirmationCode(),
+                reservation.getStatus()
 
         );
     }

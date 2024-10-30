@@ -1,6 +1,7 @@
 package com.example.parkinglot.service;
 
 import com.example.parkinglot.entity.Car;
+import com.example.parkinglot.exception.CarNotFoundException;
 import com.example.parkinglot.repo.CarRepository;
 import com.example.parkinglot.dto.CarDTO;
 import com.example.parkinglot.mapper.CarMapper;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -42,6 +44,15 @@ public class CarService {
         return carMapper.toDto(car);
     }
 
+    public Car findOrSaveCar(Long carId, CarDTO carDTO) {
+        if (carDTO != null) {
+            return carMapper.toEntity(save(carDTO));
+        } else {
+            return carRepository.findByUserIsCurrentUserAndId(carId)
+                    .orElseThrow(() -> new CarNotFoundException("Car with id " + carId + " was not found in the database"));
+        }
+    }
+
     /**
      * Update a car.
      *
@@ -65,7 +76,7 @@ public class CarService {
         LOG.debug("Request to partially update Car : {}", carDTO);
 
         return carRepository
-            .findById(carDTO.id())
+            .findById(carDTO.getId())
             .map(existingCar -> {
                 carMapper.partialUpdate(existingCar, carDTO);
 
@@ -124,5 +135,11 @@ public class CarService {
         LOG.debug("Request to get all Cars with eager load for user: {}", userLogin);
         return carRepository.findAllWithEagerRelationshipsByUser(pageable, userLogin).map(carMapper::toDto);
     }
+
+    public List<CarDTO> searchCars(String model, String make, String color, String registration, Long userId) {
+        List<Car> cars = carRepository.searchCars(model, make, color, registration, userId);
+        return cars.stream().map(carMapper::toDto).collect(Collectors.toList());
+    }
+
 
 }

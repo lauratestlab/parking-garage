@@ -1,3 +1,7 @@
+
+body {
+   background-color: #1c1e22;
+} 
 .content {
     display: flex;
     flex-direction: column;

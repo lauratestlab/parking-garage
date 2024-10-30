@@ -27,6 +27,10 @@ public class Floor {
     @Column(name = "name", length = 20, nullable = false)
     private String name;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "garage_id")
+    private Garage garage;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "floor")
     @JsonIgnoreProperties(value = { "floor" }, allowSetters = true)
     private Set<Spot> spots = new HashSet<>();

@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("/api/report")
+@RequestMapping("/api/admin/report")
 public class ReportController {
 
     private final ReportService reportService;

@@ -61,7 +61,7 @@ public class PriceController {
     //Delete based on id
 //    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePrice(@PathVariable("id") int id) {
+    public ResponseEntity<Void> deletePrice(@PathVariable("id") Long id) {
         if (!priceRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }

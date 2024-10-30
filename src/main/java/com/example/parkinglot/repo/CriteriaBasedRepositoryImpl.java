@@ -11,11 +11,11 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 
 @Repository
-public class ReportRepositoryImpl implements ReportRepository {
+public class CriteriaBasedRepositoryImpl implements CriteriaBasedRepository {
 
     private final EntityManager em;
 
-    public ReportRepositoryImpl(EntityManager em) {
+    public CriteriaBasedRepositoryImpl(EntityManager em, PriceRepository priceRepository) {
         this.em = em;
     }
 
@@ -28,7 +28,7 @@ public class ReportRepositoryImpl implements ReportRepository {
 
         Join<Spot, Reservation> joinedRoot = root.join("reservations", JoinType.LEFT);
 
-        joinedRoot.on(cb.lessThan(joinedRoot.get("startTime"), endTime), cb.greaterThan(joinedRoot.get("endTime"), startTime), cb.equal(joinedRoot.get("status"), Status.ACTIVE));
+        joinedRoot.on(cb.lessThan(joinedRoot.get("startTime"), endTime), cb.greaterThan(joinedRoot.get("endTime"), startTime), cb.equal(joinedRoot.get("status"), Status.STARTED));
 
         cq.where(cb.isNull(joinedRoot.get("id")));
 
@@ -38,7 +38,14 @@ public class ReportRepositoryImpl implements ReportRepository {
     }
 
     @Override
-    public Spot findFirstAvailableSpot(LocalDateTime startTime, LocalDateTime endTime) throws NoResultException {
+    public Spot findFirstAvailableSpot(LocalDateTime startTime, Long maxDurationInHours) throws NoResultException {
+        LocalDateTime endTime = startTime.plusHours(maxDurationInHours);
+        return findFirstAvailableSpot(startTime, endTime, maxDurationInHours);
+    }
+
+    @Override
+    public Spot findFirstAvailableSpot(LocalDateTime startTime, LocalDateTime endTime, Long maxDurationInHours) throws NoResultException {
+
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Spot> cq = cb.createQuery(Spot.class);
 
@@ -46,7 +53,13 @@ public class ReportRepositoryImpl implements ReportRepository {
 
         Join<Spot, Reservation> joinedRoot = root.join("reservations", JoinType.LEFT);
 
-        joinedRoot.on(cb.lessThan(joinedRoot.get("startTime"), endTime), cb.greaterThan(joinedRoot.get("endTime"), startTime), cb.equal(joinedRoot.get("status"), Status.ACTIVE));
+        CriteriaBuilder.Coalesce<LocalDateTime> coalesce = cb.coalesce();
+        coalesce.value(joinedRoot.get("endTime"));
+        coalesce.value(cb.function("add_hours", LocalDateTime.class, joinedRoot.get("startTime"), cb.literal(maxDurationInHours)));
+
+        CriteriaBuilder.In<Object> status = cb.in(joinedRoot.get("status")).value(Status.STARTED).value(Status.ORDERED);
+
+        joinedRoot.on(cb.lessThan(joinedRoot.get("startTime"), endTime), cb.greaterThan(coalesce, startTime), status);
 
         cq.where(cb.isNull(joinedRoot.get("id")));
 

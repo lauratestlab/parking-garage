@@ -1,10 +1,13 @@
 package com.example.parkinglot.service;
 
+import com.example.parkinglot.config.Constants;
 import com.example.parkinglot.entity.Floor;
 import com.example.parkinglot.repo.FloorRepository;
 import com.example.parkinglot.dto.FloorDTO;
 import com.example.parkinglot.mapper.FloorMapper;
 import java.util.Optional;
+
+import com.example.parkinglot.repo.GarageRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -24,10 +27,12 @@ public class FloorService {
     private final FloorRepository floorRepository;
 
     private final FloorMapper floorMapper;
+    private final GarageRepository garageRepository;
 
-    public FloorService(FloorRepository floorRepository, FloorMapper floorMapper) {
+    public FloorService(FloorRepository floorRepository, FloorMapper floorMapper, GarageRepository garageRepository) {
         this.floorRepository = floorRepository;
         this.floorMapper = floorMapper;
+        this.garageRepository = garageRepository;
     }
 
     /**
@@ -39,6 +44,7 @@ public class FloorService {
     public FloorDTO save(FloorDTO floorDTO) {
         LOG.debug("Request to save Floor : {}", floorDTO);
         Floor floor = floorMapper.toEntity(floorDTO);
+        floor.setGarage(garageRepository.getReferenceById(Constants.DEFAULT_GARAGE_ID));
         floor = floorRepository.save(floor);
         return floorMapper.toDto(floor);
     }

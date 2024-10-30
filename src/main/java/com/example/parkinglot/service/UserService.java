@@ -114,7 +114,6 @@ public class UserService {
         if (userDTO.getEmail() != null) {
             newUser.setEmail(userDTO.getEmail().toLowerCase());
         }
-        newUser.setImageUrl(userDTO.getImageUrl());
         // new user is not active
         newUser.setActivated(false);
         // new user gets registration key
@@ -144,7 +143,6 @@ public class UserService {
         if (userDTO.getEmail() != null) {
             user.setEmail(userDTO.getEmail().toLowerCase());
         }
-        user.setImageUrl(userDTO.getImageUrl());
         String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
         user.setPassword(encryptedPassword);
         user.setResetKey(RandomUtil.generateResetKey());
@@ -182,7 +180,6 @@ public class UserService {
                 if (userDTO.getEmail() != null) {
                     user.setEmail(userDTO.getEmail().toLowerCase());
                 }
-                user.setImageUrl(userDTO.getImageUrl());
                 user.setActivated(userDTO.isActivated());
                 Set<Authority> managedAuthorities = user.getAuthorities();
                 managedAuthorities.clear();
@@ -217,7 +214,7 @@ public class UserService {
      * @param email     email id of user.
      * @param imageUrl  image URL of user.
      */
-    public void updateUser(String firstName, String lastName, String email , String imageUrl) {
+    public void updateUser(String firstName, String lastName, String email) {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
@@ -226,7 +223,6 @@ public class UserService {
                 if (email != null) {
                     user.setEmail(email.toLowerCase());
                 }
-                user.setImageUrl(imageUrl);
                 userRepository.save(user);
                 LOG.debug("Changed Information for User: {}", user);
             });

@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient, HttpParams, HttpResponse} from "@angular/common/http";
-import {Pricing} from "../model/pricing-model";
+import {HttpClient, HttpParams} from "@angular/common/http";
+import { Pricing } from "../model/pricing-model";
 import {Observable} from "rxjs";
 import {Revenue} from "../model/revenue.model";
 import {ApplicationConfigService} from "../core/config/application-config.service";
@@ -16,6 +16,8 @@ export class DashboardApiService {
 
   private resourceUrl = this.applicationConfigService.getEndpointFor('api/report');
   private carUrl = this.applicationConfigService.getEndpointFor('api/reservation');
+  private resourceUrl = this.applicationConfigService.getEndpointFor('api/admin/report');
+
 
   getSpots(): Observable<any> {
     return this.http.get<any>(`${this.resourceUrl}/availableSpots`);

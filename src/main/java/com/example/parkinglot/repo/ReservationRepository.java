@@ -20,17 +20,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     long countByCarColor(String color);
 
 
-    @Query("SELECT EXISTS(" +
-            " SELECT spot " +
-            " FROM Spot spot LEFT JOIN Reservation reservation ON spot = reservation.spot " +
-            "   AND reservation.startTime < :endTime AND reservation.endTime > :startTime " +
-            "   AND reservation.status = :status" +
-            " WHERE reservation IS NULL" +
-            ")"
-    )
-    boolean existsAvailableSpots(LocalDateTime startTime, LocalDateTime endTime, Status status);
-
-
     @Query("SELECT SUM(reservation.price) FROM Reservation reservation WHERE reservation.status = :status AND reservation.startTime BETWEEN :start AND :end")
     Optional<BigDecimal> revenue(Status status, LocalDateTime start, LocalDateTime end);
+
+    Optional<Reservation> findOneByConfirmationCodeAndStatus(String confirmationCode, Status status);
 }

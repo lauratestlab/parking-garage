@@ -25,7 +25,6 @@ import java.util.Optional;
  * REST controller for managing the current user's account.
  */
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api")
 public class AccountResource {
 
@@ -118,8 +117,7 @@ public class AccountResource {
         userService.updateUser(
             userDTO.getFirstName(),
             userDTO.getLastName(),
-            userDTO.getEmail(),
-            userDTO.getImageUrl()
+            userDTO.getEmail()
         );
     }
 

@@ -11,6 +11,7 @@ const routes: Routes = [
     loadChildren: () => import('./floor/floor.routes'),
     title: 'Floors',
   },
+
   {
     path: 'spot',
     loadChildren: () => import('./spot/spot.routes'),

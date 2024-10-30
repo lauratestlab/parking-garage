@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 public class Price {
 
     @Id
-    private int duration;
+    private Long duration;
 
     private BigDecimal price;
 }

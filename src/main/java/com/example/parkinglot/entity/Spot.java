@@ -30,8 +30,12 @@ public class Spot {
     @JsonIgnoreProperties(value = { "spots" }, allowSetters = true)
     private Floor floor;
 
+    @ManyToOne
+    @JoinColumn(name = "car_id")
+    @JsonIgnoreProperties(value = { "spots" }, allowSetters = true)
+    private Car car;
+
     @OneToMany(mappedBy = "spot", fetch = FetchType.LAZY)
     private List<Reservation> reservations = new ArrayList<>();
-
 
 }
