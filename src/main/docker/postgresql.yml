@@ -2,8 +2,8 @@ name: postgres
 services:
   postgresql:
     image: postgres:latest
-    volumes:
-      - ./postgresql/:/var/lib/postgresql/data/
+#    volumes:
+#      - ./postgresql/:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres

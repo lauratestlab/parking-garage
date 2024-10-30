@@ -12,8 +12,9 @@ Content-Type: application/json
 
 }
 
+
 ###
-GET http://localhost:8080/api/activate?key=CXADFrBdgFPrCvzvXGe6
+GET http://localhost:8080/api/activate?key=kXyGWB3jRjaRUpgUFn24
 
 ###
 POST http://localhost:8080/api/authenticate
@@ -51,7 +52,8 @@ Accept: application/json
 
 ###
 GET http://localhost:8080/api/users
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcyOTE5ODk3NywiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzI5MTEyNTc3fQ.MGuJqSAzkgELEtne1n8Fsa_zmGWTBEN5xfs0c2wfL5JQWc_-nNCVylq1aygUh9Ksp_sd9FZUMohzxtNcXbAxnA
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjIxNTI2MywiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzI5NjIzMjYzfQ.4XBZHMdmEwXcd8qBEl2KaRwtSM71Ixa_CMFYhysp7d9A0FEqn8EbBBejxwtuhPGGrBWuqIQMM-GS3zNjMqXRRw
 
 ###
 GET http://localhost:8080/api/users?login=test

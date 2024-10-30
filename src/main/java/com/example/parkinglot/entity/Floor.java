@@ -1,9 +1,16 @@
 package com.example.parkinglot.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -12,10 +19,15 @@ public class Floor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long floorId;
+    @Column(name = "floor_id")
+    private Long id;
 
-    private int name;
+    @NotNull
+    @Size(min = 1, max = 20)
+    @Column(name = "name", length = 20, nullable = false)
+    private String name;
 
-    @OneToMany(mappedBy = "floor", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Spot> spots;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "floor")
+    @JsonIgnoreProperties(value = { "floor" }, allowSetters = true)
+    private Set<Spot> spots = new HashSet<>();
 }

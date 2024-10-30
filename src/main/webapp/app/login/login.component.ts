@@ -3,11 +3,12 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { Router, RouterModule } from '@angular/router';
 import { LoginService } from 'app/login/login.service';
 import { AccountService } from 'app/core/auth/account.service';
+import {NgIf} from "@angular/common";
 
 @Component({
   standalone: true,
   selector: 'app-login',
-  imports: [FormsModule, ReactiveFormsModule, RouterModule],
+  imports: [FormsModule, ReactiveFormsModule, RouterModule, NgIf],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
@@ -38,24 +39,20 @@ export default class LoginComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.username().nativeElement.focus();
   }
-
+    
   login(): void {
     this.loginService.login(this.loginForm.getRawValue()).subscribe({
       next: () => {
         this.authenticationError.set(false);
         if (!this.router.getCurrentNavigation()) {
           // There were no routing during login (eg from navigationToStoredUrl)
-          this.router.navigate(['']);
+          this.router.navigate(['dashboard']);
         }
       },
       error: () => this.authenticationError.set(true),
     });
 
   }
-    register(): void {
-      this.router.navigate(['register']);
-     
-    }
 
 }
 

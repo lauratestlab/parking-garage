@@ -1,19 +1,52 @@
 import { Routes } from '@angular/router';
-import { DashboardComponent } from './dashboard/dashboard.component';
+// import { DashboardComponent } from './dashboard/dashboard.component';
 import { ReservationsComponent } from './reservations/reservations.component';
 import { PricingComponent } from './pricing/pricing.component';
-import { MembersComponent } from './members/members.component';
-import {SignupComponent} from "./signup/signup.component";
+import { SpotComponent } from './spot/spot.component';
+import SignupComponent from "./account/signup/signup.component";
 import LoginComponent from "./login/login.component";
-import {ActivatePageComponent} from "./activate-page/activate-page.component";
+import {DashboardComponent} from "./dashboard/dashboard.component";
+import {Authority} from "./config/authority.constants";
+import {UserRouteAccessService} from "./core/auth/user-route-access.service";
+import { errorRoute } from './layouts/error/error.route';
+// import {ConfirmationComponent} from "./confirmation/confirmation.component";
 
 export const routes: Routes = [
-    { path: 'register', component: SignupComponent },
-    { path: 'login', component: LoginComponent },
-    { path: 'activate', component: ActivatePageComponent },
+    // { path: 'register', component: SignupComponent },
+    { path: 'login', component: LoginComponent, title: "login" },
+    // { path: 'activate', component: ActivatePageComponent },
+    // { path: 'account/activate', component: ConfirmationComponent },
+    { path: 'dashboard', component: DashboardComponent, title: "dashboard" },
+    { path: 'reservations', component: ReservationsComponent },
+    { path: 'pricing', component: PricingComponent },
+    // { path: '',   redirectTo: '/dashboard', pathMatch: 'full' },
+    // { path: 'register', component: SignupComponent },
+    // { path: 'login', component: LoginComponent },
+    // { path: 'activate', component: ActivatePageComponent },
     // { path: 'dashboard', component: DashboardComponent },
     // { path: 'reservations', component: ReservationsComponent },
     // { path: 'pricing', component: PricingComponent },
     // { path: 'members', component: MembersComponent },
-    { path: '',   redirectTo: '/register', pathMatch: 'full' }
+
+    {
+        path: 'account',
+        loadChildren: () => import('./account/account.route'),
+        title: 'Account'
+    },
+    {
+        path: 'admin',
+        data: {
+            authorities: [Authority.ADMIN],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () => import('./admin/admin.routes'),
+    },
+    {
+        path: 'car',
+        loadChildren: () => import('./car/car.routes'),
+        title: 'cars',
+    },
+    ...errorRoute,
 ];
+
+export default routes;

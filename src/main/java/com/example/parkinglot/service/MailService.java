@@ -1,7 +1,9 @@
 package com.example.parkinglot.service;
 
 import com.example.parkinglot.config.ApplicationProperties;
+import com.example.parkinglot.dto.QRModel;
 import com.example.parkinglot.entity.User;
+import com.google.zxing.WriterException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.slf4j.Logger;
@@ -15,8 +17,11 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
+
+import static com.example.parkinglot.service.util.BarcodeUtils.generateQRCodeImage;
 
 @Service
 public class MailService {
@@ -24,6 +29,8 @@ public class MailService {
     private static final Logger LOG = LoggerFactory.getLogger(MailService.class);
 
     private static final String USER = "user";
+
+    private static final String QR = "qr";
 
     private static final String BASE_URL = "baseUrl";
 
@@ -78,11 +85,15 @@ public class MailService {
     }
 
     @Async
-    public void sendEmailFromTemplate(User user, String templateName, String titleKey) {
-        this.sendEmailFromTemplateSync(user, templateName, titleKey);
+    public void sendEmailFromTemplate(User user, String templateName, String titleKey, QRModel qr) {
+        this.sendEmailFromTemplateSync(user, templateName, titleKey, qr);
     }
 
     private void sendEmailFromTemplateSync(User user, String templateName, String titleKey) {
+        sendEmailFromTemplateSync(user, templateName, titleKey, null);
+    }
+
+    private void sendEmailFromTemplateSync(User user, String templateName, String titleKey, QRModel qr) {
         if (user.getEmail() == null) {
             LOG.debug("Email doesn't exist for user '{}'", user.getLogin());
             return;
@@ -90,6 +101,7 @@ public class MailService {
         Locale locale = Locale.ENGLISH;
         Context context = new Context(locale);
         context.setVariable(USER, user);
+        context.setVariable(QR, qr);
         context.setVariable(BASE_URL, applicationProperties.getMail().getBaseUrl());
         String content = templateEngine.process(templateName, context);
         String subject = messageSource.getMessage(titleKey, null, locale);
@@ -112,5 +124,17 @@ public class MailService {
     public void sendPasswordResetMail(User user) {
         LOG.debug("Sending password reset email to '{}'", user.getEmail());
         this.sendEmailFromTemplateSync(user, "mail/passwordResetEmail", "email.reset.title");
+    }
+
+    @Async
+    public void sendOrderInfoMail(User user, String confirmationNumber) {
+        String qrCodeImage = null;
+        try {
+            qrCodeImage = generateQRCodeImage(confirmationNumber);
+        } catch (WriterException | IOException e) {
+            LOG.error("QR code generation failed for {}", confirmationNumber);
+        }
+        LOG.debug("Sending order onfo email to '{}'", user.getEmail());
+        this.sendEmailFromTemplate(user, "mail/orderInfo", "email.order.title", new QRModel(confirmationNumber, qrCodeImage));
     }
 }

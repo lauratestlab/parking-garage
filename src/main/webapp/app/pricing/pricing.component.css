@@ -4,11 +4,11 @@
     gap: 20px;
     color: #fff;
     margin-left: 20vw; /* Leave space for the sidebar */
-    height: 100vh; /* Full viewport height */
+    height: 100%; /* Full viewport height */
     background-color: #1c1e22;
     padding: 20px;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-    
+    /*width: 300px;*/
 }
 
 .header{
@@ -24,27 +24,47 @@
     gap: 6px;
 }
 
-.card-container {
-    display: flex;
-    flex-direction: row;
-    /* justify-content: center;
-    align-items: center; */
-    gap: 16px;
-    /* height: 50%; */
-    /* border: 1px solid greenyellow; */
+table{
+    width: 100%;
+    table-layout: fixed;
+}
+.tbl-header{
+    background-color: rgba(255,255,255,0.3);
+}
+.tbl-content{
+    height:100%;
+    overflow-x: hidden;
+    margin-top: 0px;
+}
+th{
+    padding: 20px 20px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 1rem;
+    color: #fff;
+    text-transform: uppercase;
+}
+td{
+    padding: 20px;
+    text-align: left;
+    vertical-align:middle;
+    font-weight: 300;
+    font-size: 1.2rem;
+    color: #fff;
+    border-bottom: solid 2px #2e3033;
 }
 
-.box {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 20px;
-    color: white;
-    text-align: left;
-    /* margin: 5px 0; Space between boxes */
-    width: 400px;
-    height: 95%;
-    border-radius: 10px;
-    background-color: #2e3033;
-    /* border: 1px solid greenyellow; */
+.add-price-div {
+    width: 40%;
 }
+
+.update-price-div {
+    width: 40%;
+}
+
+.modify-prices {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+}
+

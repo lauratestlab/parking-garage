@@ -14,7 +14,7 @@ describe('Data Utils Service Test', () => {
 
   describe('byteSize', () => {
     it('should return the bytesize of the text', () => {
-      expect(service.byteSize('Hello JHipster')).toBe(`10.5 bytes`);
+      expect(service.byteSize('Hello')).toBe(`10.5 bytes`);
     });
   });
 
@@ -24,8 +24,7 @@ describe('Data Utils Service Test', () => {
       newWindow.document.write = jest.fn();
       window.open = jest.fn(() => newWindow);
       window.URL.createObjectURL = jest.fn();
-      // 'JHipster' in base64 is 'SkhpcHN0ZXI='
-      const data = 'SkhpcHN0ZXI=';
+      const data = 'UGFya2luZ0dhcmFnZQ==';
       const contentType = 'text/plain';
       service.openFile(data, contentType);
       expect(window.open).toHaveBeenCalledTimes(1);

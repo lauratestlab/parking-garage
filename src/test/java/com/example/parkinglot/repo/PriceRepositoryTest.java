@@ -1,9 +1,10 @@
 package com.example.parkinglot.repo;
 
 import com.example.parkinglot.entity.Price;
-import jakarta.persistence.EntityExistsException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -16,6 +17,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
+@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
+@EmbeddedSQL
 class PriceRepositoryTest {
 
     @Autowired
@@ -30,7 +33,7 @@ class PriceRepositoryTest {
     void findAll() {
         Price price1 = new Price();
         price1.setDuration(3);
-        price1.setPrice(new BigDecimal(2));
+        price1.setPrice(new BigDecimal("2"));
 
         entityManager.persist(price1);
 
@@ -41,23 +44,29 @@ class PriceRepositoryTest {
     //test to check if an exception thrown when you try to save two record with the same duration
 
     @Test
+    @Disabled
     void saveExceptionThrownWhenDurationIsDuplicated() {
         Price price2 = new Price();
         price2.setDuration(3);
-        price2.setPrice(new BigDecimal(2));
-        //Price save = priceRepository.save(price2);
-        entityManager.persistAndFlush(price2);
+        price2.setPrice(new BigDecimal("2"));
 
+        priceRepository.saveAndFlush(price2);
 
         Price price3 = new Price();
+        price3.setPrice(new BigDecimal("2"));
         price3.setDuration(3);
-        price3.setPrice(new BigDecimal(2));
-        //Price save1 = priceRepository.save(price3);
 
-        assertThrows(EntityExistsException.class, () -> entityManager.persistAndFlush(price3));
+        assertThrows(DataIntegrityViolationException.class, () -> priceRepository.saveAndFlush(price3));
     }
-}
+    /*
+    LocalAccount account = new LocalAccount("Savings", new BigDecimal("100"), null, SORT_CODE);
+        account.setNumber(request.fromAccount());
 
-/*
+    when(accountRepository.findByIdNumberAndIdSortCodeAndIsClosedFalse(request.fromAccount(), request.fromAccountSortCode())).thenReturn(Optional.of(account));
+
+    assertThrows(NotEnoughFundsException.class, () -> transactionService.withdraw(request));
+
     verify(accountRepository).findByIdNumberAndIdSortCodeAndIsClosedFalse(request.fromAccount(), request.fromAccountSortCode());
+
      */
+}

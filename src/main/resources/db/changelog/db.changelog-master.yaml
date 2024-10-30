@@ -194,6 +194,7 @@ databaseChangeLog:
                   name: car_id
                   type: BIGINT
                   autoIncrement: true
+                  startWith: 100
                   constraints:
                     nullable: false
                     primaryKey: true
@@ -258,6 +259,7 @@ databaseChangeLog:
                     name: payment_method_id
                     type: BIGINT
                     autoIncrement: true
+                    startWith: 100
                     constraints:
                       nullable: false
                       primaryKey: true
@@ -317,11 +319,12 @@ databaseChangeLog:
                   name: floor_id
                   type: BIGINT
                   autoIncrement: true
+                  startWith: 100
               - column:
                   constraints:
                     nullable: false
                   name: name
-                  type: INT
+                  type: VARCHAR(20)
             tableName: floors
   - changeSet:
       id: 1729099703466-101
@@ -357,6 +360,7 @@ databaseChangeLog:
                   name: spot_id
                   type: BIGINT
                   autoIncrement: true
+                  startWith: 100
               - column:
                   name: name
                   type: VARCHAR(10)
@@ -388,6 +392,7 @@ databaseChangeLog:
                   name: reservation_id
                   type: BIGINT
                   autoIncrement: true
+                  startWith: 100
                   constraints:
                     nullable: false
                     primaryKey: true
@@ -413,14 +418,12 @@ databaseChangeLog:
                   name: payment_method_id
                   type: BIGINT
                   constraints:
-                    nullable: false
                     foreignKeyName: fk_payment_reservation
                     references: payment_methods(payment_method_id)
               - column:
                   name: user_id
                   type: BIGINT
                   constraints:
-                    nullable: false
                     foreignKeyName: fk_user_reservation
                     references: users(id)
               - column:
@@ -428,6 +431,18 @@ databaseChangeLog:
                   type: DECIMAL(10, 2)
                   constraints:
                     nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: car_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_car_reservation
+                    references: cars(car_id)
 
   - changeSet:
       id: 1729099703466-170
@@ -490,13 +505,78 @@ databaseChangeLog:
             tableName: reservations
             usePreparedStatements: true
 
+  - changeSet:
+      id: 1729099703466-230
+      author: user
+      changes:
+        - addColumn:
+            tableName: reservations
+            columns:
+              - column:
+                  name: created_by
+                  type: varchar(50)
+              - column:
+                  name: last_modified_by
+                  type: varchar(50)
+              - column:
+                  name: created_date
+                  type: timestamp
+              - column:
+                  name: last_modified_date
+                  type: timestamp
+
+  - changeSet:
+      id: 1729099703466-240
+      author: user
+      changes:
+        - addColumn:
+            tableName: reservations
+            columns:
+              - column:
+                  name: confirmation_code
+                  type: VARCHAR(20)
 
 
+  - changeSet:
+      id: 1729099703466-250
+      author: user
+      changes:
+        - addColumn:
+            tableName: payment_methods
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+  - changeSet:
+      id: 1729099703466-260
+      author: user
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: payment_methods
+            constraintName: fk_suer_id_payment_methods
+            referencedColumnNames: id
+            referencedTableName: users
 
+  - changeSet:
+      id: 1729099703466-270
+      author: user
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: payment_methods
+            constraintName: fk_user_id_payment_methods
+            referencedColumnNames: id
+            referencedTableName: users
 
-
-
-
+  - changeSet:
+      id: 1729099703466-280
+      author: user
+      changes:
+        - modifyDataType:
+            columnName: card_number
+            newDataType: varchar(19)
+            tableName: payment_methods
 
 
 

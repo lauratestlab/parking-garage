@@ -2,9 +2,227 @@
 
     <div class="header">
         <h2>Reservations</h2>
-        <div class="buttons">
-            <button type="button" class="btn btn-outline-light">Reserve a spot</button>
-        </div>
+<!--        <div class="buttons">-->
+<!--            <button type="button" class="btn btn-outline-light">Reserve a spot</button>-->
+<!--        </div>-->
     </div>
+    <hr>
+    <div>
+        <div *appHasAnyAuthority="'ROLE_ADMIN'">
+            <h2>All Reservations (Admin View)</h2>
+            <!-- Display admin-specific data -->
+        </div>
+        <div *appHasAnyAuthority="'ROLE_USER'">
+            <h2>My Reservations</h2>
+            <!-- Display member-specific data -->
+        </div>
+        <table class="table table-hover">
+            <thead class="table-light">
+            <tr>
+                <th scope="col">Reservation ID</th>
+                <th scope="col">Start Time</th>
+                <th scope="col">End Time</th>
+                <th scope="col">Price</th>
+                <th scope="col">User ID</th>
+                <th scope="col">Spot ID</th>
+                <th scope="col">Status</th>
+                <th scope="col">Car ID</th>
+                <th scope="col">Confirmation #</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let reservation of reservations">
+                <td>{{ reservation.id }}</td>
+                <td>{{ reservation.startTime | date:'short' }}</td>
+                <td>{{ reservation.endTime | date:'short' }}</td>
+                <td>{{ reservation.price | currency }}</td>
+                <td>{{ reservation.userId }}</td>
+
+                <!-- Spot ID with pill-shaped badge -->
+                <td>
+          <span class="badge rounded-pill bg-info text-dark">
+            {{ reservation.spotId }}
+          </span>
+                </td>
+
+                <!-- Status dropdown for inline updates -->
+                <td>
+                    <select [(ngModel)]="reservation.status"  class="form-select form-select-sm">
+                        <option value="Ordered">Ordered</option>
+                        <option value="Activated">Activated</option>
+                    </select>
+                </td>
+
+                <td>{{ reservation.carId }}</td>
+                <td>{{ reservation.confirmationCode }}</td>
+
+                <!-- Actions for additional functionality (optional) -->
+                <td>
+                    <button class="btn btn-primary btn-sm me-2" >Edit</button>
+                    <button class="btn btn-danger btn-sm">Delete</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <form class="row g-3" [formGroup]="reservationForm" (ngSubmit)="addReservation()">
+        <div class="row g-3">
+            <legend>Reservation Dates</legend>
+            <div class="col">
+                <label for="startTime" class="form-label">Start Date:</label>
+                <input formControlName="startTime" type="datetime-local" class="form-control" aria-label="Start Date/Time" required>
+            </div>
+            <div class="col">
+                <label for="endTime" class="form-label">End Date:</label>
+                <input formControlName="endTime" type="datetime-local" class="form-control"  aria-label="End Date/Time" required>
+            </div>
+        </div>
+
+        <fieldset formGroupName="car">
+            <div class="row g-3">
+                <legend>Car Details</legend>
+                <div class="col-sm">
+                    <label for="make" class="form-label">Make: </label>
+                    <input formControlName="make" type="text" class="form-control" placeholder="Ford">
+                </div>
+                <div class="col-sm">
+                    <label for="model" class="form-label">Model: </label>
+                    <input formControlName="model" type="text" class="form-control" placeholder="Fusion">
+                </div>
+                <div class="col-sm">
+                    <label for="color" class="form-label">Color: </label>
+                    <input formControlName="color" type="text" class="form-control" placeholder="Red" aria-label="color">
+                </div>
+                <div class="col-md-5">
+                    <label for="registration" class="form-label">Registration Number: </label>
+                    <input formControlName="registration" type="text" class="form-control" placeholder="1234567">
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset formGroupName="paymentMethod">
+            <legend>Payment Details</legend>
+            <div class="row g-3">
+                <div class="col-sm">
+                    <label for="card_number" class="form-label">Account Number: </label>
+                    <input formControlName="card_number" type="text" class="form-control" placeholder="12345678945">
+                </div>
+                <div class="col-sm">
+                    <label for="ccv" class="form-label">CCV: </label>
+                    <input formControlName="ccv" type="number" class="form-control" placeholder="123">
+                </div>
+                <div class="col-md-5">
+                    <label for="expirationDate" class="form-label">Expiration Date: </label>
+                    <input formControlName="expirationDate" type="text" class="form-control" placeholder="MM/YY" >
+                </div>
+                <div class="col-sm">
+                    <label for="fullName" class="form-label">Full Name:  </label>
+                    <input formControlName="fullName" type="text" class="form-control" placeholder="John Doe">
+                </div>
+            </div>
+
+
+            <fieldset formGroupName="address">
+                <legend>Billing Address</legend>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label for="deliveryStreet" class="form-label">Address</label>
+                        <input formControlName="deliveryStreet" type="text" class="form-control" id="deliveryStreet" placeholder="1234 Main St">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="deliveryCity" class="form-label">City</label>
+                        <input formControlName="deliveryCity" type="text" class="form-control" id="deliveryCity">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="deliveryState" class="form-label">State</label>
+                        <input formControlName="deliveryState" type="text" class="form-control" id="deliveryState">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="deliveryZip" class="form-label">Zip</label>
+                        <input formControlName="deliveryZip" type="text" class="form-control" id="deliveryZip">
+                    </div>
+                </div>
+            </fieldset>
+        </fieldset>
+
+
+
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Reserve a spot</button>
+        </div>
+    </form>
+
+<!--    &lt;!&ndash; booking-form.component.html &ndash;&gt;-->
+<!--    <form [formGroup]="reservationForm" (ngSubmit)="submitForm()">-->
+<!--        <h2>Booking Form</h2>-->
+<!--        &lt;!&ndash; Date and Time Inputs &ndash;&gt;-->
+<!--        <label for="startDate">Start Date:</label>-->
+<!--        <input type="date" formControlName="startDate" />-->
+
+<!--        <label for="startTime">Start Time:</label>-->
+<!--        <input type="time" formControlName="startTime" />-->
+
+<!--        <label for="endDate">End Date:</label>-->
+<!--        <input type="date" formControlName="endDate" />-->
+
+<!--        <label for="endTime">End Time:</label>-->
+<!--        <input type="time" formControlName="endTime" />-->
+
+<!--        &lt;!&ndash; Car Info Group &ndash;&gt;-->
+<!--        <fieldset formGroupName="carInfo">-->
+<!--            <legend>Car Information</legend>-->
+
+<!--            <label for="color">Color:</label>-->
+<!--            <input type="text" formControlName="color" />-->
+
+<!--            <label for="make">Make:</label>-->
+<!--            <input type="text" formControlName="make" />-->
+
+<!--            <label for="model">Model:</label>-->
+<!--            <input type="text" formControlName="model" />-->
+
+<!--            <label for="registrationNumber">Registration Number:</label>-->
+<!--            <input type="text" formControlName="registrationNumber" />-->
+<!--        </fieldset>-->
+
+<!--        &lt;!&ndash; Payment Info Group &ndash;&gt;-->
+<!--        <fieldset formGroupName="paymentInfo">-->
+<!--            <legend>Payment Information</legend>-->
+
+<!--            <label for="cardNumber">Card Number:</label>-->
+<!--            <input type="text" formControlName="cardNumber" maxlength="16" />-->
+
+<!--            <label for="ccv">CCV:</label>-->
+<!--            <input type="text" formControlName="ccv" maxlength="3" />-->
+
+<!--            <label for="expirationDate">Expiration Date:</label>-->
+<!--            <input type="month" formControlName="expirationDate" />-->
+
+<!--            <label for="fullName">Full Name:</label>-->
+<!--            <input type="text" formControlName="fullName" />-->
+
+<!--            &lt;!&ndash; Address Group &ndash;&gt;-->
+<!--            <fieldset formGroupName="address">-->
+<!--                <legend>Billing Address</legend>-->
+
+<!--                <label for="street">Street:</label>-->
+<!--                <input type="text" formControlName="street" />-->
+
+<!--                <label for="city">City:</label>-->
+<!--                <input type="text" formControlName="city" />-->
+
+<!--                <label for="state">State:</label>-->
+<!--                <input type="text" formControlName="state" />-->
+
+<!--                <label for="zipCode">Zip Code:</label>-->
+<!--                <input type="text" formControlName="zipCode" maxlength="5" />-->
+<!--            </fieldset>-->
+<!--        </fieldset>-->
+
+<!--        &lt;!&ndash; Submit Button &ndash;&gt;-->
+<!--        <button type="submit" [disabled]="!reservationForm.valid">Submit</button>-->
+<!--    </form>-->
 
 </div>

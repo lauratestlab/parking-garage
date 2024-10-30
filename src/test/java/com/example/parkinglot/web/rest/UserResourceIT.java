@@ -38,18 +38,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserResourceIT {
 
     private static final String DEFAULT_LOGIN = "johndoe";
-    private static final String UPDATED_LOGIN = "jhipster";
+    private static final String UPDATED_LOGIN = "user";
 
     private static final Long DEFAULT_ID = 1L;
 
     private static final String DEFAULT_EMAIL = "johndoe@localhost";
-    private static final String UPDATED_EMAIL = "jhipster@localhost";
+    private static final String UPDATED_EMAIL = "user@localhost";
 
     private static final String DEFAULT_FIRSTNAME = "john";
-    private static final String UPDATED_FIRSTNAME = "jhipsterFirstName";
+    private static final String UPDATED_FIRSTNAME = "userFirstName";
 
     private static final String DEFAULT_LASTNAME = "doe";
-    private static final String UPDATED_LASTNAME = "jhipsterLastName";
+    private static final String UPDATED_LASTNAME = "userLastName";
 
     private static final String DEFAULT_IMAGEURL = "http://placehold.it/50x50";
     private static final String UPDATED_IMAGEURL = "http://placehold.it/40x40";
@@ -358,10 +358,10 @@ class UserResourceIT {
         userRepository.saveAndFlush(user);
 
         User anotherUser = new User();
-        anotherUser.setLogin("jhipster");
+        anotherUser.setLogin("user");
         anotherUser.setPassword(RandomStringUtils.randomAlphanumeric(60));
         anotherUser.setActivated(true);
-        anotherUser.setEmail("jhipster@localhost");
+        anotherUser.setEmail("user@localhost");
         anotherUser.setFirstName("java");
         anotherUser.setLastName("hipster");
         anotherUser.setImageUrl("");
@@ -375,7 +375,7 @@ class UserResourceIT {
         userDTO.setLogin(updatedUser.getLogin());
         userDTO.setFirstName(updatedUser.getFirstName());
         userDTO.setLastName(updatedUser.getLastName());
-        userDTO.setEmail("jhipster@localhost"); // this email should already be used by anotherUser
+        userDTO.setEmail("user@localhost"); // this email should already be used by anotherUser
         userDTO.setActivated(updatedUser.isActivated());
         userDTO.setImageUrl(updatedUser.getImageUrl());
         userDTO.setCreatedBy(updatedUser.getCreatedBy());
@@ -396,10 +396,10 @@ class UserResourceIT {
         userRepository.saveAndFlush(user);
 
         User anotherUser = new User();
-        anotherUser.setLogin("jhipster");
+        anotherUser.setLogin("user");
         anotherUser.setPassword(RandomStringUtils.randomAlphanumeric(60));
         anotherUser.setActivated(true);
-        anotherUser.setEmail("jhipster@localhost");
+        anotherUser.setEmail("user@localhost");
         anotherUser.setFirstName("java");
         anotherUser.setLastName("hipster");
         anotherUser.setImageUrl("");
@@ -410,7 +410,7 @@ class UserResourceIT {
 
         AdminUserDTO userDTO = new AdminUserDTO();
         userDTO.setId(updatedUser.getId());
-        userDTO.setLogin("jhipster"); // this login should already be used by anotherUser
+        userDTO.setLogin("user"); // this login should already be used by anotherUser
         userDTO.setFirstName(updatedUser.getFirstName());
         userDTO.setLastName(updatedUser.getLastName());
         userDTO.setEmail(updatedUser.getEmail());

@@ -2,6 +2,7 @@ package com.example.parkinglot.config;
 
 import jakarta.validation.constraints.NotNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.web.cors.CorsConfiguration;
 
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
@@ -17,6 +18,8 @@ public class ApplicationProperties {
     public Security getSecurity() {
         return security;
     }
+
+    private final CorsConfiguration cors = new CorsConfiguration();
 
     public static class Mail {
 
@@ -141,5 +144,9 @@ public class ApplicationProperties {
                 this.key = key;
             }
         }
+    }
+
+    public CorsConfiguration getCors() {
+        return cors;
     }
 }

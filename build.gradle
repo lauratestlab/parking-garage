@@ -2,6 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.4'
 	id 'io.spring.dependency-management' version '1.1.6'
+	id "com.github.node-gradle.node" version '7.0.2'
+	id "com.google.cloud.tools.jib" version "3.3.2"
 }
 
 group = 'com.example'
@@ -33,7 +35,6 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 	runtimeOnly 'org.postgresql:postgresql'
-	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
@@ -49,8 +50,87 @@ dependencies {
 	testImplementation "org.testcontainers:junit-jupiter"
 	testImplementation "org.testcontainers:testcontainers"
 	testImplementation "org.testcontainers:postgresql"
+	implementation 'com.google.zxing:core:3.5.3'
+	implementation 'com.google.zxing:javase:3.5.3'
+	implementation 'commons-io:commons-io:2.17.0'
+	implementation 'com.github.spotbugs:spotbugs-annotations:4.8.6'
+}
+
+ext {
+	springProfiles = ""
+	if (project.hasProperty("tls")) {
+		springProfiles += ",tls"
+	}
+	if (project.hasProperty("e2e")) {
+		springProfiles += ",e2e"
+	}
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+if (project.hasProperty("prod")) {
+	apply from: "gradle/profile_prod.gradle"
+} else {
+	apply from: "gradle/profile_dev.gradle"
+}
+
+if (project.hasProperty("war")) {
+	apply from: "gradle/war.gradle"
+}
+
+if (project.hasProperty("nodeInstall")) {
+	node {
+		version = "20.17.0"
+		npmVersion = "10.8.3"
+		download = true
+	}
+
+	// Copy local node and npm to a fixed location for npmw
+	def deleteOldNpm = tasks.register("deleteOldNpm", Delete) {
+		delete 'build/node/lib/node_modules/npm'
+	}
+	def fixedNode = tasks.register("fixedNode", Copy) {
+		from nodeSetup
+		into 'build/node'
+		finalizedBy deleteOldNpm
+	}
+	tasks.named("nodeSetup").configure { finalizedBy fixedNode }
+
+	def fixedNpm = tasks.register("fixedNpm", Copy) {
+		from npmSetup
+		into 'build/node'
+	}
+	tasks.named("npmSetup").configure { finalizedBy fixedNpm }
+}
+
+jib {
+	configurationName = "productionRuntimeClasspath"
+	from {
+		image = "eclipse-temurin:17-jre-focal"
+		platforms {
+			platform {
+				architecture = "${findProperty('jibArchitecture') ?: 'amd64'}"
+				os = "linux"
+			}
+		}
+	}
+	to {
+		image = "parkinggarage:latest"
+	}
+	container {
+		entrypoint = ["bash", "-c", "/entrypoint.sh"]
+		ports = ["8080"]
+		environment = [
+				SPRING_OUTPUT_ANSI_ENABLED: "ALWAYS",
+				APP_SLEEP: "0"
+		]
+		creationTime = "USE_CURRENT_TIMESTAMP"
+		user = 1000
+	}
+	extraDirectories {
+		paths = file("src/main/docker/jib")
+		permissions = ["/entrypoint.sh": "755"]
+	}
 }

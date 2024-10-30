@@ -1,0 +1,29 @@
+###
+POST http://localhost:8080/api/reservation
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjIyOTAwNiwiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzI5NjM3MDA2fQ.XkmMwxbygJPUE1XBiHxaTYW0SmH83isSK7vfAsSuA3IXh7pEHfNmFoeAWwG64Aqdkd7L3AzohlyGxoB35orYdA
+
+{
+  "userId": 1,
+  "startTime": "2025-04-23T18:25:43.511Z",
+  "endTime": "2025-04-28T18:25:43.511Z",
+  "car": {
+    "color": "red",
+    "make": "Ford",
+    "model": "Fusion",
+    "registration": "GSDD#34534"
+  },
+  "paymentMethod": {
+    "card_number": "374245455400126",
+    "ccv": 343,
+    "deliveryCity": "Brooklyn",
+    "deliveryState": "NY",
+    "deliveryStreet": "123 1st St",
+    "deliveryZip": "122451",
+    "expirationDate": "12/31",
+    "fullName": "Ivan Petrov"
+  }
+}
+
+###
+GET http://localhost:8080/api/reservation/qr/FDF434634
