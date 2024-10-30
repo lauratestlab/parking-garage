@@ -17,7 +17,8 @@ import java.util.List;
 public class PaymentMethod {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long paymentMethodId;
+    @Column(name = "payment_method_id")
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -46,8 +47,4 @@ public class PaymentMethod {
 
     @NotBlank(message="Zip code is required")
     private String deliveryZip;
-
-    public Long getId() {
-        return paymentMethodId;
-    }
 }

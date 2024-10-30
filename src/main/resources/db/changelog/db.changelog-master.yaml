@@ -578,6 +578,80 @@ databaseChangeLog:
             newDataType: varchar(19)
             tableName: payment_methods
 
+  - changeSet:
+      id: 1729099703466-290
+      author: arsen a
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            tableName: settings
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_settings
+                  name: key
+                  type: VARCHAR(50)
+              - column:
+                  name: value
+                  type: VARCHAR(50)
+
+  - changeSet:
+      id: 1729099703466-290
+      author: user
+      changes:
+        - loadData:
+            file: db/changelog/data/settings.csv
+            separator: ;
+            tableName: settings
+            usePreparedStatements: true
+
+  - changeSet:
+      id: 1729099703466-300
+      author: arsen a
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  startWith: 100
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_garages
+                  name: garage_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(20)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: address
+                  type: VARCHAR(200)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: member_discount
+                  type: DECIMAL
+            tableName: garages
+
+  - changeSet:
+      id: 1729099703466-310
+      author: user
+      changes:
+        - loadData:
+            file: db/changelog/data/garages.csv
+            separator: ;
+            tableName: garages
+            usePreparedStatements: true
+
+
+
 
 
 

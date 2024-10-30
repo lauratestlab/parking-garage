@@ -149,7 +149,7 @@ public class ReservationService {
         if (Objects.nonNull(reservationDTO.paymentMethod())) {
             return paymentMethodMapper.paymentMethodDTOToPaymentMethod(reservationDTO.paymentMethod());
         } else {
-            return paymentMethodRepository.findPaymentMethodByPaymentMethodId(reservationDTO.paymentMethodId())
+            return paymentMethodRepository.findPaymentMethodById(reservationDTO.paymentMethodId())
                     .orElseThrow(() -> new PaymentMethodNotFoundException("Payment method with id " + reservationDTO.paymentMethodId() + " was not found in the database"));
         }
     }
@@ -178,7 +178,7 @@ public class ReservationService {
                     .orElseThrow(() -> new UserNotFoundException("User not found"));
             List<Reservation> reservations = reservationRepository.findByUser(user);
             return reservations.stream()
-                    .map(reservation -> new ReservationDTO(reservation)) // convert to DTO
+                    .map(ReservationDTO::new) // convert to DTO
                     .collect(Collectors.toList());
         }
         return Collections.emptyList();

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.springframework.data.domain.Persistable;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -16,6 +17,7 @@ import java.util.Objects;
 @JsonIgnoreProperties(value = { "new", "id" })
 public class Authority implements Serializable, Persistable<String> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @NotNull
