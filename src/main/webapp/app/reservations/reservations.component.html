@@ -31,25 +31,27 @@
             </thead>
             <tbody>
             <tr *ngFor="let reservation of reservations">
-                <td>{{ reservation.id }}</td>
+                <td>{{ reservation.reservationId }}</td>
                 <td>{{ reservation.startTime | date:'short' }}</td>
                 <td>{{ reservation.endTime | date:'short' }}</td>
                 <td>{{ reservation.price | currency }}</td>
                 <td>{{ reservation.userId }}</td>
 
                 <!-- Spot ID with pill-shaped badge -->
-                <td>
-          <span class="badge rounded-pill bg-info text-dark">
-            {{ reservation.spotId }}
-          </span>
-                </td>
+                <td> {{ reservation.spotId }} </td>
 
                 <!-- Status dropdown for inline updates -->
                 <td>
-                    <select [(ngModel)]="reservation.status"  class="form-select form-select-sm">
-                        <option value="Ordered">Ordered</option>
-                        <option value="Activated">Activated</option>
-                    </select>
+                    <span
+                            class="badge rounded-pill"
+                            [ngClass]="{
+                                'bg-warning text-dark': reservation.status === 'Ordered',
+                                'bg-success text-light': reservation.status === 'Activated'
+            }"
+                    >
+            {{ reservation.status }}
+          </span>
+
                 </td>
 
                 <td>{{ reservation.carId }}</td>
@@ -151,76 +153,5 @@
             <button type="submit" class="btn btn-primary">Reserve a spot</button>
         </div>
     </form>
-
-<!--    &lt;!&ndash; booking-form.component.html &ndash;&gt;-->
-<!--    <form [formGroup]="reservationForm" (ngSubmit)="submitForm()">-->
-<!--        <h2>Booking Form</h2>-->
-<!--        &lt;!&ndash; Date and Time Inputs &ndash;&gt;-->
-<!--        <label for="startDate">Start Date:</label>-->
-<!--        <input type="date" formControlName="startDate" />-->
-
-<!--        <label for="startTime">Start Time:</label>-->
-<!--        <input type="time" formControlName="startTime" />-->
-
-<!--        <label for="endDate">End Date:</label>-->
-<!--        <input type="date" formControlName="endDate" />-->
-
-<!--        <label for="endTime">End Time:</label>-->
-<!--        <input type="time" formControlName="endTime" />-->
-
-<!--        &lt;!&ndash; Car Info Group &ndash;&gt;-->
-<!--        <fieldset formGroupName="carInfo">-->
-<!--            <legend>Car Information</legend>-->
-
-<!--            <label for="color">Color:</label>-->
-<!--            <input type="text" formControlName="color" />-->
-
-<!--            <label for="make">Make:</label>-->
-<!--            <input type="text" formControlName="make" />-->
-
-<!--            <label for="model">Model:</label>-->
-<!--            <input type="text" formControlName="model" />-->
-
-<!--            <label for="registrationNumber">Registration Number:</label>-->
-<!--            <input type="text" formControlName="registrationNumber" />-->
-<!--        </fieldset>-->
-
-<!--        &lt;!&ndash; Payment Info Group &ndash;&gt;-->
-<!--        <fieldset formGroupName="paymentInfo">-->
-<!--            <legend>Payment Information</legend>-->
-
-<!--            <label for="cardNumber">Card Number:</label>-->
-<!--            <input type="text" formControlName="cardNumber" maxlength="16" />-->
-
-<!--            <label for="ccv">CCV:</label>-->
-<!--            <input type="text" formControlName="ccv" maxlength="3" />-->
-
-<!--            <label for="expirationDate">Expiration Date:</label>-->
-<!--            <input type="month" formControlName="expirationDate" />-->
-
-<!--            <label for="fullName">Full Name:</label>-->
-<!--            <input type="text" formControlName="fullName" />-->
-
-<!--            &lt;!&ndash; Address Group &ndash;&gt;-->
-<!--            <fieldset formGroupName="address">-->
-<!--                <legend>Billing Address</legend>-->
-
-<!--                <label for="street">Street:</label>-->
-<!--                <input type="text" formControlName="street" />-->
-
-<!--                <label for="city">City:</label>-->
-<!--                <input type="text" formControlName="city" />-->
-
-<!--                <label for="state">State:</label>-->
-<!--                <input type="text" formControlName="state" />-->
-
-<!--                <label for="zipCode">Zip Code:</label>-->
-<!--                <input type="text" formControlName="zipCode" maxlength="5" />-->
-<!--            </fieldset>-->
-<!--        </fieldset>-->
-
-<!--        &lt;!&ndash; Submit Button &ndash;&gt;-->
-<!--        <button type="submit" [disabled]="!reservationForm.valid">Submit</button>-->
-<!--    </form>-->
 
 </div>
