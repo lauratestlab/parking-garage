@@ -5,11 +5,13 @@ import com.example.parkinglot.entity.Price;
 import com.example.parkinglot.repo.GarageRepository;
 import com.example.parkinglot.repo.PriceRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Optional;
+
+import static org.apache.commons.lang3.ObjectUtils.max;
+import static org.apache.commons.lang3.ObjectUtils.min;
 
 @Service
 public class PriceService {
@@ -33,22 +35,14 @@ public class PriceService {
         return null;
     }
 
-    public BigDecimal maxDuration(long hours, boolean applyDiscount) {
-        BigDecimal price = priceRepository.findFirstByDurationGreaterThanEqualOrderByDurationAsc(hours)
-                .orElseThrow(RuntimeException::new)
-                .getPrice();
-
-        if (applyDiscount) {
-            BigDecimal discount = garageRepository.memberDiscount(Constants.DEFAULT_GARAGE_ID)
-                    .orElseThrow(RuntimeException::new);
-            price = price.multiply(new BigDecimal("100").subtract(discount));
-        }
-
-        return price;
+    public Long maxDuration() {
+        return priceRepository.maxDuration()
+                .orElseThrow(() -> new RuntimeException("Prices are not set"));
     }
 
-    public BigDecimal getPrice(long hours, boolean applyDiscount) {
-        BigDecimal price = priceRepository.findFirstByDurationGreaterThanEqualOrderByDurationAsc(hours)
+    public BigDecimal getPrice(long hours, long maxDuration, boolean applyDiscount) {
+
+        BigDecimal price = priceRepository.findFirstByDurationGreaterThanEqualOrderByDurationAsc(min(hours, maxDuration))
                 .orElseThrow(RuntimeException::new)
                 .getPrice();
 

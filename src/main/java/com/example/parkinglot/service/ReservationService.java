@@ -1,20 +1,23 @@
 package com.example.parkinglot.service;
 
 
-import com.example.parkinglot.dto.*;
 import com.example.parkinglot.config.Constants;
+import com.example.parkinglot.dto.*;
 import com.example.parkinglot.entity.*;
 import com.example.parkinglot.enums.Status;
-import com.example.parkinglot.exception.*;
+import com.example.parkinglot.exception.CarNotFoundException;
+import com.example.parkinglot.exception.PaymentMethodNotFoundException;
+import com.example.parkinglot.exception.ReservationNotFoundException;
+import com.example.parkinglot.exception.UserNotFoundException;
 import com.example.parkinglot.mapper.CarMapper;
 import com.example.parkinglot.mapper.PaymentMethodMapper;
+import com.example.parkinglot.mapper.ReservationInfoMapper;
 import com.example.parkinglot.mapper.ReservationMapper;
 import com.example.parkinglot.repo.*;
 import com.example.parkinglot.security.RandomUtil;
 import com.example.parkinglot.security.SecurityUtils;
 import jakarta.persistence.NoResultException;
 import jakarta.validation.Valid;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,10 +45,10 @@ public class ReservationService {
     private final CarMapper carMapper;
     private final PriceService priceService;
     private final ReservationMapper reservationMapper;
-    private final PriceRepository priceRepository;
     private final SpotRepository spotRepository;
+    private final ReservationInfoMapper reservationInfoMapper;
 
-    public ReservationService(UserRepository userRepository, PaymentService paymentService, ReservationRepository reservationRepository, CarService carService, CarRepository carRepository, PaymentMethodRepository paymentMethodRepository, PaymentMethodMapper paymentMethodMapper, ReportRepository reportRepository, MailService mailService, CarMapper carMapper, PriceService priceService, ReservationMapper reservationMapper, PriceRepository priceRepository, SpotRepository spotRepository) {
+    public ReservationService(UserRepository userRepository, PaymentService paymentService, ReservationRepository reservationRepository, CarService carService, CarRepository carRepository, PaymentMethodRepository paymentMethodRepository, PaymentMethodMapper paymentMethodMapper, ReportRepository reportRepository, MailService mailService, CarMapper carMapper, PriceService priceService, ReservationMapper reservationMapper, SpotRepository spotRepository, ReservationInfoMapper reservationInfoMapper) {
         this.userRepository = userRepository;
         this.paymentService = paymentService;
         this.reservationRepository = reservationRepository;
@@ -58,8 +61,8 @@ public class ReservationService {
         this.carMapper = carMapper;
         this.priceService = priceService;
         this.reservationMapper = reservationMapper;
-        this.priceRepository = priceRepository;
         this.spotRepository = spotRepository;
+        this.reservationInfoMapper = reservationInfoMapper;
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
@@ -76,15 +79,16 @@ public class ReservationService {
             paymentMethodRepository.save(paymentMethod);
         }
 
+        Reservation reservation = new Reservation();
+
         Spot spot;
         try {
-            spot = reportRepository.findFirstAvailableSpot(reservationDTO.startTime(), reservationDTO.endTime());
+            spot = reportRepository.findFirstAvailableSpot(reservationDTO.startTime(), reservationDTO.endTime(), priceService.maxDuration());
         } catch (NoResultException e) {
-            return new ReservationInfoDTO(false, "No spots available");
+            return reservationInfoMapper.toDto(false, "No spots available", reservation);
         }
         Car car = registerCar(reservationDTO.carId(), reservationDTO.car());
 
-        Reservation reservation = new Reservation();
         reservation.setStartTime(reservationDTO.startTime());
         reservation.setEndTime(reservationDTO.endTime());
         reservation.setUser(user);
@@ -97,18 +101,21 @@ public class ReservationService {
 
         mailService.sendOrderInfoMail(user, reservation.getConfirmationCode());
 
-        return new ReservationInfoDTO(true, "");
+        String message = "Spot: " + spot.getName() + "; Flor: " + spot.getFloor().getName();
+        return reservationInfoMapper.toDto(true, message, reservation);
     }
 
     public ReservationInfoDTO startReservation(@Valid ReservationStartDTO reservationDTO) {
         Reservation reservation = new Reservation();
         reservation.setStartTime(LocalDateTime.now());
 
+        Long maxDurationInHours = priceService.maxDuration();
+
         Spot spot;
         try {
-            spot = reportRepository.findFirstAvailableSpot(reservation.getStartTime(), null);
+            spot = reportRepository.findFirstAvailableSpot(reservation.getStartTime(), maxDurationInHours);
         } catch (NoResultException e) {
-            return new ReservationInfoDTO(false, "No spots available");
+            return reservationInfoMapper.toDto(false, "No spots available", reservation);
         }
         Car car = registerCar(null, new CarDTO(null, reservationDTO.model(), reservationDTO.make(), reservationDTO.color(), reservationDTO.registration(), null));
         reservation.setSpot(spot);
@@ -118,6 +125,7 @@ public class ReservationService {
             user = userRepository.findOneByEmailIgnoreCase(reservationDTO.email()).orElseThrow(() -> new UserNotFoundException("Couldn't find a member with the given email: " + reservationDTO.email()));
         }
 
+        reservation.setUser(user);
         reservation.setCar(car);
         reservation.setStatus(Status.STARTED);
         reservation.setConfirmationCode(RandomUtil.generateRandomAlphanumericString());
@@ -131,12 +139,13 @@ public class ReservationService {
             mailService.sendOrderInfoMail(user, reservation.getConfirmationCode());
         }
 
-        return new ReservationInfoDTO(true, spot.getName() + " " + spot.getFloor().getName());
+        String message = "Spot: " + spot.getName() + "; Flor: " + spot.getFloor().getName();
+        return reservationInfoMapper.toDto(true, message, reservation);
     }
 
-    public ReservationDTO closeReservation(@Valid ReservationCompletionDTO reservationCompletionDTO) {
+    public ReservationInfoDTO closeReservation(@Valid ReservationCompletionDTO reservationCompletionDTO) {
 
-        Reservation reservation = reservationRepository.findOneByConfirmationCode(reservationCompletionDTO.confirmationCode())
+        Reservation reservation = reservationRepository.findOneByConfirmationCodeAndStatus(reservationCompletionDTO.confirmationCode(), Status.STARTED)
                 .orElseThrow(() -> new ReservationNotFoundException("Reservation: " + reservationCompletionDTO.confirmationCode() + " not found"));
         reservation.setStatus(Status.COMPLETED);
         reservation.setEndTime(LocalDateTime.now());
@@ -144,14 +153,15 @@ public class ReservationService {
         Duration duration = Duration.between(reservation.getEndTime(), reservation.getStartTime());
         long hours = duration.toHours();
 
-
-        BigDecimal price = priceService.getPrice(hours, reservation.getUser() != null);
+        Long maxDuration = priceService.maxDuration();
+        BigDecimal price = priceService.getPrice(hours,  maxDuration, reservation.getUser() != null);
 
         reservation.setPrice(price);
 
         reservation = reservationRepository.save(reservation);
 
-        return reservationMapper.toDto(reservation);
+        String message = "";
+        return reservationInfoMapper.toDto(true, message, hours > maxDuration, reservation);
     }
 
     private PaymentMethod processPayment(ReservationDTO reservationDTO) {
@@ -175,7 +185,7 @@ public class ReservationService {
     public List<ReservationDTO> findAllReservations() {
         List<Reservation> reservations = reservationRepository.findAll();
         return reservations.stream()
-                .map(ReservationDTO::new) // Assuming ReservationDTO2 has a constructor that takes Reservation
+                .map(reservationMapper::toDto) // Assuming ReservationDTO2 has a constructor that takes Reservation
                 .collect(Collectors.toList());
     }
 
@@ -187,7 +197,7 @@ public class ReservationService {
                     .orElseThrow(() -> new UserNotFoundException("User not found"));
             List<Reservation> reservations = reservationRepository.findByUser(user);
             return reservations.stream()
-                    .map(ReservationDTO::new) // convert to DTO
+                    .map(reservationMapper::toDto) // convert to DTO
                     .collect(Collectors.toList());
         }
         return Collections.emptyList();

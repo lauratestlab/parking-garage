@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-
 @Data
 @Entity
 @Table(name = "cars")
@@ -36,6 +35,7 @@ public class Car {
     @Column(name = "registration", nullable = false)
     private String registration;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 }

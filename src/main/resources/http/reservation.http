@@ -38,6 +38,14 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjg0M
   "registration": "YRH45645",
   "model": "Tundra",
   "make": "Toyota",
-  "color": "Gray",
-  "email": "user@localhost"
+  "color": "Gray"
+}
+
+###
+POST http://localhost:8080/api/reservation/complete
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjg0MzMxNywiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzMwMjUxMzE3fQ.kUEWRqjOUJP6oMToabHzrZHWQY9c5bEzNJXeoG-4ipMUF_5qMV_BUIDReqQX0DQPaRAJFoAPEe2Zvf63CtDsXQ
+
+{
+  "confirmationCode": "homG5zL7O5JaELPLKTQh"
 }

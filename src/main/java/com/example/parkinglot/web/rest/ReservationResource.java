@@ -1,5 +1,6 @@
 package com.example.parkinglot.web.rest;
 
+import com.example.parkinglot.dto.ReservationCompletionDTO;
 import com.example.parkinglot.dto.ReservationDTO;
 import com.example.parkinglot.dto.ReservationInfoDTO;
 import com.example.parkinglot.dto.ReservationStartDTO;
@@ -48,6 +49,14 @@ public class ReservationResource {
     public ReservationInfoDTO startParking(@Valid @RequestBody ReservationStartDTO reservationDTO) {
         LOG.debug("REST request to register customer at the counter");
         return reservationService.startReservation(reservationDTO);
+    }
+
+    @PostMapping("/complete")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.OK)
+    public ReservationInfoDTO completeParking(@Valid @RequestBody ReservationCompletionDTO reservationDTO) {
+        LOG.debug("REST request to accept payment at the exit");
+        return reservationService.closeReservation(reservationDTO);
     }
 
     @GetMapping(value = "/qr/{confirmationCode}", produces = MediaType.IMAGE_JPEG_VALUE)

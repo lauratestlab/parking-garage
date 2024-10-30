@@ -40,13 +40,13 @@ public class ReportRepositoryImpl implements ReportRepository {
     }
 
     @Override
-    public Spot findFirstAvailableSpot(LocalDateTime startTime, LocalDateTime endTime) throws NoResultException {
+    public Spot findFirstAvailableSpot(LocalDateTime startTime, Long maxDurationInHours) throws NoResultException {
+        LocalDateTime endTime = startTime.plusHours(maxDurationInHours);
+        return findFirstAvailableSpot(startTime, endTime, maxDurationInHours);
+    }
 
-        Long maxDurationInHours = priceRepository.maxDuration()
-                .orElseThrow(() -> new RuntimeException("Prices are not set"));
-        if (endTime == null) {
-            endTime = startTime.plusHours(maxDurationInHours);
-        }
+    @Override
+    public Spot findFirstAvailableSpot(LocalDateTime startTime, LocalDateTime endTime, Long maxDurationInHours) throws NoResultException {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Spot> cq = cb.createQuery(Spot.class);
@@ -66,7 +66,7 @@ public class ReportRepositoryImpl implements ReportRepository {
         cq.where(cb.isNull(joinedRoot.get("id")));
 
         cq.orderBy(cb.asc(root.get("floor")), cb.asc(root.get("name")));
-        
+
         return em.createQuery(cq).setFirstResult(0).setMaxResults(1).getSingleResult();
     }
 }
