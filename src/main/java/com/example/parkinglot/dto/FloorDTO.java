@@ -9,6 +9,8 @@ public record FloorDTO(
         @NotNull
         @Size(min = 1, max = 20)
         String name
+
+
 ) {
 
 }

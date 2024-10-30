@@ -1,10 +1,8 @@
 package com.example.parkinglot.service;
 
 
-import com.example.parkinglot.dto.ReservationCompletionDTO;
+import com.example.parkinglot.dto.*;
 import com.example.parkinglot.config.Constants;
-import com.example.parkinglot.dto.ReservationDTO;
-import com.example.parkinglot.dto.ReservationInfoDTO;
 import com.example.parkinglot.entity.*;
 import com.example.parkinglot.enums.Status;
 import com.example.parkinglot.exception.*;
@@ -44,8 +42,10 @@ public class ReservationService {
     private final CarMapper carMapper;
     private final PriceService priceService;
     private final ReservationMapper reservationMapper;
+    private final PriceRepository priceRepository;
+    private final SpotRepository spotRepository;
 
-    public ReservationService(UserRepository userRepository, PaymentService paymentService, ReservationRepository reservationRepository, CarService carService, CarRepository carRepository, PaymentMethodRepository paymentMethodRepository, PaymentMethodMapper paymentMethodMapper, ReportRepository reportRepository, MailService mailService, CarMapper carMapper, PriceService priceService, ReservationMapper reservationMapper) {
+    public ReservationService(UserRepository userRepository, PaymentService paymentService, ReservationRepository reservationRepository, CarService carService, CarRepository carRepository, PaymentMethodRepository paymentMethodRepository, PaymentMethodMapper paymentMethodMapper, ReportRepository reportRepository, MailService mailService, CarMapper carMapper, PriceService priceService, ReservationMapper reservationMapper, PriceRepository priceRepository, SpotRepository spotRepository) {
         this.userRepository = userRepository;
         this.paymentService = paymentService;
         this.reservationRepository = reservationRepository;
@@ -58,6 +58,8 @@ public class ReservationService {
         this.carMapper = carMapper;
         this.priceService = priceService;
         this.reservationMapper = reservationMapper;
+        this.priceRepository = priceRepository;
+        this.spotRepository = spotRepository;
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
@@ -80,13 +82,14 @@ public class ReservationService {
         } catch (NoResultException e) {
             return new ReservationInfoDTO(false, "No spots available");
         }
+        Car car = registerCar(reservationDTO.carId(), reservationDTO.car());
 
         Reservation reservation = new Reservation();
         reservation.setStartTime(reservationDTO.startTime());
         reservation.setEndTime(reservationDTO.endTime());
         reservation.setUser(user);
         reservation.setSpot(spot);
-        reservation.setCar(registerCar(reservationDTO));
+        reservation.setCar(car);
         reservation.setStatus(Status.ORDERED);
         reservation.setConfirmationCode(RandomUtil.generateRandomAlphanumericString());
 
@@ -97,34 +100,38 @@ public class ReservationService {
         return new ReservationInfoDTO(true, "");
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
-    public ReservationInfoDTO startReservation(@Valid ReservationDTO reservationDTO) {
+    public ReservationInfoDTO startReservation(@Valid ReservationStartDTO reservationDTO) {
+        Reservation reservation = new Reservation();
+        reservation.setStartTime(LocalDateTime.now());
+
         Spot spot;
         try {
-            spot = reportRepository.findFirstAvailableSpot(reservationDTO.startTime(), reservationDTO.endTime());
+            spot = reportRepository.findFirstAvailableSpot(reservation.getStartTime(), null);
         } catch (NoResultException e) {
             return new ReservationInfoDTO(false, "No spots available");
         }
+        Car car = registerCar(null, new CarDTO(null, reservationDTO.model(), reservationDTO.make(), reservationDTO.color(), reservationDTO.registration(), null));
+        reservation.setSpot(spot);
 
         User user = null;
         if (reservationDTO.email() != null) {
             user = userRepository.findOneByEmailIgnoreCase(reservationDTO.email()).orElseThrow(() -> new UserNotFoundException("Couldn't find a member with the given email: " + reservationDTO.email()));
         }
 
-        Reservation reservation = new Reservation();
-        reservation.setStartTime(LocalDateTime.now());
-        reservation.setSpot(spot);
-        reservation.setCar(registerCar(reservationDTO));
+        reservation.setCar(car);
         reservation.setStatus(Status.STARTED);
         reservation.setConfirmationCode(RandomUtil.generateRandomAlphanumericString());
 
         reservationRepository.save(reservation);
 
+        spot.setCar(car);
+        spotRepository.save(spot);
+
         if (user != null) {
             mailService.sendOrderInfoMail(user, reservation.getConfirmationCode());
         }
 
-        return new ReservationInfoDTO(true, "");
+        return new ReservationInfoDTO(true, spot.getName() + " " + spot.getFloor().getName());
     }
 
     public ReservationDTO closeReservation(@Valid ReservationCompletionDTO reservationCompletionDTO) {
@@ -136,7 +143,9 @@ public class ReservationService {
 
         Duration duration = Duration.between(reservation.getEndTime(), reservation.getStartTime());
         long hours = duration.toHours();
-        BigDecimal price = priceService.getPrice(hours);
+
+
+        BigDecimal price = priceService.getPrice(hours, reservation.getUser() != null);
 
         reservation.setPrice(price);
 
@@ -154,12 +163,12 @@ public class ReservationService {
         }
     }
 
-    private Car registerCar(ReservationDTO reservationDTO) {
-        if (reservationDTO.car() != null) {
-            return carMapper.toEntity(carService.save(reservationDTO.car()));
+    private Car registerCar(Long carId, CarDTO car) {
+        if (car != null) {
+            return carMapper.toEntity(carService.save(car));
         } else {
-            return carRepository.findByUserIsCurrentUserAndId(reservationDTO.carId())
-                    .orElseThrow(() -> new CarNotFoundException("Car with id " + reservationDTO.carId() + " was not found in the database"));
+            return carRepository.findByUserIsCurrentUserAndId(carId)
+                    .orElseThrow(() -> new CarNotFoundException("Car with id " + carId + " was not found in the database"));
         }
     }
 

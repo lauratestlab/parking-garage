@@ -306,6 +306,49 @@ databaseChangeLog:
                       nullable: false
 
   - changeSet:
+      id: 1729099703466-50
+      author: arsen a
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  startWith: 100
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_garages
+                  name: garage_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(20)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: address
+                  type: VARCHAR(200)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: member_discount
+                  type: DECIMAL
+            tableName: garages
+
+  - changeSet:
+      id: 1729099703466-55
+      author: user
+      changes:
+        - loadData:
+            file: db/changelog/data/garages.csv
+            separator: ;
+            tableName: garages
+            usePreparedStatements: true
+
+  - changeSet:
       id: 1729099703466-100
       author: user
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
@@ -325,6 +368,13 @@ databaseChangeLog:
                     nullable: false
                   name: name
                   type: VARCHAR(20)
+              - column:
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_garage_flor
+                    references: garages(garage_id)
+                  name: garage_id
+                  type: BIGINT
             tableName: floors
   - changeSet:
       id: 1729099703466-101
@@ -346,6 +396,7 @@ databaseChangeLog:
                   name: price
                   type: decimal(10, 2)
             tableName: prices
+
   - changeSet:
       id: 1729099703466-102
       author: user
@@ -367,9 +418,13 @@ databaseChangeLog:
               - column:
                   name: floor_id
                   type: BIGINT
+              - column:
+                  name: car_id
+                  type: BIGINT
             tableName: spots
+
   - changeSet:
-      id: 1729099703466-1003
+      id: 1729099703466-103
       author: user
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -379,6 +434,18 @@ databaseChangeLog:
             constraintName: FK_SPOT_ON_FLOORID
             referencedColumnNames: floor_id
             referencedTableName: floors
+
+  - changeSet:
+      id: 1729099703466-104
+      author: user
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: car_id
+            baseTableName: spots
+            constraintName: FK_SPOT_ON_CARID
+            referencedColumnNames: car_id
+            referencedTableName: cars
 
   - changeSet:
       id: 1729099703466-150
@@ -405,8 +472,6 @@ databaseChangeLog:
               - column:
                   name: end_time
                   type: TIMESTAMP
-                  constraints:
-                    nullable: false
               - column:
                   name: spot_id
                   type: BIGINT
@@ -581,74 +646,13 @@ databaseChangeLog:
   - changeSet:
       id: 1729099703466-290
       author: arsen a
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
-        - createTable:
-            tableName: settings
-            columns:
-              - column:
-                  constraints:
-                    nullable: false
-                    primaryKey: true
-                    primaryKeyName: pk_settings
-                  name: key
-                  type: VARCHAR(50)
-              - column:
-                  name: value
-                  type: VARCHAR(50)
+        - sqlFile:
+            dbms: postgresql
+            path: db/changelog/sql/add_hours.sql
+            splitStatements: false
 
-  - changeSet:
-      id: 1729099703466-290
-      author: user
-      changes:
-        - loadData:
-            file: db/changelog/data/settings.csv
-            separator: ;
-            tableName: settings
-            usePreparedStatements: true
 
-  - changeSet:
-      id: 1729099703466-300
-      author: arsen a
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - createTable:
-            columns:
-              - column:
-                  autoIncrement: true
-                  startWith: 100
-                  constraints:
-                    nullable: false
-                    primaryKey: true
-                    primaryKeyName: pk_garages
-                  name: garage_id
-                  type: BIGINT
-              - column:
-                  constraints:
-                    nullable: false
-                  name: name
-                  type: VARCHAR(20)
-              - column:
-                  constraints:
-                    nullable: false
-                  name: address
-                  type: VARCHAR(200)
-              - column:
-                  constraints:
-                    nullable: false
-                  name: member_discount
-                  type: DECIMAL
-            tableName: garages
-
-  - changeSet:
-      id: 1729099703466-310
-      author: user
-      changes:
-        - loadData:
-            file: db/changelog/data/garages.csv
-            separator: ;
-            tableName: garages
-            usePreparedStatements: true
 
 
 

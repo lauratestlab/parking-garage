@@ -33,7 +33,7 @@ class PriceRepositoryTest {
     @Test
     void findAll() {
         Price price1 = new Price();
-        price1.setDuration(3);
+        price1.setDuration(3L);
         price1.setPrice(new BigDecimal("2"));
 
         entityManager.persist(price1);
@@ -48,14 +48,14 @@ class PriceRepositoryTest {
     @Disabled
     void saveExceptionThrownWhenDurationIsDuplicated() {
         Price price2 = new Price();
-        price2.setDuration(3);
+        price2.setDuration(3L);
         price2.setPrice(new BigDecimal("2"));
 
         priceRepository.saveAndFlush(price2);
 
         Price price3 = new Price();
         price3.setPrice(new BigDecimal("2"));
-        price3.setDuration(3);
+        price3.setDuration(3L);
 
         assertThrows(DataIntegrityViolationException.class, () -> priceRepository.saveAndFlush(price3));
     }
@@ -65,6 +65,13 @@ class PriceRepositoryTest {
         Optional<Price> priceOptional = priceRepository.findFirstByDurationGreaterThanEqualOrderByDurationAsc(4);
         assertThat(priceOptional).isNotNull();
         assertThat(priceOptional.get().getPrice()).isEqualTo(new BigDecimal("8.00"));
+    }
+
+    @Test
+    void findFirstOrderByDurationDesc() {
+        Optional<Long> priceOptional = priceRepository.maxDuration();
+        assertThat(priceOptional).isNotNull();
+        assertThat(priceOptional.get()).isEqualTo(24L);
     }
 
     /*

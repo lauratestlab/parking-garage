@@ -14,9 +14,11 @@ import java.time.LocalDateTime;
 public class ReportRepositoryImpl implements ReportRepository {
 
     private final EntityManager em;
+    private final PriceRepository priceRepository;
 
-    public ReportRepositoryImpl(EntityManager em) {
+    public ReportRepositoryImpl(EntityManager em, PriceRepository priceRepository) {
         this.em = em;
+        this.priceRepository = priceRepository;
     }
 
     @Override
@@ -39,6 +41,13 @@ public class ReportRepositoryImpl implements ReportRepository {
 
     @Override
     public Spot findFirstAvailableSpot(LocalDateTime startTime, LocalDateTime endTime) throws NoResultException {
+
+        Long maxDurationInHours = priceRepository.maxDuration()
+                .orElseThrow(() -> new RuntimeException("Prices are not set"));
+        if (endTime == null) {
+            endTime = startTime.plusHours(maxDurationInHours);
+        }
+
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Spot> cq = cb.createQuery(Spot.class);
 
@@ -46,12 +55,18 @@ public class ReportRepositoryImpl implements ReportRepository {
 
         Join<Spot, Reservation> joinedRoot = root.join("reservations", JoinType.LEFT);
 
-        joinedRoot.on(cb.lessThan(joinedRoot.get("startTime"), endTime), cb.greaterThan(joinedRoot.get("endTime"), startTime), cb.equal(joinedRoot.get("status"), Status.STARTED));
+        CriteriaBuilder.Coalesce<LocalDateTime> coalesce = cb.coalesce();
+        coalesce.value(joinedRoot.get("endTime"));
+        coalesce.value(cb.function("add_hours", LocalDateTime.class, joinedRoot.get("startTime"), cb.literal(maxDurationInHours)));
+
+        CriteriaBuilder.In<Object> status = cb.in(joinedRoot.get("status")).value(Status.STARTED).value(Status.ORDERED);
+
+        joinedRoot.on(cb.lessThan(joinedRoot.get("startTime"), endTime), cb.greaterThan(coalesce, startTime), status);
 
         cq.where(cb.isNull(joinedRoot.get("id")));
 
         cq.orderBy(cb.asc(root.get("floor")), cb.asc(root.get("name")));
-
+        
         return em.createQuery(cq).setFirstResult(0).setMaxResults(1).getSingleResult();
     }
 }
