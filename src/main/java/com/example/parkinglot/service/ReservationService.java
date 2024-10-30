@@ -1,12 +1,10 @@
 package com.example.parkinglot.service;
 
 
-import com.example.parkinglot.config.Constants;
 import com.example.parkinglot.dto.*;
 import com.example.parkinglot.entity.*;
 import com.example.parkinglot.enums.Status;
-import com.example.parkinglot.exception.CarNotFoundException;
-import com.example.parkinglot.exception.PaymentMethodNotFoundException;
+import com.example.parkinglot.exception.NotAllowedTimeException;
 import com.example.parkinglot.exception.ReservationNotFoundException;
 import com.example.parkinglot.exception.UserNotFoundException;
 import com.example.parkinglot.mapper.CarMapper;
@@ -27,7 +25,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -37,12 +34,8 @@ public class ReservationService {
     private final PaymentService paymentService;
     private final ReservationRepository reservationRepository;
     private final CarService carService;
-    private final CarRepository carRepository;
-    private final PaymentMethodRepository paymentMethodRepository;
-    private final PaymentMethodMapper paymentMethodMapper;
     private final ReportRepository reportRepository;
     private final MailService mailService;
-    private final CarMapper carMapper;
     private final PriceService priceService;
     private final ReservationMapper reservationMapper;
     private final SpotRepository spotRepository;
@@ -53,12 +46,8 @@ public class ReservationService {
         this.paymentService = paymentService;
         this.reservationRepository = reservationRepository;
         this.carService = carService;
-        this.carRepository = carRepository;
-        this.paymentMethodRepository = paymentMethodRepository;
-        this.paymentMethodMapper = paymentMethodMapper;
         this.reportRepository = reportRepository;
         this.mailService = mailService;
-        this.carMapper = carMapper;
         this.priceService = priceService;
         this.reservationMapper = reservationMapper;
         this.spotRepository = spotRepository;
@@ -67,27 +56,29 @@ public class ReservationService {
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public ReservationInfoDTO createReservation(@Valid ReservationDTO reservationDTO) {
-        String currentUserLogin = SecurityUtils.getCurrentUserLogin().orElse(Constants.SYSTEM);
+        Long maxDuration = priceService.maxDuration();
+        checkReservationDuration(reservationDTO, maxDuration);
+
+        String currentUserLogin = SecurityUtils.getCurrentUserLogin().orElse("");
 
         User user = userRepository.findOneByLogin(currentUserLogin).orElse(null);
 
-        PaymentMethod paymentMethod = processPayment(reservationDTO);
-        paymentService.processPayment(paymentMethod);
+        PaymentMethod paymentMethod = paymentService.processReservationPayment(reservationDTO, user);
 
-        if (reservationDTO.saveCreditCard()) {
-            paymentMethod.setUser(user);
-            paymentMethodRepository.save(paymentMethod);
+        if (reservationDTO.saveCar() && user != null) {
+            reservationDTO.car().setUser(new UserDTO(user));
         }
+        Car car = carService.findOrSaveCar(reservationDTO.carId(), reservationDTO.car());
 
         Reservation reservation = new Reservation();
 
         Spot spot;
         try {
-            spot = reportRepository.findFirstAvailableSpot(reservationDTO.startTime(), reservationDTO.endTime(), priceService.maxDuration());
+            spot = reportRepository.findFirstAvailableSpot(reservationDTO.startTime(), reservationDTO.endTime(), maxDuration);
         } catch (NoResultException e) {
             return reservationInfoMapper.toDto(false, "No spots available", reservation);
         }
-        Car car = registerCar(reservationDTO.carId(), reservationDTO.car());
+
 
         reservation.setStartTime(reservationDTO.startTime());
         reservation.setEndTime(reservationDTO.endTime());
@@ -95,6 +86,9 @@ public class ReservationService {
         reservation.setSpot(spot);
         reservation.setCar(car);
         reservation.setStatus(Status.ORDERED);
+        if (reservationDTO.saveCreditCard()) {
+            reservation.setPaymentMethod(paymentMethod);
+        }
         reservation.setConfirmationCode(RandomUtil.generateRandomAlphanumericString());
 
         reservationRepository.save(reservation);
@@ -111,19 +105,19 @@ public class ReservationService {
 
         Long maxDurationInHours = priceService.maxDuration();
 
+        User user = null;
+        if (reservationDTO.email() != null) {
+            user = userRepository.findOneByEmailIgnoreCase(reservationDTO.email()).orElseThrow(() -> new UserNotFoundException("Couldn't find a member with the given email: " + reservationDTO.email()));
+        }
+
         Spot spot;
         try {
             spot = reportRepository.findFirstAvailableSpot(reservation.getStartTime(), maxDurationInHours);
         } catch (NoResultException e) {
             return reservationInfoMapper.toDto(false, "No spots available", reservation);
         }
-        Car car = registerCar(null, new CarDTO(null, reservationDTO.model(), reservationDTO.make(), reservationDTO.color(), reservationDTO.registration(), null));
+        Car car = carService.findOrSaveCar(null, new CarDTO(null, reservationDTO.model(), reservationDTO.make(), reservationDTO.color(), reservationDTO.registration(), null));
         reservation.setSpot(spot);
-
-        User user = null;
-        if (reservationDTO.email() != null) {
-            user = userRepository.findOneByEmailIgnoreCase(reservationDTO.email()).orElseThrow(() -> new UserNotFoundException("Couldn't find a member with the given email: " + reservationDTO.email()));
-        }
 
         reservation.setUser(user);
         reservation.setCar(car);
@@ -151,35 +145,21 @@ public class ReservationService {
         reservation.setEndTime(LocalDateTime.now());
 
         Duration duration = Duration.between(reservation.getEndTime(), reservation.getStartTime());
-        long hours = duration.toHours();
+        long durationSeconds = duration.toSeconds();
 
         Long maxDuration = priceService.maxDuration();
-        BigDecimal price = priceService.getPrice(hours,  maxDuration, reservation.getUser() != null);
+        BigDecimal price = priceService.getPrice(durationSeconds / 3600,  maxDuration, reservation.getUser() != null);
 
         reservation.setPrice(price);
 
         reservation = reservationRepository.save(reservation);
 
+        var spot = reservation.getSpot();
+        spot.setCar(null);
+        spotRepository.save(spot);
+
         String message = "";
-        return reservationInfoMapper.toDto(true, message, hours > maxDuration, reservation);
-    }
-
-    private PaymentMethod processPayment(ReservationDTO reservationDTO) {
-        if (Objects.nonNull(reservationDTO.paymentMethod())) {
-            return paymentMethodMapper.paymentMethodDTOToPaymentMethod(reservationDTO.paymentMethod());
-        } else {
-            return paymentMethodRepository.findPaymentMethodById(reservationDTO.paymentMethodId())
-                    .orElseThrow(() -> new PaymentMethodNotFoundException("Payment method with id " + reservationDTO.paymentMethodId() + " was not found in the database"));
-        }
-    }
-
-    private Car registerCar(Long carId, CarDTO car) {
-        if (car != null) {
-            return carMapper.toEntity(carService.save(car));
-        } else {
-            return carRepository.findByUserIsCurrentUserAndId(carId)
-                    .orElseThrow(() -> new CarNotFoundException("Car with id " + carId + " was not found in the database"));
-        }
+        return reservationInfoMapper.toDto(true, message, durationSeconds > maxDuration * 3600, reservation);
     }
 
     public List<ReservationDTO> findAllReservations() {
@@ -214,6 +194,15 @@ public class ReservationService {
         return reservationRepository.countByCarColor(color);
     }
 
+
+    private void checkReservationDuration(ReservationDTO reservationDTO , Long maxDuration) {
+        Duration between = Duration.between(reservationDTO.startTime(), reservationDTO.endTime());
+        Duration duration = Duration.ofHours(maxDuration);
+        if (between.getSeconds() > duration.toSeconds()) {
+            throw new NotAllowedTimeException("You can't reserve more than for " + maxDuration + " hours");
+        }
+
+    }
 
 
 

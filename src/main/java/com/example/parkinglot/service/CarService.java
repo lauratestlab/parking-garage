@@ -1,6 +1,7 @@
 package com.example.parkinglot.service;
 
 import com.example.parkinglot.entity.Car;
+import com.example.parkinglot.exception.CarNotFoundException;
 import com.example.parkinglot.repo.CarRepository;
 import com.example.parkinglot.dto.CarDTO;
 import com.example.parkinglot.mapper.CarMapper;
@@ -42,6 +43,15 @@ public class CarService {
         return carMapper.toDto(car);
     }
 
+    public Car findOrSaveCar(Long carId, CarDTO carDTO) {
+        if (carDTO != null) {
+            return carMapper.toEntity(save(carDTO));
+        } else {
+            return carRepository.findByUserIsCurrentUserAndId(carId)
+                    .orElseThrow(() -> new CarNotFoundException("Car with id " + carId + " was not found in the database"));
+        }
+    }
+
     /**
      * Update a car.
      *
@@ -65,7 +75,7 @@ public class CarService {
         LOG.debug("Request to partially update Car : {}", carDTO);
 
         return carRepository
-            .findById(carDTO.id())
+            .findById(carDTO.getId())
             .map(existingCar -> {
                 carMapper.partialUpdate(existingCar, carDTO);
 

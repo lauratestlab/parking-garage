@@ -49,7 +49,7 @@ public class PriceService {
         if (applyDiscount) {
             BigDecimal discount = garageRepository.memberDiscount(Constants.DEFAULT_GARAGE_ID)
                     .orElseThrow(RuntimeException::new);
-            price = price.multiply(new BigDecimal("100").subtract(discount));
+            price = price.multiply(new BigDecimal("100").subtract(discount).divide(new BigDecimal("100")));
         }
 
         return price;

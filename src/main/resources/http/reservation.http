@@ -6,13 +6,15 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjIyO
 {
   "userId": 1,
   "startTime": "2025-04-23T18:25:43.511Z",
-  "endTime": "2025-04-28T18:25:43.511Z",
+  "endTime": "2025-04-24T18:24:43.511Z",
   "car": {
     "color": "red",
     "make": "Ford",
     "model": "Fusion",
     "registration": "GSDD#34534"
   },
+  "saveCar": true,
+  "saveCreditCard": true,
   "paymentMethod": {
     "card_number": "374245455400126",
     "ccv": 343,
@@ -38,7 +40,8 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjg0M
   "registration": "YRH45645",
   "model": "Tundra",
   "make": "Toyota",
-  "color": "Gray"
+  "color": "Gray",
+  "email": "user@localhost"
 }
 
 ###
@@ -47,5 +50,5 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjg0MzMxNywiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzMwMjUxMzE3fQ.kUEWRqjOUJP6oMToabHzrZHWQY9c5bEzNJXeoG-4ipMUF_5qMV_BUIDReqQX0DQPaRAJFoAPEe2Zvf63CtDsXQ
 
 {
-  "confirmationCode": "homG5zL7O5JaELPLKTQh"
+  "confirmationCode": "LXO7gQVlcrX0rfipcupu"
 }

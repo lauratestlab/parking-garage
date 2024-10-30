@@ -47,12 +47,12 @@ public class CarResource {
     @PostMapping("")
     public ResponseEntity<CarDTO> createCar(@Valid @RequestBody CarDTO carDTO) throws URISyntaxException {
         LOG.debug("REST request to save Car : {}", carDTO);
-        if (carDTO.id() != null) {
+        if (carDTO.getId() != null) {
             throw new BadRequestAlertException("A new car cannot already have an ID", ENTITY_NAME, "idexists");
         }
         carDTO = carService.save(carDTO);
-        return ResponseEntity.created(new URI("/api/cars/" + carDTO.id()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, carDTO.id().toString()))
+        return ResponseEntity.created(new URI("/api/cars/" + carDTO.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, carDTO.getId().toString()))
             .body(carDTO);
     }
 
@@ -60,10 +60,10 @@ public class CarResource {
     public ResponseEntity<CarDTO> updateCar(@PathVariable(value = "id", required = false) final Long id, @Valid @RequestBody CarDTO carDTO)
         throws URISyntaxException {
         LOG.debug("REST request to update Car : {}, {}", id, carDTO);
-        if (carDTO.id() == null) {
+        if (carDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, carDTO.id())) {
+        if (!Objects.equals(id, carDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -73,7 +73,7 @@ public class CarResource {
 
         carDTO = carService.update(carDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, carDTO.id().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, carDTO.getId().toString()))
             .body(carDTO);
     }
 
@@ -83,10 +83,10 @@ public class CarResource {
         @NotNull @RequestBody CarDTO carDTO
     ) throws URISyntaxException {
         LOG.debug("REST request to partial update Car partially : {}, {}", id, carDTO);
-        if (carDTO.id() == null) {
+        if (carDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, carDTO.id())) {
+        if (!Objects.equals(id, carDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -98,7 +98,7 @@ public class CarResource {
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, carDTO.id().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, carDTO.getId().toString())
         );
     }
 
