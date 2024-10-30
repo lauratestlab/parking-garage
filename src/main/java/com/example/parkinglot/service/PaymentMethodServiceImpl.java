@@ -18,9 +18,12 @@ public class PaymentMethodServiceImpl implements PaymentMethodService{
     private final Logger logger = LoggerFactory.getLogger(PaymentMethodServiceImpl.class);
 
     private final PaymentMethodRepository paymentMethodRepository;
+    private final PaymentMethodMapper paymentMethodMapper;
 
-    public PaymentMethodServiceImpl(PaymentMethodRepository paymentMethodRepository) {
+
+    public PaymentMethodServiceImpl(PaymentMethodRepository paymentMethodRepository, PaymentMethodMapper paymentMethodMapper) {
         this.paymentMethodRepository = paymentMethodRepository;
+        this.paymentMethodMapper = paymentMethodMapper;
     }
 
 
@@ -28,14 +31,14 @@ public class PaymentMethodServiceImpl implements PaymentMethodService{
     public List<PaymentMethodDTO> getAllPaymentMethods() {
         List<PaymentMethod> paymentMethods = (List<PaymentMethod>) paymentMethodRepository.findAll();
         return paymentMethods.stream()
-                .map(PaymentMethodMapper::mapToDTO)
+                .map(paymentMethodMapper::paymentMethodToPaymentMethodDTO)
                 .toList();
     }
 
     @Override
     public PaymentMethodDTO getPaymentMethod(Long paymentMethodId) {
         return paymentMethodRepository.findById(paymentMethodId)
-                .map(PaymentMethodMapper::mapToDTO)
+                .map(paymentMethodMapper::paymentMethodToPaymentMethodDTO)
                 .orElse(null);
     }
 
@@ -54,7 +57,7 @@ public class PaymentMethodServiceImpl implements PaymentMethodService{
         paymentMethod.setCard_number(paymentMethodDTO.card_number());
 
         paymentMethod = paymentMethodRepository.save(paymentMethod);
-        return PaymentMethodMapper.mapToDTO(paymentMethod);
+        return paymentMethodMapper.paymentMethodToPaymentMethodDTO(paymentMethod);
 
     }
 }
