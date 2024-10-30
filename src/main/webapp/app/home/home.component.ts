@@ -79,7 +79,7 @@ export class HomeComponent implements OnInit {
     this.loadPricingModel();
   }
     loadPricingModel(): void {
-    this.api.getPricingList().subscribe(
+    this.api.get().subscribe(
         data => { this.prices = data; },
         error => { console.error('Error fetching pricing list', error); }
     );
