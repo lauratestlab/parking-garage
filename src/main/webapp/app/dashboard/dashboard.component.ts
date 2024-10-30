@@ -28,9 +28,9 @@ export class DashboardComponent implements OnInit{
   revenueForm: FormGroup;
   revenueData?: Revenue;
 
-  colors: string[] = ['Red', 'Black', 'Blue', 'White', 'Grey', 'Green'];
-  carCount: number | null = null;
   selectedColor: string = 'Red';
+  carCount: number | null = null;
+  colors: string[] = ['Red', 'Black', 'Blue', 'White', 'Grey', 'Green'];
 
   constructor(
       private api: DashboardApiService,
@@ -91,6 +91,7 @@ export class DashboardComponent implements OnInit{
       this.api.fetchCarByColor(this.selectedColor).subscribe({
         next: (count) => {
           this.carCount = count;
+          console.log(this.carCount);
         },
         error: (err) => {
           console.error('Failed to fetch car count', err);
