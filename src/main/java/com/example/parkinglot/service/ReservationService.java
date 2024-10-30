@@ -2,6 +2,7 @@ package com.example.parkinglot.service;
 
 
 import com.example.parkinglot.dto.ReservationDTO;
+import com.example.parkinglot.dto.ReservationDTO2;
 import com.example.parkinglot.dto.ReservationInfoDTO;
 import com.example.parkinglot.entity.*;
 import com.example.parkinglot.enums.Status;
@@ -102,22 +103,22 @@ public class ReservationService {
         }
     }
 
-    public List<ReservationDTO> findAllReservations() {
+    public List<ReservationDTO2> findAllReservations() {
         List<Reservation> reservations = reservationRepository.findAll();
         return reservations.stream()
-                .map(ReservationDTO::new) // Assuming ReservationDTO2 has a constructor that takes Reservation
+                .map(ReservationDTO2::new) // Assuming ReservationDTO2 has a constructor that takes Reservation
                 .collect(Collectors.toList());
     }
 
 
-    public List<ReservationDTO> findReservationsForCurrentUser() {
+    public List<ReservationDTO2> findReservationsForCurrentUser() {
         Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
         if (currentUserLogin.isPresent()) {
             User user = userRepository.findByLogin(currentUserLogin.get())
                     .orElseThrow(() -> new UserNotFoundException("User not found"));
             List<Reservation> reservations = reservationRepository.findByUser(user);
             return reservations.stream()
-                    .map(reservation -> new ReservationDTO(reservation)) // convert to DTO
+                    .map(reservation -> new ReservationDTO2(reservation)) // convert to DTO
                     .collect(Collectors.toList());
         }
         return Collections.emptyList();

@@ -3,33 +3,38 @@ package com.example.parkinglot.dto;
 import com.example.parkinglot.entity.PaymentMethod;
 import com.example.parkinglot.entity.Reservation;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public record ReservationDTO(
+public record ReservationDTO2(
+//        Long userId,
+//        LocalDateTime startTime,
+//        LocalDateTime endTime,
+//        Long spotId,
+//        Long carId,
+//        CarDTO car
+        Long reservationId,
         Long userId,
         LocalDateTime startTime,
         LocalDateTime endTime,
         Long spotId,
         Long carId,
-        CarDTO car,
-        Long paymentMethodId,
-        PaymentMethodDTO paymentMethod,
-        boolean saveCreditCard
+        BigDecimal price,
+        String confirmationCode
 )
 
 
 {
-    public ReservationDTO(Reservation reservation) {
+    public ReservationDTO2(Reservation reservation) {
         this(
+                reservation.getId(),
                 reservation.getUser() != null ? reservation.getUser().getId() : null,
                 reservation.getStartTime(),
                 reservation.getEndTime(),
                 reservation.getSpot() != null ? reservation.getSpot().getId() : null,
                 reservation.getCar() != null ? reservation.getCar().getId() : null,
-                null,
-                reservation.getPaymentMethod() != null ? reservation.getPaymentMethod().getId() : null,
-                null,
-                false
+                reservation.getPrice(),
+                reservation.getConfirmationCode()
 
         );
     }
@@ -61,23 +66,24 @@ public record ReservationDTO(
         return carId;
     }
 
-    @Override
-    public CarDTO car() {
-        return car;
-    }
+//    @Override
+//    public CarDTO car() {
+//        return car;
+//    }
 
-    @Override
-    public Long paymentMethodId() {
-        return paymentMethodId;
-    }
-
-    @Override
-    public PaymentMethodDTO paymentMethod() {
-        return paymentMethod;
-    }
-
-    @Override
-    public boolean saveCreditCard() {
-        return saveCreditCard;
-    }
+//    @Override
+//    public Long paymentMethodId() {
+//        return paymentMethodId;
+//    }
+//
+//    @Override
+//    public PaymentMethodDTO paymentMethod() {
+//        return paymentMethod;
+//    }
+//
+//    @Override
+//    public boolean saveCreditCard() {
+//        return saveCreditCard;
+//    }
 }
+
