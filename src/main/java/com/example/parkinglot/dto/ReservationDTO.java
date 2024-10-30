@@ -26,6 +26,7 @@ public record ReservationDTO(
                 reservation.getPaymentMethod() != null ? reservation.getPaymentMethod().getId() : null,
                 null,
                 false
+
         );
     }
 }
