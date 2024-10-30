@@ -2,6 +2,7 @@ package com.example.parkinglot.web.rest;
 
 import com.example.parkinglot.dto.ReservationCompletionDTO;
 import com.example.parkinglot.dto.ReservationDTO;
+import com.example.parkinglot.dto.ReservationDTO2;
 import com.example.parkinglot.dto.ReservationInfoDTO;
 import com.example.parkinglot.dto.ReservationStartDTO;
 import com.example.parkinglot.service.ReservationService;
@@ -85,14 +86,14 @@ public class ReservationResource {
 
     @GetMapping
     @PermitAll // Or @PreAuthorize("hasRole('ADMIN')")
-    public List<ReservationDTO> getAllReservations() {
+    public List<ReservationDTO2> getAllReservations() {
         LOG.debug("REST request to get all reservations");
         return reservationService.findAllReservations();
     }
 
     @GetMapping("/my")
     @ResponseStatus(HttpStatus.OK)
-    public List<ReservationDTO> getMyReservations() {
+    public List<ReservationDTO2> getMyReservations() {
         LOG.debug("REST request to get reservations for current user");
         return reservationService.findReservationsForCurrentUser();
     }

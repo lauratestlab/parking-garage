@@ -1,6 +1,5 @@
 package com.example.parkinglot.repo;
 
-import com.example.parkinglot.config.EmbeddedSQL;
 import com.example.parkinglot.entity.Price;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

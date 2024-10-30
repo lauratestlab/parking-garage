@@ -122,4 +122,17 @@ public class CarService {
         LOG.debug("Request to delete Car : {}", id);
         carRepository.deleteById(id);
     }
+
+    @Transactional(readOnly = true)
+    public Page<CarDTO> findAllByUser(Pageable pageable, String userLogin) {
+        LOG.debug("Request to get all Cars for user: {}", userLogin);
+        return carRepository.findAllByUser(pageable, userLogin).map(carMapper::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<CarDTO> findAllWithEagerRelationshipsByUser(Pageable pageable, String userLogin) {
+        LOG.debug("Request to get all Cars with eager load for user: {}", userLogin);
+        return carRepository.findAllWithEagerRelationshipsByUser(pageable, userLogin).map(carMapper::toDto);
+    }
+
 }
