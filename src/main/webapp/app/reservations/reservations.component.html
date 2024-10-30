@@ -9,11 +9,9 @@
     <hr>
     <div>
         <div *appHasAnyAuthority="'ROLE_ADMIN'">
-            <h2>All Reservations (Admin View)</h2>
             <!-- Display admin-specific data -->
         </div>
         <div *appHasAnyAuthority="'ROLE_USER'">
-            <h2>My Reservations</h2>
             <!-- Display member-specific data -->
         </div>
         <table class="table table-hover">

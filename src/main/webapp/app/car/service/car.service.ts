@@ -23,6 +23,10 @@ export class CarService {
     return this.http.post<ICar>(this.resourceUrl, car, { observe: 'response' });
   }
 
+  // getAllForUser(): Observable<EntityArrayResponseType>{
+  //   return this.http.get<EntityArrayResponseType>('${this.resourceUrl}')
+  // }
+
   update(car: ICar): Observable<EntityResponseType> {
     return this.http.put<ICar>(`${this.resourceUrl}/${this.getCarIdentifier(car)}`, car, { observe: 'response' });
   }

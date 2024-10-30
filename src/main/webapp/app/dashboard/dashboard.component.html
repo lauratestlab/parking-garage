@@ -38,7 +38,15 @@
         </div>
 
         <div class="box blue">
+            <select id="colorSelect" [(ngModel)]="selectedColor" (change)="fetchCarCount()">
+                <option value="" disabled selected>Select a color</option>
+                <option *ngFor="let color of colors" [value]="color">{{ color }}</option>
+            </select>
 
+            <div *ngIf="carCount !== null">
+                <h3>Number of {{ selectedColor }} Cars: {{ carCount }}</h3>
+            </div>
+            <h2 class="card-title">Car Colors Distribution</h2>
         </div>
     </div>
 
