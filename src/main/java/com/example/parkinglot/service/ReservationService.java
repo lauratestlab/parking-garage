@@ -157,7 +157,7 @@ public class ReservationService {
         long maxDuration = priceService.maxDuration();
 
         // If it was not prepaid
-        if (reservation.getPrice().equals(BigDecimal.ZERO)) {
+        if (BigDecimal.ZERO.compareTo(reservation.getPrice()) == 0) {
 
             BigDecimal price = priceService.getPrice(durationSeconds / 3600, maxDuration, reservation.getUser() != null);
 
