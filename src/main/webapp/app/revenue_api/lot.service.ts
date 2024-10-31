@@ -4,6 +4,8 @@ import {Observable} from "rxjs";
 import {SignupModel} from "../account/signup/signup-model";
 import {ApplicationConfigService} from "../core/config/application-config.service";
 
+const BASE_URL = "http://localhost:8080/api";
+
 @Injectable({
   providedIn: 'root'
 })

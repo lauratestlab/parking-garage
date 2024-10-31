@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {DashboardApiService} from "./dashboard-api.service";
 import {Observable} from "rxjs";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Revenue} from "../model/revenue.model";
-import {error} from "@angular/compiler-cli/src/transformers/util";
-import {CurrencyPipe, NgIf} from "@angular/common";
+import {CurrencyPipe, DecimalPipe, KeyValuePipe, NgIf} from "@angular/common";
+import {ChartData, ChartOptions} from "chart.js/auto";
+import {BaseChartDirective} from "ng2-charts";
 
 @Component({
   selector: 'app-dashboard',
@@ -13,7 +14,10 @@ import {CurrencyPipe, NgIf} from "@angular/common";
     FormsModule,
     NgIf,
     ReactiveFormsModule,
-    CurrencyPipe
+    CurrencyPipe,
+    BaseChartDirective,
+    KeyValuePipe,
+    DecimalPipe,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
@@ -25,6 +29,9 @@ export class DashboardComponent implements OnInit{
   revenueForm: FormGroup;
   revenueData?: Revenue;
 
+  selectedColor: string = 'Red';
+  carCount: number | null = null;
+  colors: string[] = ['Red', 'Black', 'Blue', 'White', 'Grey', 'Green'];
 
   constructor(
       private api: DashboardApiService,
@@ -48,8 +55,9 @@ export class DashboardComponent implements OnInit{
       }
     });
 
-    // Initial fetch for today's revenue
+    // Initial fetch all the information to display on dashboard
     this.fetchRevenue();
+    this.getAvailSpots();
   }
 
   getAvailSpots(): void {
@@ -78,4 +86,20 @@ export class DashboardComponent implements OnInit{
       });
     }
   }
+
+  fetchCarCount(): void {
+    if(this.selectedColor) {
+      this.api.fetchCarByColor(this.selectedColor).subscribe({
+        next: (count) => {
+          this.carCount = count;
+          console.log(this.carCount);
+        },
+        error: (err) => {
+          console.error('Failed to fetch car count', err);
+          this.carCount = null;
+        }
+      })
+    }
+  }
+
 }

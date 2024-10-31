@@ -19,6 +19,11 @@ const routes: Routes = [
   },
 
   {
+    path: 'receipt',
+
+  },
+
+  {
     path: 'checkin',
     loadComponent: () => import('./checkin/checkin.component').then(m => m.CheckinComponent),
     title: 'Checkin',
