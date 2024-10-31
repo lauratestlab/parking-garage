@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Optional;
 
 import static org.apache.commons.lang3.ObjectUtils.max;
@@ -46,10 +47,15 @@ public class PriceService {
                 .orElseThrow(RuntimeException::new)
                 .getPrice();
 
+        if (hours > maxDuration) {
+            BigDecimal remainder = maxDuration % hours == 0 ? BigDecimal.ZERO : BigDecimal.ONE;
+            price = price.multiply(new BigDecimal(hours / maxDuration).add(remainder));
+        }
+
         if (applyDiscount) {
             BigDecimal discount = garageRepository.memberDiscount(Constants.DEFAULT_GARAGE_ID)
                     .orElseThrow(RuntimeException::new);
-            price = price.multiply(new BigDecimal("100").subtract(discount).divide(new BigDecimal("100")));
+            price = price.multiply(new BigDecimal("100").subtract(discount).divide(new BigDecimal("100"), RoundingMode.HALF_UP));
         }
 
         return price;

@@ -1,2 +1,0 @@
-reservation_id;start_time;end_time;spot_id;payment_method_id;user_id;price;status;car_id
-1;2024-10-22 10:46:51.000000;2024-10-24 10:46:57.000000;1;1;2;22.50;ORDERED;1

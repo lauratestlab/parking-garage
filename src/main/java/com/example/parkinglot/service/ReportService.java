@@ -16,16 +16,19 @@ public class ReportService {
 
     private final CriteriaBasedRepository criteriaBasedRepository;
     private final ReservationRepository reservationRepository;
+    private final PriceService priceService;
 
 
-    public ReportService(CriteriaBasedRepository criteriaBasedRepository, ReservationRepository reservationRepository) {
+    public ReportService(CriteriaBasedRepository criteriaBasedRepository, ReservationRepository reservationRepository, PriceService priceService) {
         this.criteriaBasedRepository = criteriaBasedRepository;
         this.reservationRepository = reservationRepository;
+        this.priceService = priceService;
     }
 
 
     public Long getNumberOfAvailableSpots(LocalDateTime start, LocalDateTime end) {
-        return criteriaBasedRepository.numberOfAvailableSports(start, end);
+        Long maxDuration = priceService.maxDuration();
+        return criteriaBasedRepository.numberOfAvailableSports(start, end, maxDuration);
     }
 
     public BigDecimal getRevenue(LocalDate start, LocalDate end) {

@@ -29,7 +29,7 @@ spring:
       hibernate.z`timezone.default_storage: NORMALIZE
       hibernate.query.fail_on_pagination_over_collection_fetch: true
   liquibase:
-    contexts: test
+    contexts: test, fake
   jackson:
     serialization:
       write-durations-as-timestamps: false

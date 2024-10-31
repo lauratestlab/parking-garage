@@ -1,0 +1,62 @@
+<div class="d-flex justify-content-center main-content">
+  <div class="col-8">
+    @if (paymentMethod(); as paymentMethodRef) {
+      <div>
+        <h2 data-cy="paymentMethodDetailsHeading"><span>Payment Method</span></h2>
+
+        <hr />
+
+        <app-alert-error></app-alert-error>
+
+        <app-alert></app-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ paymentMethodRef.id }}</span>
+          </dd>
+          <dt><span>Expiration Date</span></dt>
+          <dd>
+            <span>{{ paymentMethodRef.expirationDate }}</span>
+          </dd>
+          <dt><span>Ccv</span></dt>
+          <dd>
+            <span>{{ paymentMethodRef.ccv }}</span>
+          </dd>
+          <dt><span>Card Number</span></dt>
+          <dd>
+            <span>{{ paymentMethodRef.cardNumber }}</span>
+          </dd>
+          <dt><span>Full Name</span></dt>
+          <dd>
+            <span>{{ paymentMethodRef.fullName }}</span>
+          </dd>
+          <dt><span>Street</span></dt>
+          <dd>
+            <span>{{ paymentMethodRef.street }}</span>
+          </dd>
+          <dt><span>City</span></dt>
+          <dd>
+            <span>{{ paymentMethodRef.city }}</span>
+          </dd>
+          <dt><span>State</span></dt>
+          <dd>
+            <span>{{ paymentMethodRef.state }}</span>
+          </dd>
+          <dt><span>Zip</span></dt>
+          <dd>
+            <span>{{ paymentMethodRef.zip }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/payment-method', paymentMethodRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

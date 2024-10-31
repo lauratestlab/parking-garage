@@ -1,0 +1,2 @@
+payment_method_id;expiration_date;ccv;card_number;full_name;street;city;state;zip;user_id
+1;22/28;342;5250432827704595;Simon Fay;123 Main St;Warsaw;Mazowieckie;00-001;2
