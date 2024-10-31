@@ -6,7 +6,6 @@ import {Revenue} from "../model/revenue.model";
 import {ApplicationConfigService} from "../core/config/application-config.service";
 import {ICar} from "../car/car.model";
 
-export type EntityArrayResponseType = HttpResponse<ICar[]>;
 @Injectable({
   providedIn: 'root'
 })
@@ -14,7 +13,7 @@ export class DashboardApiService {
   private http = inject(HttpClient);
   private applicationConfigService = inject(ApplicationConfigService);
 
-  private resourceUrl = this.applicationConfigService.getEndpointFor('api/report');
+  // private resourceUrl = this.applicationConfigService.getEndpointFor('api/report');
   private carUrl = this.applicationConfigService.getEndpointFor('api/reservation');
   private resourceUrl = this.applicationConfigService.getEndpointFor('api/admin/report');
 
