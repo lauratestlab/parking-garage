@@ -61,4 +61,7 @@ public interface CarRepository extends JpaRepository<Car, Long> {
                          @Param("registration") String registration,
                          @Param("userId") Long userId);
 
+
+    @Query("SELECT DISTINCT c.color FROM Car c ORDER BY c.color ASC")
+    List<String> findAllDistinctColorsSorted();
 }

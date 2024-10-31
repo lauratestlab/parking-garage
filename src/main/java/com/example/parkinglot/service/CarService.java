@@ -141,5 +141,10 @@ public class CarService {
         return cars.stream().map(carMapper::toDto).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public List<String> findAllDistinctColorsSorted() {
+        return carRepository.findAllDistinctColorsSorted();
+    }
+
 
 }

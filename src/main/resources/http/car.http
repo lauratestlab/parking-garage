@@ -25,7 +25,7 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjIxM
 
 
 ###Bellow 3 search api to find cars by diffrent filed (model or (and) make or color (and) or registration (and))
-GET http://localhost:8080/api/cars/search?model=Toyota&make=Corolla
+GET http://localhost:8080/api/cars/search?model=KrAZ&make=Model100
 Content-Type: application/json
 //Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyIiwiZXhwIjoxNzMyMjExOTA5LCJhdXRoIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzI5NjE5OTA5fQ.SiIQrIUHy-kA0AzbHo0o6Gc9WrjRZzIO_Z8316AUVSiYf8IduJXleL9aKyA_s-fwqFy7fZscbRXqDTGeoqAsXw
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjIxMjY0MCwiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzI5NjIwNjQwfQ.A8djeccnKXFg-6JWQ1DmH0AtGpdTcfh4yxEsMw92-29vcUYemQ29vf4-gmOtsZuCOxMeyieXwuX2IdAUx1SRFQ
@@ -46,3 +46,10 @@ ontent-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjIxMjY0MCwiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzI5NjIwNjQwfQ.A8djeccnKXFg-6JWQ1DmH0AtGpdTcfh4yxEsMw92-29vcUYemQ29vf4-gmOtsZuCOxMeyieXwuX2IdAUx1SRFQ
 
 <> 2024-10-30T163354.200.json
+
+
+### Getting all the colors from cars
+GET http://localhost:8080/api/cars/colors
+Content-Type: application/json
+//Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyIiwiZXhwIjoxNzMyMjExOTA5LCJhdXRoIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzI5NjE5OTA5fQ.SiIQrIUHy-kA0AzbHo0o6Gc9WrjRZzIO_Z8316AUVSiYf8IduJXleL9aKyA_s-fwqFy7fZscbRXqDTGeoqAsXw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjIxMjY0MCwiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzI5NjIwNjQwfQ.A8djeccnKXFg-6JWQ1DmH0AtGpdTcfh4yxEsMw92-29vcUYemQ29vf4-gmOtsZuCOxMeyieXwuX2IdAUx1SRFQ
