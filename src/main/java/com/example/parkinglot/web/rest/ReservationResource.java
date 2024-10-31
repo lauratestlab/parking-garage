@@ -1,10 +1,6 @@
 package com.example.parkinglot.web.rest;
 
-import com.example.parkinglot.dto.ReservationCompletionDTO;
-import com.example.parkinglot.dto.ReservationDTO;
-import com.example.parkinglot.dto.ReservationDTO2;
-import com.example.parkinglot.dto.ReservationInfoDTO;
-import com.example.parkinglot.dto.ReservationStartDTO;
+import com.example.parkinglot.dto.*;
 import com.example.parkinglot.service.ReservationService;
 import com.example.parkinglot.service.util.BarcodeUtils;
 import com.google.zxing.WriterException;
@@ -101,6 +97,20 @@ public class ReservationResource {
     public long countCarsByColor(@PathVariable String color) {
         LOG.debug("REST request to count cars by color: {}", color);
         return reservationService.countCarsByColor(color);
+    }
+
+    @GetMapping("/car-registrations")
+    @PermitAll // Or apply a more restrictive role if necessary
+    public List<String> getAllCarRegistrations() {
+        LOG.debug("REST request to get all car registrations from reserved cars");
+        return reservationService.getAllCarRegistrations();
+    }
+
+    @GetMapping("/spot-floor/{registration}")
+    @PermitAll // Or apply a more restrictive role if necessary
+    public SpotAndFloorDTO getSpotAndFloorByRegistration(@PathVariable String registration) {
+        LOG.debug("REST request to get spot and floor for registration: {}", registration);
+        return reservationService.getSpotAndFloorByCarRegistration(registration);
     }
 
 
