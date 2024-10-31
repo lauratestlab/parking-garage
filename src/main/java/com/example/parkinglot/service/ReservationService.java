@@ -247,8 +247,12 @@ public List<String> getAllCarRegistrations() {
                 .orElseThrow(() -> new ReservationNotFoundException("No reservation found for the car registration: " + registration));
 
         Spot spot = reservation.getSpot();
-        return new SpotAndFloorDTO(spot.getId(), spot.getFloor().getId());
+        String spotName = spot.getName();
+        String floorName = spot.getFloor().getName();
+
+        return new SpotAndFloorDTO(spotName, floorName);
     }
+
 
 
 
