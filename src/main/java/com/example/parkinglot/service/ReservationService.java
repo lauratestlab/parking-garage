@@ -231,6 +231,24 @@ public class ReservationService {
 //        }
 //
 //    }
+public List<String> getAllCarRegistrations() {
+    List<Reservation> reservations = reservationRepository.findAll();
+    return reservations.stream()
+            .map(reservation -> reservation.getCar().getRegistration())
+            .distinct()
+            .collect(Collectors.toList());
+}
+
+    public SpotAndFloorDTO getSpotAndFloorByCarRegistration(String registration) {
+        Reservation reservation = reservationRepository.findAll()
+                .stream()
+                .filter(res -> res.getCar().getRegistration().equalsIgnoreCase(registration))
+                .findFirst()
+                .orElseThrow(() -> new ReservationNotFoundException("No reservation found for the car registration: " + registration));
+
+        Spot spot = reservation.getSpot();
+        return new SpotAndFloorDTO(spot.getId(), spot.getFloor().getId());
+    }
 
 
 
