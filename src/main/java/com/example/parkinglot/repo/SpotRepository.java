@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+@Repository
 public interface SpotRepository extends JpaRepository<Spot, Long> {
     default Optional<Spot> findOneWithEagerRelationships(Long id) {
         return this.findOneWithToOneRelationships(id);

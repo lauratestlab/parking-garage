@@ -2,14 +2,9 @@ package com.example.parkinglot.entity;
 
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import org.hibernate.validator.constraints.CreditCardNumber;
+import jakarta.validation.constraints.*;
 import lombok.Data;
-
-import java.time.LocalDate;
-import java.util.List;
+import org.hibernate.validator.constraints.CreditCardNumber;
 
 @Entity
 @Data
@@ -20,31 +15,50 @@ public class PaymentMethod {
     @Column(name = "payment_method_id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @Pattern(regexp="^(0[1-9]|1[0-2])([\\/])([1-9][0-9])$",
-            message="Must be formatted MM/YY")
+    @NotNull
+    @Size(min = 5, max = 5)
+    @Pattern(regexp = "^(0[1-9]|1[0-2])([\\/])([1-9][0-9])$"
+            , message = "Must be formatted MM/YY")
+    @Column(name = "expiration_date", length = 5, nullable = false)
     private String expirationDate;
 
+    @NotNull
     @Digits(integer=3, fraction=0, message="Invalid CVV")
+    @Column(name = "ccv", nullable = false)
     private int ccv;
 
+    @NotNull
     @CreditCardNumber(message="Not a valid credit card number")
-    private String card_number;
+    @Column(name = "card_number", nullable = false)
+    private String cardNumber;
 
+    @NotNull
+    @NotBlank
+    @Column(name = "full_name", nullable = false)
     private String fullName;
 
     @NotBlank(message="Street is required")
-    private String deliveryStreet;
+    @NotNull
+    @Column(name = "street", nullable = false)
+    private String street;
 
     @NotBlank(message="City is required")
-    private String deliveryCity;
+    @NotNull
+    @Column(name = "city", nullable = false)
+    private String city;
 
     @NotBlank(message="State is required")
-    private String deliveryState;
+    @NotNull
+    @Column(name = "state", nullable = false)
+    private String state;
 
     @NotBlank(message="Zip code is required")
-    private String deliveryZip;
+    @NotNull
+    @Column(name = "zip", nullable = false)
+    private String zip;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JoinColumn(name = "user_id")
+    private User user;
 }

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-
 @Repository
 public interface GarageRepository extends JpaRepository<Garage, Long> {
 

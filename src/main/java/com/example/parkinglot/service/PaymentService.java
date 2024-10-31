@@ -30,11 +30,13 @@ public class PaymentService {
     public PaymentMethod processReservationPayment(ReservationDTO reservationDTO, User user) {
         PaymentMethod paymentMethod;
         if (Objects.nonNull(reservationDTO.paymentMethod())) {
-            paymentMethod = paymentMethodMapper.paymentMethodDTOToPaymentMethod(reservationDTO.paymentMethod());
+            paymentMethod = paymentMethodMapper.toEntity(reservationDTO.paymentMethod());
         } else {
-            paymentMethod = paymentMethodRepository.findPaymentMethodById(reservationDTO.paymentMethodId())
+            paymentMethod = paymentMethodRepository.findById(reservationDTO.paymentMethodId())
                     .orElseThrow(() -> new PaymentMethodNotFoundException("Payment method with id " + reservationDTO.paymentMethodId() + " was not found in the database"));
         }
+
+        processPayment(paymentMethod);
 
         if (reservationDTO.saveCreditCard()) {
             paymentMethod.setUser(user);
