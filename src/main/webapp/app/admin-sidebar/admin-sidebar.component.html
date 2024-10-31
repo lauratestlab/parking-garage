@@ -3,6 +3,7 @@
         <a routerLink="/home" (click)="currentPage = 'home'" [ngClass]="{active: currentPage === 'home'}">Home</a>
         <a routerLink="/dashboard" (click)="currentPage = 'dashboard'" [ngClass]="{active: currentPage === 'dashboard'}" *appHasAnyAuthority="'ROLE_ADMIN'">Dashboard</a>
         <a routerLink="/pricing" (click)="currentPage = 'pricing'" [ngClass]="{active: currentPage === 'pricing'}">Pricing</a>
+        <a routerLink="/receipt" (click)="currentPage = 'receipt'" [ngClass]="{active: currentPage === 'receipt'}">Receipt</a>
         <a routerLink="/car" (click)="currentPage = 'cars'" [ngClass]="{active: currentPage === 'cars'}" *appHasAnyAuthority="'ROLE_USER'">Car</a>
         <a routerLink="/reservations" (click)="currentPage = 'reservations'" [ngClass]="{active: currentPage === 'reservations'}">Reservations</a>
         <a routerLink="/payment-method" (click)="currentPage = 'payment-method'" [ngClass]="{active: currentPage === 'payment-method'}" routerLinkActive="active" *appHasAnyAuthority="'ROLE_USER'">Payment methods</a>

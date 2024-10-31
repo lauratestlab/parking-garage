@@ -3,7 +3,7 @@ import {DashboardApiService} from "./dashboard-api.service";
 import {Observable} from "rxjs";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Revenue} from "../model/revenue.model";
-import {CurrencyPipe, KeyValuePipe, NgIf} from "@angular/common";
+import {CurrencyPipe, DecimalPipe, KeyValuePipe, NgIf} from "@angular/common";
 import {ChartData, ChartOptions} from "chart.js/auto";
 import {BaseChartDirective} from "ng2-charts";
 
@@ -17,6 +17,7 @@ import {BaseChartDirective} from "ng2-charts";
     CurrencyPipe,
     BaseChartDirective,
     KeyValuePipe,
+    DecimalPipe,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'

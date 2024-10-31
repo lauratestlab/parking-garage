@@ -7,6 +7,7 @@ import {DashboardComponent} from "./dashboard/dashboard.component";
 import {Authority} from "./config/authority.constants";
 import {UserRouteAccessService} from "./core/auth/user-route-access.service";
 import {errorRoute} from './layouts/error/error.route';
+import {ReceiptComponent} from "./receipt/receipt.component";
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent, title: "login" },
@@ -14,6 +15,7 @@ export const routes: Routes = [
     { path: 'reservations', component: ReservationsComponent },
     { path: 'pricing', component: PricingComponent },
     { path: 'home', component: HomeComponent, },
+    { path: 'receipt', component: ReceiptComponent },
     { path: '',   redirectTo: 'home', pathMatch: 'full' },
 
     {

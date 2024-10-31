@@ -16,6 +16,11 @@ const routes: Routes = [
     path: 'spot',
     loadChildren: () => import('./spot/spot.routes'),
     title: 'Spots',
+  },
+
+  {
+    path: 'receipt',
+
   }
 ];
 
