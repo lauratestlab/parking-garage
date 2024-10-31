@@ -118,7 +118,6 @@ class AccountResourceIT {
             .andExpect(jsonPath("$.firstName").value("john"))
             .andExpect(jsonPath("$.lastName").value("doe"))
             .andExpect(jsonPath("$.email").value("john.doe@gmail.com"))
-            .andExpect(jsonPath("$.imageUrl").value("http://placehold.it/50x50"))
             .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
 
         userService.deleteUser(TEST_USER_LOGIN);

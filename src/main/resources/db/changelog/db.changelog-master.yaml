@@ -232,6 +232,8 @@ databaseChangeLog:
             constraintName: fk_users_on_cars
             referencedColumnNames: id
             referencedTableName: users
+            onDelete: SET NULL
+
   - changeSet:
       id: 1729099703466-1400
       author: user
@@ -306,8 +308,20 @@ databaseChangeLog:
                   type: BIGINT
                   constraints:
                     nullable: false
-                    references: users(id)
-                    foreignKeyName: fk_user_payment_method
+
+  - changeSet:
+      id: 1729099703466-40
+      author: user
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: payment_methods
+            constraintName: fk_user_payment_method
+            referencedColumnNames: id
+            referencedTableName: users
+            onDelete: CASCADE
+
 
   - changeSet:
       id: 1729099703466-50
@@ -486,9 +500,6 @@ databaseChangeLog:
               - column:
                   name: user_id
                   type: BIGINT
-                  constraints:
-                    foreignKeyName: fk_user_reservation
-                    references: users(id)
               - column:
                   name: price
                   type: DECIMAL(10, 2)
@@ -506,6 +517,19 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: fk_car_reservation
                     references: cars(car_id)
+
+  - changeSet:
+      id: 1729099703466-160
+      author: user
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: reservations
+            constraintName: fk_user_reservation
+            referencedColumnNames: id
+            referencedTableName: users
+            onDelete: SET NULL
 
   - changeSet:
       id: 1729099703466-180
