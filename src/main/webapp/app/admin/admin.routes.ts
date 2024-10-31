@@ -16,11 +16,6 @@ const routes: Routes = [
     path: 'spot',
     loadChildren: () => import('./spot/spot.routes'),
     title: 'Spots',
-  },
-  {
-    path: 'docs',
-    loadComponent: () => import('./docs/docs.component'),
-    title: 'global.menu.admin.apidocs',
   }
 ];
 

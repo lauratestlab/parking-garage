@@ -348,8 +348,7 @@ class UserResourceIT {
         anotherUser.setActivated(true);
         anotherUser.setEmail("user@localhost");
         anotherUser.setFirstName("java");
-        anotherUser.setLastName("hipster");
-        anotherUser.setImageUrl("");
+        anotherUser.setLastName("petrov");
         userRepository.saveAndFlush(anotherUser);
 
         // Update the user
@@ -385,8 +384,7 @@ class UserResourceIT {
         anotherUser.setActivated(true);
         anotherUser.setEmail("user@localhost");
         anotherUser.setFirstName("java");
-        anotherUser.setLastName("hipster");
-        anotherUser.setImageUrl("");
+        anotherUser.setLastName("petrov");
         userRepository.saveAndFlush(anotherUser);
 
         // Update the user

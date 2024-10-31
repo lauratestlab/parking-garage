@@ -7,10 +7,7 @@ import com.example.parkinglot.enums.Status;
 import com.example.parkinglot.exception.NotAllowedTimeException;
 import com.example.parkinglot.exception.ReservationNotFoundException;
 import com.example.parkinglot.exception.UserNotFoundException;
-import com.example.parkinglot.mapper.CarMapper;
-import com.example.parkinglot.mapper.PaymentMethodMapper;
 import com.example.parkinglot.mapper.ReservationInfoMapper;
-import com.example.parkinglot.mapper.ReservationMapper;
 import com.example.parkinglot.repo.*;
 import com.example.parkinglot.security.RandomUtil;
 import com.example.parkinglot.security.SecurityUtils;
@@ -37,11 +34,10 @@ public class ReservationService {
     private final CriteriaBasedRepository criteriaBasedRepository;
     private final MailService mailService;
     private final PriceService priceService;
-    private final ReservationMapper reservationMapper;
     private final SpotRepository spotRepository;
     private final ReservationInfoMapper reservationInfoMapper;
 
-    public ReservationService(UserRepository userRepository, PaymentService paymentService, ReservationRepository reservationRepository, CarService carService, CarRepository carRepository, PaymentMethodRepository paymentMethodRepository, PaymentMethodMapper paymentMethodMapper, CriteriaBasedRepository criteriaBasedRepository, MailService mailService, CarMapper carMapper, PriceService priceService, ReservationMapper reservationMapper, SpotRepository spotRepository, ReservationInfoMapper reservationInfoMapper) {
+    public ReservationService(UserRepository userRepository, PaymentService paymentService, ReservationRepository reservationRepository, CarService carService, CriteriaBasedRepository criteriaBasedRepository, MailService mailService, PriceService priceService, SpotRepository spotRepository, ReservationInfoMapper reservationInfoMapper) {
         this.userRepository = userRepository;
         this.paymentService = paymentService;
         this.reservationRepository = reservationRepository;
@@ -49,7 +45,6 @@ public class ReservationService {
         this.criteriaBasedRepository = criteriaBasedRepository;
         this.mailService = mailService;
         this.priceService = priceService;
-        this.reservationMapper = reservationMapper;
         this.spotRepository = spotRepository;
         this.reservationInfoMapper = reservationInfoMapper;
     }
@@ -58,7 +53,7 @@ public class ReservationService {
     public ReservationInfoDTO createReservation(@Valid ReservationDTO reservationDTO) {
         Long maxDuration = priceService.maxDuration();
         Duration duration = Duration.between(reservationDTO.startTime(), reservationDTO.endTime());
-        checkReservationDuration(duration, maxDuration);
+//        checkReservationDuration(duration, maxDuration);
 
         String currentUserLogin = SecurityUtils.getCurrentUserLogin().orElse("");
 
@@ -229,13 +224,13 @@ public class ReservationService {
     }
 
 
-    private void checkReservationDuration(Duration between, Long maxDuration) {
-        Duration duration = Duration.ofHours(maxDuration);
-        if (between.getSeconds() > duration.toSeconds()) {
-            throw new NotAllowedTimeException("You can't reserve more than for " + maxDuration + " hours");
-        }
-
-    }
+//    private void checkReservationDuration(Duration between, Long maxDuration) {
+//        Duration duration = Duration.ofHours(maxDuration);
+//        if (between.getSeconds() > duration.toSeconds()) {
+//            throw new NotAllowedTimeException("You can't reserve more than for " + maxDuration + " hours");
+//        }
+//
+//    }
 
 
 

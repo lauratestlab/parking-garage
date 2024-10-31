@@ -51,6 +51,9 @@ spring:
   messages:
     basename: i18n/messages
 
+  liquibase:
+    contexts: dev, faker
+
 server:
   port: 8080
 

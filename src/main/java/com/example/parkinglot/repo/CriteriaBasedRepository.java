@@ -6,7 +6,7 @@ import jakarta.persistence.NoResultException;
 import java.time.LocalDateTime;
 
 public interface CriteriaBasedRepository {
-    Long numberOfAvailableSports(LocalDateTime startTime, LocalDateTime endTime) throws NoResultException;
+    Long numberOfAvailableSports(LocalDateTime startTime, LocalDateTime endTime, Long maxDurationInHours) throws NoResultException;
 
     Spot findFirstAvailableSpot(LocalDateTime startTime, Long maxDurationInHours);
 

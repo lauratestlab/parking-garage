@@ -237,7 +237,7 @@ databaseChangeLog:
       author: user
       changes:
         - loadData:
-            file: db/changelog/data/car.csv
+            file: db/changelog/fake-data/car.csv
             separator: ;
             tableName: cars
             usePreparedStatements: true
@@ -340,7 +340,7 @@ databaseChangeLog:
       author: user
       changes:
         - loadData:
-            file: db/changelog/data/garages.csv
+            file: db/changelog/fake-data/garages.csv
             separator: ;
             tableName: garages
             usePreparedStatements: true
@@ -522,7 +522,7 @@ databaseChangeLog:
       author: user
       changes:
         - loadData:
-            file: db/changelog/data/floors.csv
+            file: db/changelog/fake-data/floors.csv
             separator: ;
             tableName: floors
             usePreparedStatements: true
@@ -532,7 +532,7 @@ databaseChangeLog:
       author: user
       changes:
         - loadData:
-            file: db/changelog/data/spots.csv
+            file: db/changelog/fake-data/spots.csv
             separator: ;
             tableName: spots
             usePreparedStatements: true
@@ -541,7 +541,7 @@ databaseChangeLog:
       author: user
       changes:
         - loadData:
-            file: db/changelog/data/prices.csv
+            file: db/changelog/fake-data/prices.csv
             separator: ;
             tableName: prices
             usePreparedStatements: true
@@ -551,7 +551,7 @@ databaseChangeLog:
       author: user
       changes:
         - loadData:
-            file: db/changelog/data/payment_methods.csv
+            file: db/changelog/fake-data/payment_methods.csv
             separator: ;
             tableName: payment_methods
             usePreparedStatements: true
@@ -562,7 +562,7 @@ databaseChangeLog:
       author: user
       changes:
         - loadData:
-            file: db/changelog/data/reservations.csv
+            file: db/changelog/fake-data/reservations.csv
             separator: ;
             tableName: reservations
             usePreparedStatements: true
