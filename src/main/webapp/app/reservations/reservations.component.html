@@ -47,15 +47,7 @@
 
                 <!-- Status dropdown for inline updates -->
                 <td>
-                    <span
-                            class="badge rounded-pill"
-                            [ngClass]="{
-                                'bg-warning text-dark': reservation.status === 'Ordered',
-                                'bg-success text-light': reservation.status === 'Activated'
-            }"
-                    >
-            {{ reservation.status }}
-          </span>
+                    <span class="badge rounded-pill text-bg-warning">{{ reservation.status }}</span>
 
                 </td>
 

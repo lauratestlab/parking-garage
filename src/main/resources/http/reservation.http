@@ -49,8 +49,7 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjg0M
   "registration": "YRH45645",
   "model": "Tundra",
   "make": "Toyota",
-  "color": "Gray",
-  "email": "user@localhost"
+  "color": "Gray"
 }
 
 ###
@@ -59,5 +58,5 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjg0MzMxNywiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzMwMjUxMzE3fQ.kUEWRqjOUJP6oMToabHzrZHWQY9c5bEzNJXeoG-4ipMUF_5qMV_BUIDReqQX0DQPaRAJFoAPEe2Zvf63CtDsXQ
 
 {
-  "confirmationCode": "6AnAwqJV2vqXKiqxAkMX"
+  "confirmationCode": "uovvDCMbe8Wep1KGP8yz"
 }

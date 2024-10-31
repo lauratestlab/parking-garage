@@ -1,4 +1,6 @@
-GET http://localhost:8080/api/report/availableSpots
+GET http://localhost:8080/api/admin/report/availableSpots
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjg0MzMxNywiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzMwMjUxMzE3fQ.kUEWRqjOUJP6oMToabHzrZHWQY9c5bEzNJXeoG-4ipMUF_5qMV_BUIDReqQX0DQPaRAJFoAPEe2Zvf63CtDsXQ
+
 ###
 GET http://localhost:8080/api/admin/report/revenue?start=2024-10-30&end=2024-10-30
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjM5MjM5MiwiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzI5ODAwMzkyfQ.TfU-bQWKq1ybMuhjg8CA6s8dsk-6xXi5Hx5hbP5eFu3_ISQfV_B3kE8PRctxYInaxKvLOVebQDZqsgjKzJjCIQ
