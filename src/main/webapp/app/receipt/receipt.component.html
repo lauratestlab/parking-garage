@@ -1,0 +1,20 @@
+<div class="content">
+    <div class="container">
+        <h2>Retrieve Reservation Receipt</h2>
+
+        <form [formGroup]="codeForm" (ngSubmit)="getReceipt()">
+            <div class="input-group input-group-lg">
+                <input formControlName="confirmationCode" type="string" class="form-control" id="confirmationCode" placeholder="Enter confirmation code">
+                <button class="btn btn-success" (click)="getReceipt()">Add</button>
+            </div>
+        </form>
+
+        <div *ngIf="receiptData">
+            <h3>Digital Receipt</h3>
+            <p><strong>Start Time:</strong> {{ receiptData.startTime }}</p>
+            <p><strong>End Time:</strong> {{ receiptData.endTime }}</p>
+            <p><strong>Spot ID:</strong> {{ receiptData.spotId }}</p>
+            <p><strong>Price:</strong> {{ receiptData.price | currency : 'USD' }}</p>
+        </div>
+    </div>
+</div>
