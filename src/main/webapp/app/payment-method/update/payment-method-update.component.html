@@ -1,0 +1,162 @@
+<div class="d-flex justify-content-center main-content">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="app-payment-method-heading" data-cy="PaymentMethodCreateUpdateHeading">Create or edit a Payment Method</h2>
+
+      <div>
+        <app-alert-error></app-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let expirationDateRef = editForm.get('expirationDate')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_expirationDate">Expiration Date</label>
+          <input
+            type="text"
+            class="form-control"
+            name="expirationDate"
+            id="field_expirationDate"
+            data-cy="expirationDate"
+            formControlName="expirationDate"
+          />
+          @if (expirationDateRef.invalid && (expirationDateRef.dirty || expirationDateRef.touched)) {
+            <div>
+              @if (editForm.get('expirationDate')?.errors?.required) {
+                <small class="form-text text-danger">This field is required.</small>
+              }
+              @if (editForm.get('expirationDate')?.errors?.minlength) {
+                <small class="form-text text-danger">This field is required to be at least 5 characters.</small>
+              }
+              @if (editForm.get('expirationDate')?.errors?.maxlength) {
+                <small class="form-text text-danger">This field cannot be longer than 5 characters.</small>
+              }
+              @if (editForm.get('expirationDate')?.errors?.pattern) {
+                <small class="form-text text-danger">This field should follow pattern for Expiration Date.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let ccvRef = editForm.get('ccv')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_ccv">Ccv</label>
+          <input type="number" class="form-control" name="ccv" id="field_ccv" data-cy="ccv" formControlName="ccv" />
+          @if (ccvRef.invalid && (ccvRef.dirty || ccvRef.touched)) {
+            <div>
+              @if (editForm.get('ccv')?.errors?.required) {
+                <small class="form-text text-danger">This field is required.</small>
+              }
+              <small class="form-text text-danger" [hidden]="!editForm.get('ccv')?.errors?.number">This field should be a number.</small>
+            </div>
+          }
+        </div>
+
+        @let cardNumberRef = editForm.get('cardNumber')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_cardNumber">Card Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="cardNumber"
+            id="field_cardNumber"
+            data-cy="cardNumber"
+            formControlName="cardNumber"
+          />
+          @if (cardNumberRef.invalid && (cardNumberRef.dirty || cardNumberRef.touched)) {
+            <div>
+              @if (editForm.get('cardNumber')?.errors?.required) {
+                <small class="form-text text-danger">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let fullNameRef = editForm.get('fullName')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_fullName">Full Name</label>
+          <input type="text" class="form-control" name="fullName" id="field_fullName" data-cy="fullName" formControlName="fullName" />
+          @if (fullNameRef.invalid && (fullNameRef.dirty || fullNameRef.touched)) {
+            <div>
+              @if (editForm.get('fullName')?.errors?.required) {
+                <small class="form-text text-danger">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let streetRef = editForm.get('street')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_street">Street</label>
+          <input type="text" class="form-control" name="street" id="field_street" data-cy="street" formControlName="street" />
+          @if (streetRef.invalid && (streetRef.dirty || streetRef.touched)) {
+            <div>
+              @if (editForm.get('street')?.errors?.required) {
+                <small class="form-text text-danger">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let cityRef = editForm.get('city')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_city">City</label>
+          <input type="text" class="form-control" name="city" id="field_city" data-cy="city" formControlName="city" />
+          @if (cityRef.invalid && (cityRef.dirty || cityRef.touched)) {
+            <div>
+              @if (editForm.get('city')?.errors?.required) {
+                <small class="form-text text-danger">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let stateRef = editForm.get('state')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_state">State</label>
+          <input type="text" class="form-control" name="state" id="field_state" data-cy="state" formControlName="state" />
+          @if (stateRef.invalid && (stateRef.dirty || stateRef.touched)) {
+            <div>
+              @if (editForm.get('state')?.errors?.required) {
+                <small class="form-text text-danger">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let zipRef = editForm.get('zip')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_zip">Zip</label>
+          <input type="text" class="form-control" name="zip" id="field_zip" data-cy="zip" formControlName="zip" />
+          @if (zipRef.invalid && (zipRef.dirty || zipRef.touched)) {
+            <div>
+              @if (editForm.get('zip')?.errors?.required) {
+                <small class="form-text text-danger">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

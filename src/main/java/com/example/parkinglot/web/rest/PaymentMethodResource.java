@@ -1,8 +1,9 @@
 package com.example.parkinglot.web.rest;
 
-import com.example.parkinglot.repo.PaymentMethodRepository;
-import com.example.parkinglot.service.PaymentMethodService;
 import com.example.parkinglot.dto.PaymentMethodDTO;
+import com.example.parkinglot.repo.PaymentMethodRepository;
+import com.example.parkinglot.security.SecurityUtils;
+import com.example.parkinglot.service.PaymentMethodService;
 import com.example.parkinglot.web.rest.errors.BadRequestAlertException;
 import com.example.parkinglot.web.util.HeaderUtil;
 import com.example.parkinglot.web.util.PaginationUtil;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -45,13 +47,6 @@ public class PaymentMethodResource {
         this.paymentMethodRepository = paymentMethodRepository;
     }
 
-    /**
-     * {@code POST  /payment-methods} : Create a new paymentMethod.
-     *
-     * @param paymentMethodDTO the paymentMethodDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new paymentMethodDTO, or with status {@code 400 (Bad Request)} if the paymentMethod has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PostMapping("")
     public ResponseEntity<PaymentMethodDTO> createPaymentMethod(@Valid @RequestBody PaymentMethodDTO paymentMethodDTO)
         throws URISyntaxException {
@@ -59,7 +54,9 @@ public class PaymentMethodResource {
         if (paymentMethodDTO.id() != null) {
             throw new BadRequestAlertException("A new paymentMethod cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        paymentMethodDTO = paymentMethodService.save(paymentMethodDTO);
+        String login = SecurityUtils.getCurrentUserLogin()
+                .orElseThrow(() -> new SessionAuthenticationException("Authentication failure"));
+        paymentMethodDTO = paymentMethodService.save(paymentMethodDTO, login);
         return ResponseEntity.created(new URI("/api/payment-methods/" + paymentMethodDTO.id()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, paymentMethodDTO.id().toString()))
             .body(paymentMethodDTO);
@@ -69,7 +66,7 @@ public class PaymentMethodResource {
     public ResponseEntity<PaymentMethodDTO> updatePaymentMethod(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody PaymentMethodDTO paymentMethodDTO
-    ) throws URISyntaxException {
+    ) {
         LOG.debug("REST request to update PaymentMethod : {}, {}", id, paymentMethodDTO);
         if (paymentMethodDTO.id() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -78,7 +75,9 @@ public class PaymentMethodResource {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        if (!paymentMethodRepository.existsById(id)) {
+        String login = SecurityUtils.getCurrentUserLogin()
+                .orElseThrow(() -> new SessionAuthenticationException("Authentication failure"));
+        if (!paymentMethodRepository.existsByIdAndUserLogin(id, login)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
@@ -86,42 +85,6 @@ public class PaymentMethodResource {
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, paymentMethodDTO.id().toString()))
             .body(paymentMethodDTO);
-    }
-
-    /**
-     * {@code PATCH  /payment-methods/:id} : Partial updates given fields of an existing paymentMethod, field will ignore if it is null
-     *
-     * @param id the id of the paymentMethodDTO to save.
-     * @param paymentMethodDTO the paymentMethodDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated paymentMethodDTO,
-     * or with status {@code 400 (Bad Request)} if the paymentMethodDTO is not valid,
-     * or with status {@code 404 (Not Found)} if the paymentMethodDTO is not found,
-     * or with status {@code 500 (Internal Server Error)} if the paymentMethodDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<PaymentMethodDTO> partialUpdatePaymentMethod(
-        @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody PaymentMethodDTO paymentMethodDTO
-    ) throws URISyntaxException {
-        LOG.debug("REST request to partial update PaymentMethod partially : {}, {}", id, paymentMethodDTO);
-        if (paymentMethodDTO.id() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, paymentMethodDTO.id())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        if (!paymentMethodRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
-        Optional<PaymentMethodDTO> result = paymentMethodService.partialUpdate(paymentMethodDTO);
-
-        return ResponseUtil.wrapOrNotFound(
-            result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, paymentMethodDTO.id().toString())
-        );
     }
 
     /**
@@ -138,10 +101,14 @@ public class PaymentMethodResource {
     ) {
         LOG.debug("REST request to get a page of PaymentMethods");
         Page<PaymentMethodDTO> page;
+
+        String login = SecurityUtils.getCurrentUserLogin()
+                .orElseThrow(() -> new SessionAuthenticationException("Authentication failure"));
+
         if (eagerload) {
-            page = paymentMethodService.findAllWithEagerRelationships(pageable);
+            page = paymentMethodService.findAllWithEagerRelationships(pageable, login);
         } else {
-            page = paymentMethodService.findAll(pageable);
+            page = paymentMethodService.findAll(pageable, login);
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());

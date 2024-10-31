@@ -18,7 +18,7 @@ public record PaymentMethodDTO(
 
         @NotNull
         @CreditCardNumber(message = "Not a valid credit card number")
-        String card_number,
+        String cardNumber,
 
         @NotNull
         @NotBlank(message = "Name is required")
@@ -40,7 +40,6 @@ public record PaymentMethodDTO(
         @NotBlank(message = "Zip code is required")
         String zip,
 
-        @NotNull
         UserDTO user
 ) {
 }

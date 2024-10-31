@@ -1,4 +1,3 @@
-GET http://localhost:8080/api/report/availableSpots
 ###
-GET http://localhost:8080/api/admin/report/revenue?start=2024-10-30&end=2024-10-30
+GET http://localhost:8080/api/payment-methods?page=0&size=20&eagerload=false&sort=id,asc
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjIyOTAwNiwiYXV0aCI6IlJPTEVfQURNSU4gUk9MRV9VU0VSIiwiaWF0IjoxNzI5NjM3MDA2fQ.XkmMwxbygJPUE1XBiHxaTYW0SmH83isSK7vfAsSuA3IXh7pEHfNmFoeAWwG64Aqdkd7L3AzohlyGxoB35orYdA

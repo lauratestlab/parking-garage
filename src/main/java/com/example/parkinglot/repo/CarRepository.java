@@ -9,11 +9,8 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-
 @Repository
 public interface CarRepository extends JpaRepository<Car, Long> {
-    @Query("select car from Car car where car.user.login = ?#{authentication.name}")
-    List<Car> findByUserIsCurrentUser();
 
     default Optional<Car> findOneWithEagerRelationships(Long id) {
         return this.findOneWithToOneRelationships(id);

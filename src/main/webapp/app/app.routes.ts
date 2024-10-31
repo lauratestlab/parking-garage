@@ -34,6 +34,11 @@ export const routes: Routes = [
         loadChildren: () => import('./car/car.routes'),
         title: 'cars',
     },
+    {
+        path: 'payment-method',
+        loadChildren: () => import('./payment-method/payment-method.routes'),
+        title: 'Payment methods',
+    },
     ...errorRoute,
 ];
 

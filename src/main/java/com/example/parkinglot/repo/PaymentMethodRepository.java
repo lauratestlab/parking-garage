@@ -14,30 +14,21 @@ import java.util.Optional;
 
 @Repository
 public interface PaymentMethodRepository extends JpaRepository<PaymentMethod, Long> {
-    @Query("select paymentMethod from PaymentMethod paymentMethod where paymentMethod.user.login = ?#{authentication.name}")
-    List<PaymentMethod> findByUserIsCurrentUser();
+    @Query("select paymentMethod from PaymentMethod paymentMethod where paymentMethod.user.login = :login")
+    Page<PaymentMethod> findByUserIsCurrentUser(Pageable pageable, String login);
 
-    default Optional<PaymentMethod> findOneWithEagerRelationships(Long id) {
-        return this.findOneWithToOneRelationships(id);
-    }
-
-    default List<PaymentMethod> findAllWithEagerRelationships() {
-        return this.findAllWithToOneRelationships();
-    }
-
-    default Page<PaymentMethod> findAllWithEagerRelationships(Pageable pageable) {
-        return this.findAllWithToOneRelationships(pageable);
+    default Page<PaymentMethod> findAllWithEagerRelationships(Pageable pageable, String login) {
+        return this.findAllWithToOneRelationships(pageable, login);
     }
 
     @Query(
-        value = "select paymentMethod from PaymentMethod paymentMethod left join fetch paymentMethod.user",
-        countQuery = "select count(paymentMethod) from PaymentMethod paymentMethod"
+        value = "select paymentMethod from PaymentMethod paymentMethod left join fetch paymentMethod.user where paymentMethod.user.login = :login",
+        countQuery = "select count(paymentMethod) from PaymentMethod paymentMethod where paymentMethod.user.login = :login"
     )
-    Page<PaymentMethod> findAllWithToOneRelationships(Pageable pageable);
+    Page<PaymentMethod> findAllWithToOneRelationships(Pageable pageable, String login);
 
-    @Query("select paymentMethod from PaymentMethod paymentMethod left join fetch paymentMethod.user")
-    List<PaymentMethod> findAllWithToOneRelationships();
+    @Query("select paymentMethod from PaymentMethod paymentMethod left join fetch paymentMethod.user where paymentMethod.id =:id and paymentMethod.user.login = :login")
+    Optional<PaymentMethod> findOne(@Param("id") Long id, String login);
 
-    @Query("select paymentMethod from PaymentMethod paymentMethod left join fetch paymentMethod.user where paymentMethod.id =:id")
-    Optional<PaymentMethod> findOneWithToOneRelationships(@Param("id") Long id);
+    boolean existsByIdAndUserLogin(Long id, String login);
 }

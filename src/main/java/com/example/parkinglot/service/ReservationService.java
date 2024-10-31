@@ -4,11 +4,13 @@ package com.example.parkinglot.service;
 import com.example.parkinglot.dto.*;
 import com.example.parkinglot.entity.*;
 import com.example.parkinglot.enums.Status;
-import com.example.parkinglot.exception.NotAllowedTimeException;
 import com.example.parkinglot.exception.ReservationNotFoundException;
 import com.example.parkinglot.exception.UserNotFoundException;
 import com.example.parkinglot.mapper.ReservationInfoMapper;
-import com.example.parkinglot.repo.*;
+import com.example.parkinglot.repo.CriteriaBasedRepository;
+import com.example.parkinglot.repo.ReservationRepository;
+import com.example.parkinglot.repo.SpotRepository;
+import com.example.parkinglot.repo.UserRepository;
 import com.example.parkinglot.security.RandomUtil;
 import com.example.parkinglot.security.SecurityUtils;
 import jakarta.persistence.NoResultException;
@@ -85,9 +87,7 @@ public class ReservationService {
         reservation.setSpot(spot);
         reservation.setCar(car);
         reservation.setStatus(Status.ORDERED);
-        if (reservationDTO.saveCreditCard()) {
-            reservation.setPaymentMethod(paymentMethod);
-        }
+
         reservation.setConfirmationCode(RandomUtil.generateRandomAlphanumericString());
 
         reservationRepository.save(reservation);

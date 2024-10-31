@@ -15,11 +15,6 @@ import java.util.Arrays;
 
 import static com.example.parkinglot.config.Constants.SPRING_PROFILE_DEVELOPMENT;
 
-/**
- * Aspect for logging execution of service and repository Spring components.
- *
- * By default, it only runs with the "dev" profile.
- */
 @Aspect
 public class LoggingAspect {
 
