@@ -1,6 +1,7 @@
 <div class="side">
     <div class="sidebar">
         <a routerLink="/home" (click)="currentPage = 'home'" [ngClass]="{active: currentPage === 'home'}">Home</a>
+        <a routerLink="/admin/checkin" (click)="currentPage = 'Checkin'" [ngClass]="{active: currentPage === 'Checkin'}" *appHasAnyAuthority="'ROLE_ADMIN'">Check in</a>
         <a routerLink="/dashboard" (click)="currentPage = 'dashboard'" [ngClass]="{active: currentPage === 'dashboard'}" *appHasAnyAuthority="'ROLE_ADMIN'">Dashboard</a>
         <a routerLink="/pricing" (click)="currentPage = 'pricing'" [ngClass]="{active: currentPage === 'pricing'}">Pricing</a>
         <a routerLink="/car" (click)="currentPage = 'cars'" [ngClass]="{active: currentPage === 'cars'}" *appHasAnyAuthority="'ROLE_USER'">Car</a>

@@ -16,6 +16,12 @@ const routes: Routes = [
     path: 'spot',
     loadChildren: () => import('./spot/spot.routes'),
     title: 'Spots',
+  },
+
+  {
+    path: 'checkin',
+    loadComponent: () => import('./checkin/checkin.component').then(m => m.CheckinComponent),
+    title: 'Checkin',
   }
 ];
 

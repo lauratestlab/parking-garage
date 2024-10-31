@@ -1,0 +1,67 @@
+<div class="content">
+
+    <div class="header">
+        <h2>Check in</h2>
+<!--        <div class="buttons">-->
+<!--            <button type="button" class="btn btn-outline-light">Reserve a spot</button>-->
+<!--        </div>-->
+    </div>
+
+    <app-alert-error></app-alert-error>
+
+    <app-alert></app-alert>
+
+    <hr>
+
+    <form class="row g-3" [formGroup]="editForm" (ngSubmit)="addReservation()">
+            <div class="row g-3">
+                <legend>Car Details</legend>
+                <div class="col-sm">
+                    <label for="make" class="form-label">Make: </label>
+                    <input formControlName="make" maxlength="25" type="text" class="form-control" id="make">
+                </div>
+                <div class="col-sm">
+                    <label for="model" class="form-label">Model: </label>
+                    <input formControlName="model" maxlength="25" type="text" class="form-control" id="model">
+                </div>
+                <div class="col-sm">
+                    <label for="color" class="form-label">Color: </label>
+                    <input formControlName="color" maxlength="25" type="text" class="form-control" aria-label="color" id="color">
+                </div>
+                <div class="col-md-5">
+                    <label for="registration" class="form-label">Registration Number: </label>
+                    <input formControlName="registration" maxlength="10" type="text" class="form-control" id="registration">
+                </div>
+                <div class="col-md-5">
+                    <label for="email" class="form-label">Email: </label>
+                    <input formControlName="email" type="text" class="form-control" id="email">
+                </div>
+            </div>
+        <div class="col-12">
+            <button type="submit"  [disabled]="editForm.invalid || isSaving()" class="btn btn-primary">Check in</button>
+        </div>
+    </form>
+
+    <hr>
+
+    <div>
+        <h4>Ticket</h4>
+
+        <dl class="row-md jh-entity-details">
+            <dt><span>You spot</span></dt>
+            <dd>
+                <span>{{ ticketInfo?.message }}</span>
+            </dd>
+
+            <dt><span>Start time</span></dt>
+            <dd>{{ ticketInfo?.startTime }}</dd>
+
+            <dt><span>Confirmation Number</span></dt>
+            <dd>{{ ticketInfo?.confirmationCode }}</dd>
+
+        </dl>
+
+        <img src={{imagePath}} alt ="">
+    </div>
+
+</div>
