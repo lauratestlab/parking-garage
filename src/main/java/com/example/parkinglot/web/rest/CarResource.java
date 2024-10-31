@@ -177,4 +177,10 @@ public class CarResource {
         return ResponseEntity.ok(cars);
     }
 
+    @GetMapping("/colors")
+    public ResponseEntity<List<String>> getAllColors() {
+        List<String> colors = carService.findAllDistinctColorsSorted();
+        return ResponseEntity.ok(colors);
+    }
+
 }
